@@ -10,20 +10,3 @@
 # software stacks here: https://github.com/github/gitignore
 # ==============================================================================
 
-# Build artifacts...
-dist/*
-
-# ... But keep the README.
-!dist/README.adoc
-
-# Vendor dependencies.
-node_modules/*
-
-# Log output.
-*.log
-
-# Devtool caches.
-.eslintcache
-
-# Reports.
-coverage/*
