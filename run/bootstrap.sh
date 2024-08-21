@@ -18,13 +18,7 @@ source "${inc}/sys/update.sh"
 source "${inc}/sys/upgrade.sh"
 
 # Install dev tools.
-source "${inc}/get/delta.sh"
-source "${inc}/get/git.sh"
-source "${inc}/get/git-extras.sh"
-source "${inc}/get/git-lfs.sh"
-source "${inc}/get/lazygit.sh"
-source "${inc}/get/neovim.sh"
-source "${inc}/get/oh-my-posh.sh"
+source "${inc}/get/tmux.sh"
 
 # Finalise.
 source "${inc}/sys/teardown.sh"
