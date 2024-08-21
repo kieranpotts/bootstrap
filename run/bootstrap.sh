@@ -17,15 +17,18 @@ source "${inc}/msg/start.sh"
 source "${inc}/sys/update.sh"
 source "${inc}/sys/upgrade.sh"
 
-# Install dev tools.
-source "${inc}/util/delta.sh"
-source "${inc}/util/git.sh"
-source "${inc}/util/git-extras.sh"
-source "${inc}/util/git-lfs.sh"
-source "${inc}/util/lazygit.sh"
-source "${inc}/util/neovim.sh"
-source "${inc}/util/oh-my-posh.sh"
+# Install general utilities.
+source "${inc}/util/curl.sh"
 source "${inc}/util/tmux.sh"
+
+# Install dev tools.
+source "${inc}/dev/delta.sh"
+source "${inc}/dev/git.sh"
+source "${inc}/dev/git-extras.sh"
+source "${inc}/dev/git-lfs.sh"
+source "${inc}/dev/lazygit.sh"
+source "${inc}/dev/neovim.sh"
+source "${inc}/dev/oh-my-posh.sh"
 
 
 # Finalise.
