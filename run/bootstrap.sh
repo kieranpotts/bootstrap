@@ -19,6 +19,7 @@ source "${inc}/sys/upgrade.sh"
 
 # Install general utilities.
 source "${inc}/util/curl.sh"
+#source "${inc}/util/mlocate.sh"
 source "${inc}/util/tmux.sh"
 
 # Install dev tools.
