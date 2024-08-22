@@ -23,6 +23,7 @@ source "${inc}/util/curl.sh"
 source "${inc}/util/tmux.sh"
 
 # Install dev tools.
+source "${inc}/dev/chrome.sh"
 source "${inc}/dev/delta.sh"
 source "${inc}/dev/git.sh"
 source "${inc}/dev/git-extras.sh"
