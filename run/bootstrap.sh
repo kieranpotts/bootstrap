@@ -33,6 +33,7 @@ source "${inc}/dev/oh-my-posh.sh"
 # Install runtime environments.
 source "${inc}/run/node.sh"
 source "${inc}/run/jdk.sh"
+source "${inc}/run/php.sh"
 
 # Finalise.
 source "${inc}/sys/teardown.sh"
