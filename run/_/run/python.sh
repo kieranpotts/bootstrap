@@ -4,7 +4,7 @@
 # Install Python 3 and pip, and related tools.
 # ==============================================================================
 
-startNewTask "Install Python"
+startNewTask "Install Python, pip, pipenv, etc."
 
 sudo apt install -y python3 python3-pip ipython3
 
