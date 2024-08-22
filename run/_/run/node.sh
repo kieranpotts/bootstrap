@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # ==============================================================================
-# Install Node using NVM.
+# Install Node using NVM - the Node Version Manager.
 #
+# https://nodejs.org/en
 # https://github.com/nvm-sh/nvm
 # ==============================================================================
 
@@ -36,10 +37,15 @@ export NVM_DIR="$HOME/.nvm"
 '
 
 # Add to .bashrc to automatically load NVM when a new shell session is started.
+# Avoid duplication by checking for the presence of the export statement.
 if [ -f "$HOME/local.bashrc" ]; then
-  echo "$content" >> "$HOME/local.bashrc"
+  if ! grep -q "export NVM_DIR" "$HOME/local.bashrc"; then
+    echo "$content" >> "$HOME/local.bashrc"
+  fi
 elif [ -f "$HOME/.bashrc" ]; then
-  echo "$content" >> "$HOME/.bashrc"
+  if ! grep -q "export NVM_DIR" "$HOME/.bashrc"; then
+    echo "$content" >> "$HOME/.bashrc"
+  fi
 fi
 
 # Move back to the original directory.
