@@ -34,6 +34,7 @@ source "${inc}/dev/oh-my-posh.sh"
 source "${inc}/run/node.sh"
 source "${inc}/run/jdk.sh"
 source "${inc}/run/php.sh"
+source "${inc}/run/python.sh"
 
 # Finalise.
 source "${inc}/sys/teardown.sh"
