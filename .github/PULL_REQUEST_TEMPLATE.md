@@ -12,7 +12,8 @@ Write a brief summary of the changes included in this PR.
 
 ### Optional
 
-Please mark `[x]` all that apply. This will help the maintainers of the project to understand what work is outstanding before your changes can be merged.
+Please mark `[x]` all that apply. This will help the maintainers of the project
+to understand what work is outstanding before your changes can be merged.
 
 - [ ] My changes are covered by automated tests
 - [ ] I have manually tested my changes
