@@ -20,7 +20,7 @@ source "${inc}/sys/upgrade.sh"
 # Install general utilities.
 source "${inc}/util/curl.sh"
 #source "${inc}/util/mlocate.sh"
-source "${inc}/util/tmux.sh"
+
 
 # Install dev tools.
 source "${inc}/dev/chrome.sh"
@@ -31,6 +31,7 @@ source "${inc}/dev/git-lfs.sh"
 source "${inc}/dev/lazygit.sh"
 source "${inc}/dev/neovim.sh"
 source "${inc}/dev/oh-my-posh.sh"
+source "${inc}/dev/tmux.sh"
 
 # Install runtime environments.
 source "${inc}/run/node.sh"
