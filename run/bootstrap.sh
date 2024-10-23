@@ -19,8 +19,9 @@ source "${inc}/sys/upgrade.sh"
 
 # Install general utilities.
 source "${inc}/util/curl.sh"
+source "${inc}/util/gnupg.sh"
 #source "${inc}/util/mlocate.sh"
-
+source "${inc}/util/software-properties-common.sh"
 
 # Install dev tools.
 source "${inc}/dev/chrome.sh"
