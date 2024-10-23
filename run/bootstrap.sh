@@ -34,6 +34,9 @@ source "${inc}/dev/neovim.sh"
 source "${inc}/dev/oh-my-posh.sh"
 source "${inc}/dev/tmux.sh"
 
+# Install ops tools.
+source "${inc}/ops/terraform.sh"
+
 # Install runtime environments.
 source "${inc}/run/node.sh"
 source "${inc}/run/jdk.sh"
