@@ -1,5 +1,7 @@
 = Bootstrap
 
+:link-docker-desktop: https://www.docker.com/products/docker-desktop/
+
 Provisioning scripts for my standard local development environment.
 
 == Requirements
@@ -12,15 +14,24 @@ Provisioning scripts for my standard local development environment.
 
 2. From the root directory of this repository, run `bash ./run/bootstrap.sh`.
 
-NOTE: The bootstrap script is designed to be idempotent, so you can run it multiple times without causing any issues. It can be re-run to update the system with new changes.
+NOTE: The bootstrap script is designed to be idempotent, so you can run it
+multiple times without causing any issues. It can be re-run to update the system
+with new changes.
 
 == Related notes
 
 === Using Docker on Windows
 
-My bootstrap scripts do _not_ install Docker. Since I use Windows Subsystem for Linux (WSL 2) for my local development environment, the recommended approach to using Docker in this environment is to install link:https://www.docker.com/products/docker-desktop/[Docker Desktop for Windows] in the host environment, and to configure it to use WSL as the "back-end" in which to build and run the containers it manages.
+My bootstrap scripts do _not_ install Docker. Since I use Windows Subsystem for
+Linux (WSL 2) for my local development environment, the recommended approach to
+using Docker in this environment is to install
+{link-docker-desktop}[Docker Desktop for Windows] in the host environment,
+and to configure it to use WSL as the "back-end" in which to build and run
+the containers it manages.
 
-This setup means the Docker CLI is not available in the WSL environment. Instead, Docker must be controlled directly from Windows – Git Bash is fine to access the Docker CLI.
+This setup means the Docker CLI is not available in the WSL environment.
+Instead, Docker must be controlled directly from Windows – Git Bash is fine
+to access the Docker CLI.
 
 See the following links for more information:
 
