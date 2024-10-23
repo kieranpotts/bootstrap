@@ -35,6 +35,7 @@ source "${inc}/dev/oh-my-posh.sh"
 source "${inc}/dev/tmux.sh"
 
 # Install ops tools.
+source "${inc}/ops/aws.sh"
 source "${inc}/ops/terraform.sh"
 
 # Install runtime environments.
