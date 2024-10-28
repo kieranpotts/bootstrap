@@ -23,6 +23,12 @@ source "${inc}/util/gnupg.sh"
 #source "${inc}/util/mlocate.sh"
 source "${inc}/util/software-properties-common.sh"
 
+# Install runtime environments.
+source "${inc}/run/node.sh"
+source "${inc}/run/jdk.sh"
+source "${inc}/run/php.sh"
+source "${inc}/run/python.sh"
+
 # Install dev tools.
 source "${inc}/dev/chrome.sh"
 source "${inc}/dev/delta.sh"
@@ -37,12 +43,6 @@ source "${inc}/dev/tmux.sh"
 # Install ops tools.
 source "${inc}/ops/aws.sh"
 source "${inc}/ops/terraform.sh"
-
-# Install runtime environments.
-source "${inc}/run/node.sh"
-source "${inc}/run/jdk.sh"
-source "${inc}/run/php.sh"
-source "${inc}/run/python.sh"
 
 # Finalise.
 source "${inc}/sys/teardown.sh"
