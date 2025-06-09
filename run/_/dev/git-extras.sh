@@ -9,6 +9,6 @@
 # https://github.com/tj/git-extras
 # ==============================================================================
 
-startNewTask "Install git-extras"
+# startNewTask "Install git-extras"
 
-sudo apt install git-extras
+# sudo apt install git-extras
