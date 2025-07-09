@@ -20,10 +20,9 @@ NOTE: The bootstrap script is designed to be idempotent, so you can run it multi
 
 === Using Docker on Windows
 
-My bootstrap scripts do _not_ install Docker. Since I use Windows Subsystem for Linux (WSL 2) for my local development environment, the recommended approach to
-using Docker in this environment is to install {link-docker-desktop}[Docker Desktop for Windows] in the host environment, and to configure it to use WSL as the "back-end" in which to build and run the containers it manages.
+My bootstrap scripts do _not_ install Docker. Since I use Windows Subsystem for Linux (WSL 2) for my local development environment, the recommended approach to using Docker in this environment is to install {link-docker-desktop}[Docker Desktop for Windows] in the host environment, and to configure it to use WSL as the "back-end" in which to build and run the containers it manages.
 
-This setup means the Docker CLI is not available in the WSL environment. Instead, Docker must be controlled directly from Windows – Git Bash is fine to access the Docker CLI.
+(If WSL is not used as the Docker back-end, `docker` commands will not be available in the WSL environment, but only in the Windows host environment.)
 
 See the following links for more information:
 
