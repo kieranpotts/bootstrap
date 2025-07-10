@@ -33,6 +33,7 @@ source "${inc}/run/python.sh"
 source "${inc}/dev/chrome.sh"
 source "${inc}/dev/delta.sh"
 source "${inc}/dev/git.sh"
+source "${inc}/dev/git-crypt.sh"
 #source "${inc}/dev/git-extras.sh"
 source "${inc}/dev/git-lfs.sh"
 source "${inc}/dev/lazygit.sh"
@@ -45,6 +46,6 @@ source "${inc}/dev/tmux.sh"
 source "${inc}/ops/aws.sh"
 source "${inc}/ops/terraform.sh"
 
-# Finalise.
+# Finalize.
 source "${inc}/sys/teardown.sh"
 source "${inc}/msg/finish.sh"
