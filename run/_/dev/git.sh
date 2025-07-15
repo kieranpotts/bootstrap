@@ -20,7 +20,7 @@ startNewTask "Install Git"
 git_version="2.35.0"
 
 # Install dependencies for the build.
-sudo apt-get install libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
+sudo apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
 
 # Remember the current working diectory, so we can change back here later.
 cwd=$(pwd)
