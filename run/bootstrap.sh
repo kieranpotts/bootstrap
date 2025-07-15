@@ -22,6 +22,7 @@ source "${inc}/util/curl.sh"
 source "${inc}/util/gnupg.sh"
 #source "${inc}/util/mlocate.sh"
 source "${inc}/util/software-properties-common.sh"
+source "${inc}/util/unzip.sh"
 
 # Install runtime environments.
 source "${inc}/run/node.sh"
