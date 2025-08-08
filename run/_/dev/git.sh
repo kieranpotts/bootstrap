@@ -3,7 +3,6 @@
 # ==============================================================================
 # Install Git.
 #
-#
 # Run the following command to check which is the current version of Git
 # available via the APT package manager.
 #
