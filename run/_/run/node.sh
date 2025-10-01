@@ -54,18 +54,19 @@ fi
 cd ${cwd}
 
 # Use NVM to install the current LTS version of Node, plus the previous five
-# LTS versions of Node - not the most recent LTS versions, but the very first
-# minor/patch version to receive the LTS label in each major line.
+# LTS versions of Node. Install the very first minor version to receive the LTS
+# label for each major line – not the most recent release.
 # https://nodejs.org/en/about/previous-releases
+nvm install 22.11.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md
 nvm install 20.9.0    # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md
 nvm install 18.12.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V18.md
 nvm install 16.13.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md
 nvm install 14.15.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V14.md
 nvm install 12.13.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V12.md
-nvm install 10.13.0   # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V10.md
+#nvm install 10.13.0  # github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V10.md
 
-# Use "active LTS" version as of 2024-08-21.
-nvm use 18.12.0
+# Use "active LTS" version as of 2025-10-01.
+nvm use 22.11.0
 
 # Print the versions of Node and NPM that are installed.
-nvm --list
+nvm list
