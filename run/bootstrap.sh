@@ -32,6 +32,7 @@ source "${inc}/run/python.sh"
 
 # Install dev tools.
 source "${inc}/dev/chrome.sh"
+source "${inc}/dev/copilot.sh"
 source "${inc}/dev/delta.sh"
 source "${inc}/dev/git.sh"
 source "${inc}/dev/git-crypt.sh"
