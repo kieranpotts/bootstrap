@@ -11,6 +11,9 @@ sudo apt install -y python3 python3-pip ipython3
 # https://pipenv.pypa.io/en/latest/
 pip install --user pipenv
 
+# Poetry - https://python-poetry.org/docs/
+curl -sSL https://install.python-poetry.org | python3 -
+
 # Add ~/.local/bin to PATH, required for the virtualenv script which is
 # installed here, see:
 # https://pipenv.pypa.io/en/latest/installation.html#installing-pipenv
