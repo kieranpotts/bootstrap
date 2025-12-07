@@ -8,4 +8,4 @@
 
 startNewTask "Install Neovim"
 
-sudo apt-get install neovim
+sudo apt-get install -y neovim
