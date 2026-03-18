@@ -8,7 +8,7 @@
 
 startNewTask "Install Google Chrome"
 
-# Remember the current working diectory, so we can change back here later.
+# Remember the current working directory, so we can change back here later.
 cwd=$(pwd)
 
 # Create a temporary directory.
@@ -20,7 +20,7 @@ cd "$tmp_dir"
 # Download the latest stable Debian package.
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
-# Install the Debian pakcage. The `--fix-missing` option is used to fix missing
+# Install the Debian package. The `--fix-missing` option is used to fix missing
 # dependencies that may arise during the installation process.
 superdo apt install -y --fix-missing ./google-chrome-stable_current_amd64.deb
 
@@ -32,7 +32,7 @@ rm -rf "$tmp_dir"
 
 # The following is required to eliminate dbus errors when launching Google Chrome
 # from WSL. https://github.com/microsoft/WSL/issues/7915#issuecomment-1163333151
-# This setup is WSL-specific and should not run in Docker containers.
+# This setup is WSL-specific and should not be run in Docker containers.
 if grep -qi microsoft /proc/version 2>/dev/null; then
   shrc="$HOME/.bashrc"
   if [ -f "$HOME/local.bashrc" ]; then
