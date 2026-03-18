@@ -10,7 +10,7 @@
 startNewTask "Upgrading software packages"
 
 # Install available upgrades to all existing packages (`upgrade`).
-sudo DEBIAN_FRONTEND=noninteractive apt-get --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+superdo DEBIAN_FRONTEND=noninteractive apt-get --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 # Upgrade current operating system version (`dist-upgrade`).
-sudo DEBIAN_FRONTEND=noninteractive apt-get --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
+superdo DEBIAN_FRONTEND=noninteractive apt-get --yes --allow-downgrades --allow-remove-essential --allow-change-held-packages -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade

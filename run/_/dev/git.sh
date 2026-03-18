@@ -19,7 +19,7 @@ startNewTask "Install Git"
 git_version="2.35.0"
 
 # Install dependencies for the build.
-sudo apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
+superdo apt-get install -y libz-dev libssl-dev libcurl4-gnutls-dev libexpat1-dev gettext cmake gcc
 
 # Remember the current working diectory, so we can change back here later.
 cwd=$(pwd)
@@ -39,7 +39,7 @@ cd "git-${git_version}"
 
 # Build and install the Git package. This is a slow operation.
 make prefix=/usr/local all
-sudo make prefix=/usr/local install
+superdo make prefix=/usr/local install
 
 # Cleanup.
 rm -f "v${git_version}.tar.gz"

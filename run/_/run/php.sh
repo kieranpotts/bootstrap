@@ -16,7 +16,7 @@ cwd=$(pwd)
 
 # Checkout phpenv into ~/.phpenv. Else update it.
 if [ ! -d "$HOME/.phpenv" ]; then
-  git clone git@github.com:phpenv/phpenv.git "$HOME/.phpenv"
+  git clone https://github.com/phpenv/phpenv.git "$HOME/.phpenv"
 else
   cd "$HOME/.phpenv"
   git pull
@@ -46,7 +46,7 @@ git clone https://github.com/php-build/php-build $(phpenv root)/plugins/php-buil
 # Also install php-build as a standalone binary. This is required
 # to allow us to query the available PHP "definitions" (versions).
 cd $(phpenv root)/plugins/php-build
-sudo ./install.sh
+superdo ./install.sh
 
 # Use the following command to list all available PHP "definitions" from
 # the php-build repository.
@@ -54,11 +54,11 @@ php-build --definitions
 
 # The following dependencies are required by php-build:
 # https://php-build.github.io/
-sudo apt-get install -y g++ libmcrypt-dev libreadline-dev
+superdo apt-get install -y g++ libmcrypt-dev libreadline-dev
 
 # The following packages have been found to be dependencies of the build step,
 # which is handled by php-build when phpenv install is run.
-sudo apt install -y \
+superdo apt install -y \
   libpng-dev \
   libjpeg-dev \
   libtidy-dev

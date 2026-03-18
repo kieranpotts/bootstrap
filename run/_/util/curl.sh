@@ -6,4 +6,4 @@
 
 startNewTask "Installing curl"
 
-sudo apt-get install -y curl
+superdo apt-get install -y curl

@@ -22,7 +22,7 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip -u awscliv2.zip
 
 # Run the installation. Update the CLI if it's already installed.
-sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+superdo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 
 # Move back to the original directory.
 cd ${cwd}

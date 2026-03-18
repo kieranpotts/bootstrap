@@ -13,4 +13,4 @@
 # software packages, eg. this is required for installation of Terraform.
 # ==============================================================================
 
-sudo apt-get install -y software-properties-common
+superdo apt-get install -y software-properties-common

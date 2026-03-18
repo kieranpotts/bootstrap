@@ -8,4 +8,4 @@
 
 startNewTask "Install tmux"
 
-sudo apt install tmux
+superdo apt install tmux

@@ -27,7 +27,7 @@ curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/lates
 tar xf lazygit.tar.gz lazygit
 
 # Install it.
-sudo install lazygit /usr/local/bin
+superdo install lazygit /usr/local/bin
 
 # Print out the installed version, and other version information.
 installed_lazygit_version=$(lazygit --version | grep -Po 'version=\K[^"]*')

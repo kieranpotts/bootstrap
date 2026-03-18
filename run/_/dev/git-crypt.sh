@@ -8,6 +8,6 @@
 
 startNewTask "Install git-crypt"
 
-sudo apt install git-crypt
+superdo apt install git-crypt
 
 git-crypt --version

@@ -13,4 +13,4 @@
 # https://gnupg.org/
 # ==============================================================================
 
-sudo apt-get install -y gnupg
+superdo apt-get install -y gnupg

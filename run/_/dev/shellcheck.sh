@@ -8,4 +8,4 @@
 
 startNewTask "Install shellcheck"
 
-sudo apt-get install -y shellcheck
+superdo apt-get install -y shellcheck

@@ -34,3 +34,25 @@ EOF
   sleep 2s
 
 }
+
+# ------------------------------------------------------------------------------
+# Run a command with sudo if the current user is not root.
+#
+# If running as root (eg. in Docker), execute the command directly.
+# Otherwise, prefix with sudo. This allows bootstrap scripts to work in both
+# Docker (where they run as root during build) and on local systems under
+# the current user.
+#
+# @param  * - Command and arguments to run.
+#
+# @return int - Exit code of the executed command.
+#
+function superdo {
+
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  else
+    sudo "$@"
+  fi
+
+}

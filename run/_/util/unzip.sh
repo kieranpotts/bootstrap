@@ -7,4 +7,4 @@
 # oh-my-posh.
 # ==============================================================================
 
-sudo apt-get install -y unzip
+superdo apt-get install -y unzip

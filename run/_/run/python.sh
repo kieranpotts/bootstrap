@@ -6,7 +6,7 @@
 
 startNewTask "Install Python, pip, pipenv, etc."
 
-sudo apt install -y python3 python3-pip ipython3
+superdo apt install -y python3 python3-pip ipython3
 
 # https://pipenv.pypa.io/en/latest/
 pip install --user pipenv
