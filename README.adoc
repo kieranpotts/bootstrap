@@ -6,7 +6,7 @@ Provisioning scripts for my standard local development environment.
 
 == Requirements
 
-* Debian-based Linux distribution (tested on Ubuntu 20.04.6 LTS running in WSL2)
+* Debian-based Linux distribution (tested on Ubuntu 24.04 LTS running in WSL2)
 
 == Instructions
 
