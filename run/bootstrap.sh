@@ -24,6 +24,7 @@ source "${inc}/util/gnupg.sh"
 source "${inc}/util/make.sh"
 source "${inc}/util/software-properties-common.sh"
 source "${inc}/util/unzip.sh"
+source "${inc}/util/wget.sh"
 
 # Install runtime environments.
 source "${inc}/run/node.sh"
