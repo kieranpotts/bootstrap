@@ -8,4 +8,4 @@
 
 startNewTask "Install Maven"
 
-superdo apt install maven -y
+superdo apt install -y maven

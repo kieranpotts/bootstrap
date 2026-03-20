@@ -21,10 +21,10 @@ delta_version="0.18.0"
 cwd=$(pwd)
 
 # Create a temporary directory.
-tmp_dir=$(mktemp -d)
+tmp_dir="$(mktemp -d)"
 
 # Move to the temporary directory.
-cd "$tmp_dir"
+cd "$tmp_dir" || true
 
 # Fetch the latest .deb file from GitHub releases.
 wget "https://github.com/dandavison/delta/releases/download/${delta_version}/git-delta_${delta_version}_amd64.deb"
@@ -36,7 +36,7 @@ superdo dpkg -i "git-delta_${delta_version}_amd64.deb"
 superdo apt-get install -f
 
 # Move back to the original directory.
-cd ${cwd}
+cd "${cwd}" || true
 
 # Remove the temporary directory.
 rm -rf "$tmp_dir"

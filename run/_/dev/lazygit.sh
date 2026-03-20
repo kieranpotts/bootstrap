@@ -9,13 +9,13 @@
 startNewTask "Install LazyGit"
 
 # Remember the current working diectory, so we can change back here later.
-cwd=$(pwd)
+cwd="$(pwd)"
 
 # Create a temporary directory.
-tmp_dir=$(mktemp -d)
+tmp_dir="$(mktemp -d)"
 
 # Move to the temporary directory.
-cd "$tmp_dir"
+cd "$tmp_dir" || true
 
 # Find the latest release.
 lazygit_version=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
@@ -38,7 +38,7 @@ rm -f lazygit.tar.gz
 rm -rf lazygit
 
 # Move back to the original directory.
-cd ${cwd}
+cd "${cwd}" || true
 
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
