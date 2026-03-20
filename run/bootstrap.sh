@@ -21,6 +21,7 @@ source "${inc}/sys/upgrade.sh"
 source "${inc}/util/curl.sh"
 source "${inc}/util/git.sh"
 source "${inc}/util/gnupg.sh"
+source "${inc}/util/make.sh"
 source "${inc}/util/software-properties-common.sh"
 source "${inc}/util/unzip.sh"
 
