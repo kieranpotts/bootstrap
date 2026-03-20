@@ -13,4 +13,6 @@
 # https://gnupg.org/
 # ==============================================================================
 
+startNewTask "Installing gnupg"
+
 superdo apt-get install -y gnupg
