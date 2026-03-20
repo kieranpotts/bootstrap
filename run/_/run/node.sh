@@ -21,17 +21,19 @@ nvm_version="0.40.0"
 cwd=$(pwd)
 
 # https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
-cd ~/
+cd ~/ || true
 rm -Rf .nvm
 git clone https://github.com/nvm-sh/nvm.git .nvm
 
-cd ~/.nvm
+cd ~/.nvm || true
 git checkout "v${nvm_version}"
 
 # Source nvm.sh to load NVM immediately into the current shell session.
 . ./nvm.sh
 
 # Define the content to be appended to the .bashrc file.
+# (Single quotes are deliberate to disable variable expansion.)
+# shellcheck disable=SC2016
 content='
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Loads NVM
@@ -44,14 +46,15 @@ if [ -f "$HOME/local.bashrc" ]; then
   if ! grep -q "export NVM_DIR" "$HOME/local.bashrc"; then
     echo "$content" >> "$HOME/local.bashrc"
   fi
-elif [ -f "$HOME/.bashrc" ]; then
-  if ! grep -q "export NVM_DIR" "$HOME/.bashrc"; then
-    echo "$content" >> "$HOME/.bashrc"
+else
+  touch "${HOME}/.bashrc"
+  if ! grep -q "export NVM_DIR" "${HOME}/.bashrc"; then
+    echo "${content}" >> "${HOME}/.bashrc"
   fi
 fi
 
 # Move back to the original directory.
-cd ${cwd}
+cd "${cwd}" || true
 
 # Use NVM to install the current LTS version of Node, plus the previous five
 # LTS versions of Node. Install the very first minor version to receive the LTS
