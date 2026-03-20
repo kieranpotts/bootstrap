@@ -13,6 +13,7 @@ startNewTask "Install OpenJDK via Jabba"
 jabba_version="0.11.2"
 
 export JABBA_VERSION=${jabba_version}
+# shellcheck disable=SC1090
 curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash -s -- --skip-rc && . ~/.jabba/jabba.sh
 
 # Add scripts to .bashrc to automatically source jabba.sh at shell startup.
@@ -22,7 +23,8 @@ if [ -f "$HOME/local.bashrc" ]; then
     echo "export JABBA_VERSION=${jabba_version}" >> "$HOME/local.bashrc"
     echo "[ -s "$JABBA_HOME/jabba.sh" ] && . "$JABBA_HOME/jabba.sh"" >> "$HOME/local.bashrc"
   fi
-elif [ -f "$HOME/.bashrc" ]; then
+else
+  touch "$HOME/.bashrc"
   if ! grep -q "export JABBA_VERSION" "$HOME/.bashrc"; then
     echo "export JABBA_VERSION=${jabba_version}" >> "$HOME/.bashrc"
     echo "[ -s "$JABBA_HOME/jabba.sh" ] && . "$JABBA_HOME/jabba.sh"" >> "$HOME/.bashrc"
@@ -30,6 +32,7 @@ elif [ -f "$HOME/.bashrc" ]; then
 fi
 
 # Source jabba.sh to load Jabba immediately into the current shell session.
+# shellcheck disable=SC1090
 . ~/.jabba/jabba.sh
 
 # Install the current LTS versions of OpenJDK, using direct downloads of the
