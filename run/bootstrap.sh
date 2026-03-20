@@ -20,7 +20,6 @@ source "${inc}/sys/upgrade.sh"
 # Install general utilities.
 source "${inc}/util/curl.sh"
 source "${inc}/util/gnupg.sh"
-#source "${inc}/util/mlocate.sh"
 source "${inc}/util/software-properties-common.sh"
 source "${inc}/util/unzip.sh"
 
