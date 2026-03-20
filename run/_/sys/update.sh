@@ -10,7 +10,13 @@
 
 startNewTask "Updating the system"
 
-superdo timedatectl set-timezone UTC
+# Set timezone to UTC.
+if command -v timedatectl &> /dev/null; then
+  superdo timedatectl set-timezone UTC
+else
+  echo "UTC" | superdo tee /etc/timezone
+  superdo dpkg-reconfigure -f noninteractive tzdata
+fi
 
 # Clean up any packages that were installed to satisfy dependencies,
 # but which are no longer needed.
