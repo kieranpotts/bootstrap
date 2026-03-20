@@ -18,11 +18,22 @@ curl -sSL https://install.python-poetry.org | python3 -
 # installed here, see:
 # https://pipenv.pypa.io/en/latest/installation.html#installing-pipenv
 if [ -f "$HOME/local.bashrc" ]; then
+  # (Single quotes are used to prevent variable expansion.)
+  # shellcheck disable=SC2016
   if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/local.bashrc"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/local.bashrc"
+    . "$HOME/local.bashrc"
   fi
-elif [ -f "$HOME/.bashrc" ]; then
+else
+  touch "$HOME/.bashrc"
+  # (Single quotes are used to prevent variable expansion.)
+  # shellcheck disable=SC2016
   if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.bashrc"; then
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+    . "$HOME/.bashrc"
   fi
 fi
+
+python3 --version
+pip --version
+poetry --version
