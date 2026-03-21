@@ -31,34 +31,36 @@ cd "${cwd}" || true
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
 
+# @deprecated: This might be causing problems in the devcontainer.
+#
 # The following is required to eliminate dbus errors when launching Google Chrome
 # from WSL. https://github.com/microsoft/WSL/issues/7915#issuecomment-1163333151
 # This setup is WSL-specific and should not be run in Docker containers.
-if grep -qi microsoft /proc/version 2>/dev/null; then
-
-  shrc="$HOME/.bashrc"
-  if [ -f "$HOME/local.bashrc" ]; then
-    shrc="$HOME/local.bashrc"
-  fi
-
-  echo '' >> ${shrc}
-  echo '# Fixes for dbus errors when launching Google Chrome from WSL.' >> ${shrc}
-  echo 'export XDG_RUNTIME_DIR=/run/user/$(id -u)' >> ${shrc}
-  echo 'export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus' >> ${shrc}
-
-  # shellcheck disable=SC1090
-  . "${shrc}"
-
-  superdo service dbus start
-  superdo chmod 700 "$XDG_RUNTIME_DIR"
-  superdo chown "$(id -un):$(id -gn)" "$XDG_RUNTIME_DIR"
-  dbus-daemon --session --address="$DBUS_SESSION_BUS_ADDRESS" --nofork --nopidfile --syslog-only &
-
-  # upower also required in WSL.
-  # https://ubuntu.pkgs.org/20.04/ubuntu-main-arm64/upower_0.99.11-1build2_arm64.deb.html
-  superdo apt install -y upower
-fi
-
+# if grep -qi microsoft /proc/version 2>/dev/null; then
+#
+#   shrc="$HOME/.bashrc"
+#   if [ -f "$HOME/local.bashrc" ]; then
+#     shrc="$HOME/local.bashrc"
+#   fi
+#
+#   echo '' >> ${shrc}
+#   echo '# Fixes for dbus errors when launching Google Chrome from WSL.' >> ${shrc}
+#   echo 'export XDG_RUNTIME_DIR=/run/user/$(id -u)' >> ${shrc}
+#   echo 'export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus' >> ${shrc}
+#
+#   # shellcheck disable=SC1090
+#   . "${shrc}"
+#
+#   superdo service dbus start
+#   superdo chmod 700 "$XDG_RUNTIME_DIR"
+#   superdo chown "$(id -un):$(id -gn)" "$XDG_RUNTIME_DIR"
+#   dbus-daemon --session --address="$DBUS_SESSION_BUS_ADDRESS" --nofork --nopidfile --syslog-only &
+#
+#   # upower also required in WSL.
+#   # https://ubuntu.pkgs.org/20.04/ubuntu-main-arm64/upower_0.99.11-1build2_arm64.deb.html
+#   superdo apt install -y upower
+# fi
+#
 # To launch Chrome, type:
 # ---
 # $ google-chrome
