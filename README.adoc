@@ -16,7 +16,15 @@ Provisioning scripts for my standard local development environment.
 
 NOTE: The bootstrap script is designed to be idempotent, so you can run it multiple times without causing any issues. It can be re-run to update the system with new changes.
 
-== Related notes
+=== Releasing
+
+Releases are now tagged in Git, with the version numbers corresponding to releases of my https://hub.docker.com/r/kieranpotts/devenv[devenv] container, which is built from the https://github.com/kieranpotts/workspace[workspace] repository.
+
+----
+$ git tag -a v<major>.<minor>.<patch> -m "<description>"
+$ git push
+$ git push --tags
+----
 
 === Using Docker on Windows
 
