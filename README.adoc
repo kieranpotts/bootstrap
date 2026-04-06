@@ -18,7 +18,7 @@ NOTE: The bootstrap script is designed to be idempotent, so you can run it multi
 
 === Releasing
 
-Releases are now tagged in Git, with the version numbers corresponding to releases of my https://hub.docker.com/r/kieranpotts/devenv[devenv] container, which is built from the https://github.com/kieranpotts/workspace[workspace] repository.
+Releases are now tagged in Git. I use the version numbers to pin builds of my https://hub.docker.com/r/kieranpotts/docker-devenv[devenv] container to a specific point in this repository's history.
 
 ----
 $ git tag -a v<major>.<minor>.<patch> -m "<description>"
