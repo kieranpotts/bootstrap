@@ -50,6 +50,9 @@ source "${inc}/dev/tmux.sh"
 source "${inc}/ops/aws.sh"
 source "${inc}/ops/terraform.sh"
 
+# Hardware utilities.
+source "${inc}/phy/rocm.sh"
+
 # Finalize.
 source "${inc}/sys/teardown.sh"
 source "${inc}/msg/finish.sh"
