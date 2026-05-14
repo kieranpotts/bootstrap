@@ -9,10 +9,10 @@
 
 startNewTask "Install Python, pip, pipenv, etc."
 
-superdo apt install -y python3 python3-pip ipython3
+superdo apt install -y python3 python3-pip python3-venv ipython3 pipx
 
 # https://pipenv.pypa.io/en/latest/
-pip install --user pipenv
+pipx install pipenv
 
 # Poetry - https://python-poetry.org/docs/
 curl -sSL https://install.python-poetry.org | python3 -
@@ -39,4 +39,5 @@ fi
 
 python3 --version
 pip --version
+pipx --version
 poetry --version

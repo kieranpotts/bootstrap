@@ -43,6 +43,7 @@ source "${inc}/dev/lazygit.sh"
 source "${inc}/dev/maven.sh"
 source "${inc}/dev/neovim.sh"
 source "${inc}/dev/oh-my-posh.sh"
+source "${inc}/dev/pre-commit.sh"
 source "${inc}/dev/shellcheck.sh"
 source "${inc}/dev/tmux.sh"
 
