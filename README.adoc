@@ -31,7 +31,7 @@ $ git commit -m "release: v<major>.<minor>.<patch>"
 Tag the release:
 
 ----
-$ git tag -a v<major>.<minor>.<patch> -F RELEASE_NOTES.md
+$ git tag -a v<major>.<minor>.<patch> -F RELEASE.md
 ----
 
 Then push the commit and tag:
