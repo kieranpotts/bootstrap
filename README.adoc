@@ -22,6 +22,17 @@ Releases are now tagged in Git. I use the version numbers to pin builds of my ht
 
 ----
 $ git tag -a v<major>.<minor>.<patch> -m "<description>"
+----
+
+Or:
+
+----
+$ git tag -a v<major>.<minor>.<patch> -F RELEASE_NOTES.md
+----
+
+Then:
+
+----
 $ git push
 $ git push --tags
 ----
