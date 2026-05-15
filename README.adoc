@@ -20,17 +20,21 @@ NOTE: The bootstrap script is designed to be idempotent, so you can run it multi
 
 Releases are now tagged in Git. I use the version numbers to pin builds of my https://hub.docker.com/r/kieranpotts/docker-devcontainer[devcontainer] to a specific point in this repository's history.
 
+Update the changelog and release note, and commit those:
+
 ----
-$ git tag -a v<major>.<minor>.<patch> -m "<description>"
+$ git add CHANGELOG.md
+$ git add RELEASE.md
+$ git commit -m "release: v<major>.<minor>.<patch>"
 ----
 
-Or:
+Tag the release:
 
 ----
 $ git tag -a v<major>.<minor>.<patch> -F RELEASE_NOTES.md
 ----
 
-Then:
+Then push the commit and tag:
 
 ----
 $ git push
