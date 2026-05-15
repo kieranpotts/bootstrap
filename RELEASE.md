@@ -1,6 +1,5 @@
-# v0.0.0 release notes
+# v1.2.0 release notes
 
-- Changed this.
-- Changed that.
-- Added this and that.
-- Deprecated this.
+- Renamed container name: kieranpotts/devenv → kieranpotts/devcontainer.
+- Installed rocm-smi.
+- Added Git pre-commit.com hook framework.
