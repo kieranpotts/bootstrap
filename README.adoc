@@ -8,6 +8,8 @@ Provisioning scripts for my standard local development environment.
 
 * Debian-based Linux distribution (tested on Ubuntu 24.04 LTS running in WSL2)
 
+* Git
+
 == Instructions
 
 1. Clone this repository on the target machine.
