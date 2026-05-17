@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Remove `git-secrets`.
+
 ## [1.2.0] - 2026-05-15
 
 - Renamed container name: kieranpotts/devenv → kieranpotts/devcontainer.
