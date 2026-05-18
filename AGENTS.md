@@ -1,0 +1,59 @@
+# Bootstrap
+
+## Project overview
+
+Provisioning scripts for a standard local development environment on Debian-based Linux – which may include Ubuntu 24.04 LTS under WSL2.
+
+The scripts are idempotent – safe to re-run to pick up new changes.
+
+The boostrap script may be used to provision host environments, or to create an image for a containerized environment. [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) is a Docker image that can be used for a guest [devcontainer](https://containers.dev/), as an alternative to installing the bootstrap scripts directly on a host machine.
+
+Tagged released of this repository are used to pin builds of the [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) image to a known good state.
+
+## Tech stack
+
+- Bash, targeting Debian-based Linux (`apt`, `dpkg`).
+- ShellCheck for static analysis.
+
+## Repository structure
+
+- `run/bootstrap`: Entry script, sources every install step in order.
+- `run/_/utils.sh`: Shared helpers (`startNewTask`, `superdo`).
+- `run/_/msg/`: Start and finish banners.
+- `run/_/sys/`: System updates, upgrades, and teardown.
+- `run/_/util/`: General utilities (curl, git, gnupg, wget, …).
+- `run/_/run/`: Language runtimes (Node, JDK, PHP, Python).
+- `run/_/dev/`: Developer tooling (Claude, Copilot, delta, lazygit, …).
+- `run/_/ops/`: Ops tooling (AWS CLI, Terraform).
+- `run/_/phy/`: Hardware-related tooling (eg. ROCm).
+- `docs/`: Installation, requirements, releasing, and considerations.
+- `skills/`: On-demand skills for agents working on this repo.
+
+## Tools
+
+- `./run/bootstrap` to provision a target machine.
+- `shellcheck run/**/*.sh run/bootstrap` to lint shell scripts.
+
+## Rules
+
+- MUST keep every script idempotent. Running `./run/bootstrap` repeatedly must converge, not duplicate, work.
+
+- MUST call `startNewTask "…"` as the first non-comment line of every install step, so the run is self-narrating.
+
+- MUST use the `superdo` helper instead of `sudo` directly, so scripts work both as root (eg. for Docker builds) and as a regular user (for local installs).
+
+- MUST source every new install script from `run/bootstrap` in the correct group, sorted alphabetically within that group.
+
+- MUST target Debian-based distros only. Do not add steps that assume other package managers besides APT.
+
+- MUST NOT commit ad-hoc one-off scripts to `run/_/`. Each file installs or configures one named tool.
+
+- SHOULD pin upstream versions when the project publishes stable tags or `.deb` artifacts, so devcontainer builds are reproducible.
+
+- SHOULD restore the original working directory and clean up any temporary directories created during an install step.
+
+- SHOULD add an "[Unreleased]" entry to `CHANGELOG.md` when adding, removing, or materially changing an install step.
+
+## Skills
+
+- [`./skills/install-step/SKILL.md`](./skills/install-steo/SKILL.md): Add or modify an install step in the bootstrap scripts.

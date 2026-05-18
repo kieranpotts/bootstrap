@@ -28,4 +28,18 @@
     },
   },
 
+  "[skill]": {
+    /* Same as for Markdown. */
+    "editor.wordWrap": "bounded",
+    "editor.wordWrapColumn": 72,
+
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+    },
+  },
+
 }

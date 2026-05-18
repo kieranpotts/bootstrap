@@ -1,0 +1,184 @@
+---
+name: install-step
+description: Add, modify, or remove a program installation step.
+compatibility: requires bash, Debian-based Linux (apt/dpkg)
+license: MIT
+---
+
+# Install step
+
+Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one.
+
+The conventions below keep `./run/bootstrap` idempotent, readable, and reproducible across the host machine and the [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) image.
+
+Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/_/utils.sh` (the shared helpers).
+
+## Instructions
+
+1.  **Pick the right group.**
+
+    Each install step lives in a single file under `run/_/<group>/<name>.sh`. Pick the group that matches the tool's role:
+
+    - `sys/`: System-level setup, upgrades, teardown.
+    - `util/`: General command-line utilities (curl, wget, unzip, …).
+    - `run/`: Language runtimes and version managers.
+    - `dev/`: Developer tooling (CLIs, TUIs, editors, linters).
+    - `ops/`: Cloud and infrastructure CLIs.
+    - `phy/`: Hardware-related tooling.
+    - `msg/`: Start/finish banners only.
+
+    Use the program's canonical short name as the filename (eg. `gh.sh`, not `github-cli.sh`).
+
+2.  **Create the install script from this template.**
+
+    ```bash
+    #!/bin/bash
+
+    #
+    # Install <Program Name>.
+    #
+    # <Upstream homepage>
+    # <Upstream install docs>
+    #
+
+    startNewTask "Install <Program Name>"
+
+    # Install commands here, using `superdo` instead of `sudo`.
+    superdo apt-get install -y <package>
+    ```
+
+    The leading comment block is required. It documents what the script installs and points readers at the upstream install instructions.
+
+3.  **Wire the script into the entry point.**
+
+    Add a `source "${inc}/<group>/<name>.sh"` line to `run/bootstrap` in the correct group, keeping the lines within that group sorted alphabetically.
+
+4.  **Pin versions when reasonable.**
+
+    Where the upstream project ships tagged releases or `.deb` artifacts, pin the version in a local variable at the top of the script so the install is reproducible. Add a short comment beside any pinned version that records where the version number came from (eg. an upstream changelog link).
+
+5.  **Update the changelog.**
+
+    Add a one-line bullet under the `## [Unreleased]` heading in `CHANGELOG.md` describing the change (eg. `- Install GitHub CLI (\`gh\`).`).
+
+6.  **Lint the script.**
+
+    Run `shellcheck` against the new or modified file (and `run/bootstrap` if it was touched). Resolve any findings before committing.
+
+7.  **Smoke-test the install.**
+
+    On a clean target – or by re-running `./run/bootstrap` on an existing host – confirm the new step prints its `STEP N` banner, completes without prompts, and that the installed binary is on `PATH` and reports a sensible version.
+
+## Rules
+
+-   **Scripts must be idempotent.**
+
+    `./run/bootstrap` is re-run to apply updates as well as on first provisioning. Each step must converge on the same end state whether it runs against a fresh machine or one that has been bootstrapped many times before.
+
+    Prefer package-manager installs and guarded mutations (`grep -q … || echo … >> …`) over blind appends.
+
+-   **Use `superdo`, never `sudo` directly.**
+
+    The `superdo` helper in `run/_/utils.sh` invokes the command directly when running as root (Docker image builds) and prefixes `sudo` otherwise (local installs). Calling `sudo` directly breaks the Docker build path.
+
+    ```bash
+    # ✅ Yes:
+    superdo apt-get install -y <package>
+
+    # ❌ No:
+    sudo apt-get install -y <package>
+    ```
+
+-   **Announce each step with `startNewTask`.**
+
+    The first non-comment line of every install script must be `startNewTask "Install …"` (or an equivalent verb). The helper prints a numbered banner so the bootstrap run is self-narrating, and is the contract that downstream scripts depend on for step numbering.
+
+-   **One tool per file.**
+
+    Do not bundle unrelated installs into a single script. If a tool genuinely depends on another, install the dependency in its own file and source both from `run/bootstrap` in the right order.
+
+-   **Download into a temp directory; restore the working directory.**
+
+    When a step downloads tarballs or `.deb` files, create a temp directory with `mktemp -d`, capture the original working directory before `cd`-ing in, and `cd` back plus `rm -rf` the temp dir on the way out.
+
+    See `run/_/dev/lazygit.sh` and `run/_/dev/delta.sh` for the established pattern.
+
+-   **Target Debian-based Linux only.**
+
+    Use `apt-get`, `dpkg`, and `.deb` artifacts. Do not branch on distribution or add fallbacks for non-Debian systems. The supported environment is documented in `docs/requirements.md`.
+
+-   **No interactive prompts.**
+
+    Pass `-y` to `apt-get install` and any other flag needed to keep the run non-interactive, so the script can complete unattended in Docker builds and CI.
+
+-   **Print the installed version.**
+
+    Where the tool exposes `--version`, end the script with an `echo` of the installed version. This makes provisioning logs useful when diagnosing devcontainer build differences.
+
+-   **Follow the project's shell conventions.**
+
+    `#!/bin/bash` shebang, two-space indent, lowercase snake-case for local variables, and `source` (already used throughout `run/bootstrap`). These match the existing style and `.shellcheckrc` configuration.
+
+## Examples
+
+A minimal install step backed by an apt package — see [`run/_/util/curl.sh`](../../run/_/util/curl.sh):
+
+```bash
+#!/bin/bash
+
+#
+# Install Curl
+#
+
+startNewTask "Installing curl"
+
+superdo apt-get install -y curl
+```
+
+An install step that adds a third-party apt source and pins the version — see [`run/_/dev/gh.sh`](../../run/_/dev/gh.sh):
+
+```bash
+#!/bin/bash
+
+#
+# Install the GitHub CLI (`gh`).
+#
+# https://github.com/cli/cli
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+#
+
+startNewTask "Install GitHub CLI"
+
+superdo mkdir -p -m 755 /etc/apt/keyrings
+wget -nv -O- https://cli.github.com/packages/githubcli-archive-keyring.gpg | superdo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+superdo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+
+superdo mkdir -p -m 755 /etc/apt/sources.list.d
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | superdo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+superdo apt-get update
+superdo apt-get install gh -y
+```
+
+An install step that downloads a release tarball and pins the upstream version — see [`run/_/dev/lazygit.sh`](../../run/_/dev/lazygit.sh) for the temp-dir pattern.
+
+## Edge cases
+
+-   **Tools requiring a runtime:**
+
+    If the tool depends on Node, Python, or another runtime installed earlier in the run (eg. global npm packages like Claude Code or Copilot CLI), confirm that the runtime's `source` line in `run/bootstrap` appears before the new step. Do not re-install the runtime inside the tool's script.
+
+-   **Tools that modify `.bashrc`:**
+
+    Guard appends with a `grep -q` check so re-running the bootstrap does not duplicate exports. See `run/_/run/node.sh` for the established pattern.
+
+-   **Removing a tool:**
+
+    Delete the install script, remove its `source` line from `run/bootstrap`, and add an "[Unreleased]" changelog entry. Consider whether the bootstrap should also remove an already-installed copy on existing machines (`apt-get remove …`) — usually yes, so the cleanup converges on the new desired state.
+
+## References
+
+- [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill builds on.
+- [`run/_/utils.sh`](../../run/_/utils.sh): Source of `startNewTask` and `superdo`.
+- [`docs/installation.md`](../../docs/installation.md): How the entry script is invoked.
+- [`docs/considerations.md`](../../docs/considerations.md): Why Docker is intentionally excluded.
