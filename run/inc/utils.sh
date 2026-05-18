@@ -36,12 +36,19 @@ function startNewTask {
   # Increment the global task counter.
   ((i++))
 
+  local message="${i}. ${1}"
+
+  # Pad the message line so the closing box edge stays flush right. The box is
+  # 80 columns wide, with one space of left padding inside the bars; subtracting
+  # those two pieces leaves 77 columns for `message + right padding`.
+  local pad=$(( 77 - ${#message} ))
+  (( pad < 0 )) && pad=0
+
   # Message to render.
   read -r -d '' msg << EOF
-────────────────────────────────────────────────────────────────────────────────
-  STEP ${i}
-  ${1}
-────────────────────────────────────────────────────────────────────────────────
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ${message}$(printf '%*s' "${pad}" '')│
+└──────────────────────────────────────────────────────────────────────────────┘
 EOF
 
   # Print the message and give the user a moment to read it.

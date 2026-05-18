@@ -8,9 +8,9 @@ Discrete changes that would bring this repo's structure, conventions, and toolin
 
 - [x] Add ANSI code variables (`BOLD`, `RED`, `GREEN`, `YELLOW`, `BLUE`, `RESET`) — either inline in `utils.sh` or in a dedicated module mirroring the company repo's `run/inc/var/ansi-codes.sh`.
 
-- [ ] Decide whether to switch the `startNewTask` banner to the heavier boxed style used by the company repo's `print_step` (`┌──…┐ / │ … │ / └──…┘`). Currently dashed lines. Cosmetic — skip if the lighter style is preferred.
+- [x] Decide whether to switch the `startNewTask` banner to the heavier boxed style used by the company repo's `print_step` (`┌──…┐ / │ … │ / └──…┘`). Currently dashed lines. Cosmetic — skip if the lighter style is preferred.
 
-- [ ] Decide whether to replace the plain-echo banners in [run/inc/msg/start.sh](run/inc/msg/start.sh) and [run/inc/msg/finish.sh](run/inc/msg/finish.sh) with the company repo's `┏━━…┓` heavy-box style. Cosmetic — skip if the current style is preferred.
+- [x] Decide whether to replace the plain-echo banners in [run/inc/msg/start.sh](run/inc/msg/start.sh) and [run/inc/msg/finish.sh](run/inc/msg/finish.sh) with the company repo's `┏━━…┓` heavy-box style. Cosmetic — skip if the current style is preferred.
 
 - [ ] Audit each install step for use of the new `print_*` helpers — particularly to replace bare `echo` lines with `print_info` and to surface success/failure consistently.
 
