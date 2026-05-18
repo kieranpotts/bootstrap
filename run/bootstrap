@@ -41,6 +41,9 @@ source "${inc}/utils.sh"
 # Print start message.
 source "${inc}/msg/start.sh"
 
+# Verify system compatibility and record detected OS/arch.
+source "${inc}/sys/checks.sh"
+
 # Update and install system utilities.
 source "${inc}/sys/update.sh"
 source "${inc}/sys/upgrade.sh"

@@ -12,13 +12,13 @@ Discrete changes that would bring this repo's structure, conventions, and toolin
 
 - [x] Decide whether to replace the plain-echo banners in [run/inc/msg/start.sh](run/inc/msg/start.sh) and [run/inc/msg/finish.sh](run/inc/msg/finish.sh) with the company repo's `┏━━…┓` heavy-box style. Cosmetic — skip if the current style is preferred.
 
-- [ ] Audit each install step for use of the new `print_*` helpers — particularly to replace bare `echo` lines with `print_info` and to surface success/failure consistently.
+- [x] Audit each install step for use of the new `print_*` helpers — particularly to replace bare `echo` lines with `print_info` and to surface success/failure consistently.
 
 ## Pre-flight checks
 
-- [ ] Add `run/inc/sys/checks.sh` modelled on the company repo's [equivalent](../../../hacksltd/tools/development-environment-bootstrapper/run/inc/sys/checks.sh), guarding the run against non-Debian-based OSes and (where relevant) non-`x86_64` architectures. Prompt before continuing on Ubuntu versions outside the supported set. Source it as the first sourced step in [run/bootstrap](run/bootstrap), after flag parsing.
+- [x] Add `run/inc/sys/checks.sh` modelled on the company repo's [equivalent](../../../hacksltd/tools/development-environment-bootstrapper/run/inc/sys/checks.sh), guarding the run against non-Debian-based OSes and (where relevant) non-`x86_64` architectures. Prompt before continuing on Ubuntu versions outside the supported set. Source it as the first sourced step in [run/bootstrap](run/bootstrap), after flag parsing.
 
-- [ ] Include the detected OS name, version, and architecture in the start banner so logs are self-describing.
+- [x] Include the detected OS name, version, and architecture in the start banner so logs are self-describing.
 
 ## Idempotency
 
