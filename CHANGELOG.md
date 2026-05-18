@@ -4,6 +4,7 @@
 
 - Remove `git-secrets`.
 - Install GitHub CLI (`gh`).
+- Renamed entry script from `run/bootstrap.sh` to `run/bootstrap` (now executable).
 
 ## [1.2.0] - 2026-05-15
 
