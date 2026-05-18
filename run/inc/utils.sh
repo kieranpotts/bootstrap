@@ -4,6 +4,14 @@
 # Helper functions for the bootstrap scripts.
 #
 
+# ANSI escapes used by the `print_*` helpers below.
+RESET='\033[0m'
+BOLD='\033[1m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+
 # Global task counter.
 i=0
 
@@ -74,5 +82,60 @@ function superdo {
 function is_gui_enabled {
 
   [ "${install_gui:-0}" -eq 1 ]
+
+}
+
+# ------------------------------------------------------------------------------
+# Print a general information message.
+#
+# @param  1 - Message to print.
+#
+# @return void
+#
+function print_info {
+
+  printf '%b%b[INFO]%b %s\n' "${BOLD}" "${BLUE}" "${RESET}" "$1"
+
+}
+
+# ------------------------------------------------------------------------------
+# Print notification of a successful operation.
+#
+# @param  1 - Message to print.
+#
+# @return void
+#
+function print_success {
+
+  printf '%b%b[SUCCESS]%b %s\n' "${BOLD}" "${GREEN}" "${RESET}" "$1"
+
+}
+
+# ------------------------------------------------------------------------------
+# Print a warning message.
+#
+# @param  1 - Message to print.
+#
+# @return void
+#
+function print_warning {
+
+  printf '%b%b[WARNING]%b %s\n' "${BOLD}" "${YELLOW}" "${RESET}" "$1"
+
+}
+
+# ------------------------------------------------------------------------------
+# Notify the user of an error.
+#
+# Usage of this function should be followed by an exit command, with a non-zero
+# exit code to indicate failure.
+#
+# @param  1 - Message to print.
+#
+# @return void
+#
+function print_error {
+
+  printf '%b%b[ERROR]%b %s\n' "${BOLD}" "${RED}" "${RESET}" "$1"
 
 }

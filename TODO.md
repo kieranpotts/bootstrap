@@ -4,7 +4,7 @@ Discrete changes that would bring this repo's structure, conventions, and toolin
 
 ## Helpers & UX
 
-- [ ] Add coloured status helpers to [run/inc/utils.sh](run/inc/utils.sh) (or a new sibling module): `print_info`, `print_success`, `print_warning`, `print_error`. Each uses the bold + colour + bracketed label prefix pattern from the company repo's `run/inc/fn/statuses.sh`.
+- [x] Add coloured status helpers to [run/inc/utils.sh](run/inc/utils.sh) (or a new sibling module): `print_info`, `print_success`, `print_warning`, `print_error`. Each uses the bold + colour + bracketed label prefix pattern from the company repo's `run/inc/fn/statuses.sh`.
 
 - [ ] Add ANSI code variables (`BOLD`, `RED`, `GREEN`, `YELLOW`, `BLUE`, `RESET`) — either inline in `utils.sh` or in a dedicated module mirroring the company repo's `run/inc/var/ansi-codes.sh`.
 
