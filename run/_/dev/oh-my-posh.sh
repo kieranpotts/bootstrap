@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install Oh-My-Posh.
 #
 # https://ohmyposh.dev/docs/installation/linux
-# ==============================================================================
+#
 
 startNewTask "Install Oh-My-Posh"
 

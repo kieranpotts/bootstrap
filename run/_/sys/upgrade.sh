@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Upgrade to the latest packages, without requiring user interaction.
 #
 # @see https://serverfault.com/a/839563
 # @see https://askubuntu.com/a/147079
-# ==============================================================================
+#
 
 startNewTask "Upgrading software packages"
 

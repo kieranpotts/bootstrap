@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Installs `git-delta`, a paging utility with built-in syntax highlighting. It
 # can be used as an alternative to `less` for paging through `git diff` output,
 # and other Git commands.
 #
 # https://dandavison.github.io/delta/
-# ==============================================================================
+#
 
 startNewTask "Install delta"
 

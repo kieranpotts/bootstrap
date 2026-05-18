@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install gnupg.
 #
 # The GNU Privacy Guard (GnuPG or GPG) is a complete and free implementation of
@@ -11,7 +11,7 @@
 # This package is often required for the installation of other software packages.
 #
 # https://gnupg.org/
-# ==============================================================================
+#
 
 startNewTask "Installing gnupg"
 

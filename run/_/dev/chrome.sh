@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Installs Google Chrome - required for Puppeteer etc.
 #
 # https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-google-chrome-for-linux
-# ==============================================================================
+#
 
 startNewTask "Install Google Chrome"
 

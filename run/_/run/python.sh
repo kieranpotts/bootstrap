@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install Python 3 and pip, and related tools.
-# ==============================================================================
+#
 
 # Single quotes are used in this file to prevent variable expansion.
 # shellcheck disable=SC2016

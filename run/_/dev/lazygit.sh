@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install LazyGit, a TUI for Git.
 #
 # https://github.com/jesseduffield/lazygit#installation
-# ==============================================================================
+#
 
 startNewTask "Install LazyGit"
 

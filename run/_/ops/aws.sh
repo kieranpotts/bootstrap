@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install AWS C:I.
 #
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-# ==============================================================================
+#
 
 startNewTask "Install AWS CLI"
 

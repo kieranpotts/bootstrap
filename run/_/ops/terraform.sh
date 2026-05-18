@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install Terraform.
 #
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
-# ==============================================================================
+#
 
 startNewTask "Install Terraform"
 

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install OpenJDK using the Jabba JDK version manager.
 #
 # https://openjdk.org/
 # https://github.com/openjdk/jdk
 # https://github.com/shyiko/jabba
-# ==============================================================================
+#
 
 startNewTask "Install OpenJDK via Jabba"
 
@@ -21,13 +21,13 @@ curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash -s -- --sk
 if [ -f "$HOME/local.bashrc" ]; then
   if ! grep -q "export JABBA_VERSION" "$HOME/local.bashrc"; then
     echo "export JABBA_VERSION=${jabba_version}" >> "$HOME/local.bashrc"
-    echo "[ -s "$JABBA_HOME/jabba.sh" ] && . "$JABBA_HOME/jabba.sh"" >> "$HOME/local.bashrc"
+    echo "[ -s ""$JABBA_HOME"/jabba.sh" ] && . ""$JABBA_HOME"/jabba.sh"" >> "$HOME/local.bashrc"
   fi
 else
   touch "$HOME/.bashrc"
   if ! grep -q "export JABBA_VERSION" "$HOME/.bashrc"; then
     echo "export JABBA_VERSION=${jabba_version}" >> "$HOME/.bashrc"
-    echo "[ -s "$JABBA_HOME/jabba.sh" ] && . "$JABBA_HOME/jabba.sh"" >> "$HOME/.bashrc"
+    echo "[ -s ""$JABBA_HOME"/jabba.sh" ] && . ""$JABBA_HOME"/jabba.sh"" >> "$HOME/.bashrc"
   fi
 fi
 

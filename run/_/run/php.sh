@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install PHP, using phpenv as the version manager and php-build to compile
 # multiple active versions of PHP.
 #
@@ -11,7 +11,7 @@
 # https://www.php.net/
 # https://github.com/phpenv/phpenv
 # https://github.com/php-build/php-build
-# ==============================================================================
+#
 
 startNewTask "Install PHP via phpenv"
 

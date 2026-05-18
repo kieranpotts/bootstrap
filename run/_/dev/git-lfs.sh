@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install Git Large File System (LFS).
 #
 # https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md
-# ==============================================================================
+#
 
 startNewTask "Install Git LFS"
 

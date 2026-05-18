@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # System updates.
 #
 # - Set the system timezone to UTC.
 # - Clean up any failed packages, cached from previous builds.
 # - Fetch latest updates for all pre-installed software.
-# ==============================================================================
+#
 
 startNewTask "Updating the system"
 

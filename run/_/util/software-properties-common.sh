@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install software-properties-common.
 #
 # This package provides an abstraction of the used APT repositories, allowing
@@ -11,7 +11,7 @@
 #
 # This package is often a requirement of the installation scripts of
 # software packages, eg. this is required for installation of Terraform.
-# ==============================================================================
+#
 
 startNewTask "Installing software-properties-common"
 

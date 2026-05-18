@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# ==============================================================================
+#
 # Install Node using NVM - the Node Version Manager.
 #
 # https://nodejs.org/en
 # https://github.com/nvm-sh/nvm
 #
 # https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl
-# ==============================================================================
+#
 
 startNewTask "Install Node via NVM"
 
