@@ -4,7 +4,14 @@
 # Helper functions for the bootstrap scripts.
 #
 
-# ANSI escapes used by the `print_*` helpers below.
+# ------------------------------------------------------------------------------
+# ANSI escape codes.
+#
+# Kept inline rather than in a dedicated module: the only consumers are the
+# `print_*` helpers below. Add more from the standard palette as needed.
+#
+# https://en.wikipedia.org/wiki/ANSI_escape_code#SGR
+#
 RESET='\033[0m'
 BOLD='\033[1m'
 RED='\033[31m'
