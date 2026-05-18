@@ -11,13 +11,13 @@ Use this skill when adding a new tool to the bootstrap provisioning run, changin
 
 The conventions below keep `./run/bootstrap` idempotent, readable, and reproducible across the host machine and the [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) image.
 
-Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/_/utils.sh` (the shared helpers).
+Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/utils.sh` (the shared helpers).
 
 ## Instructions
 
 1.  **Pick the right group.**
 
-    Each install step lives in a single file under `run/_/<group>/<name>.sh`. Pick the group that matches the tool's role:
+    Each install step lives in a single file under `run/inc/<group>/<name>.sh`. Pick the group that matches the tool's role:
 
     - `sys/`: System-level setup, upgrades, teardown.
     - `util/`: General command-line utilities (curl, wget, unzip, …).
@@ -79,7 +79,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
 -   **Use `superdo`, never `sudo` directly.**
 
-    The `superdo` helper in `run/_/utils.sh` invokes the command directly when running as root (Docker image builds) and prefixes `sudo` otherwise (local installs). Calling `sudo` directly breaks the Docker build path.
+    The `superdo` helper in `run/inc/utils.sh` invokes the command directly when running as root (Docker image builds) and prefixes `sudo` otherwise (local installs). Calling `sudo` directly breaks the Docker build path.
 
     ```bash
     # ✅ Yes:
@@ -95,7 +95,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
 -   **Guard optional steps with feature toggles.**
 
-    CLI flags parsed by `run/bootstrap` are exposed as helper predicates in `run/_/utils.sh`. An install step that should only run under a given flag must short-circuit before its `startNewTask` call so the step number is not consumed:
+    CLI flags parsed by `run/bootstrap` are exposed as helper predicates in `run/inc/utils.sh`. An install step that should only run under a given flag must short-circuit before its `startNewTask` call so the step number is not consumed:
 
     ```bash
     # GUI-only install. No-op unless `--gui` was passed.
@@ -117,7 +117,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
     When a step downloads tarballs or `.deb` files, create a temp directory with `mktemp -d`, capture the original working directory before `cd`-ing in, and `cd` back plus `rm -rf` the temp dir on the way out.
 
-    See `run/_/dev/lazygit.sh` and `run/_/dev/delta.sh` for the established pattern.
+    See `run/inc/dev/lazygit.sh` and `run/inc/dev/delta.sh` for the established pattern.
 
 -   **Target Debian-based Linux only.**
 
@@ -137,7 +137,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
 ## Examples
 
-A minimal install step backed by an apt package — see [`run/_/util/curl.sh`](../../run/_/util/curl.sh):
+A minimal install step backed by an apt package — see [`run/inc/util/curl.sh`](../../run/inc/util/curl.sh):
 
 ```bash
 #!/bin/bash
@@ -151,7 +151,7 @@ startNewTask "Installing curl"
 superdo apt-get install -y curl
 ```
 
-An install step that adds a third-party apt source and pins the version — see [`run/_/dev/gh.sh`](../../run/_/dev/gh.sh):
+An install step that adds a third-party apt source and pins the version — see [`run/inc/dev/gh.sh`](../../run/inc/dev/gh.sh):
 
 ```bash
 #!/bin/bash
@@ -176,7 +176,7 @@ superdo apt-get update
 superdo apt-get install gh -y
 ```
 
-An install step that downloads a release tarball and pins the upstream version — see [`run/_/dev/lazygit.sh`](../../run/_/dev/lazygit.sh) for the temp-dir pattern.
+An install step that downloads a release tarball and pins the upstream version — see [`run/inc/dev/lazygit.sh`](../../run/inc/dev/lazygit.sh) for the temp-dir pattern.
 
 ## Edge cases
 
@@ -186,7 +186,7 @@ An install step that downloads a release tarball and pins the upstream version �
 
 -   **Tools that modify `.bashrc`:**
 
-    Guard appends with a `grep -q` check so re-running the bootstrap does not duplicate exports. See `run/_/run/node.sh` for the established pattern.
+    Guard appends with a `grep -q` check so re-running the bootstrap does not duplicate exports. See `run/inc/run/node.sh` for the established pattern.
 
 -   **Removing a tool:**
 
@@ -195,6 +195,6 @@ An install step that downloads a release tarball and pins the upstream version �
 ## References
 
 - [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill builds on.
-- [`run/_/utils.sh`](../../run/_/utils.sh): Source of `startNewTask` and `superdo`.
+- [`run/inc/utils.sh`](../../run/inc/utils.sh): Source of `startNewTask` and `superdo`.
 - [`docs/installation.md`](../../docs/installation.md): How the entry script is invoked.
 - [`docs/considerations.md`](../../docs/considerations.md): Why Docker is intentionally excluded.

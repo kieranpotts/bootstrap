@@ -18,14 +18,14 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 ## Repository structure
 
 - `run/bootstrap`: Entry script, sources every install step in order.
-- `run/_/utils.sh`: Shared helpers (`startNewTask`, `superdo`).
-- `run/_/msg/`: Start and finish banners.
-- `run/_/sys/`: System updates, upgrades, and teardown.
-- `run/_/util/`: General utilities (curl, git, gnupg, wget, …).
-- `run/_/run/`: Language runtimes (Node, JDK, PHP, Python).
-- `run/_/dev/`: Developer tooling (Claude, Copilot, delta, lazygit, …).
-- `run/_/ops/`: Ops tooling (AWS CLI, Terraform).
-- `run/_/phy/`: Hardware-related tooling (eg. ROCm).
+- `run/inc/utils.sh`: Shared helpers (`startNewTask`, `superdo`).
+- `run/inc/msg/`: Start and finish banners.
+- `run/inc/sys/`: System updates, upgrades, and teardown.
+- `run/inc/util/`: General utilities (curl, git, gnupg, wget, …).
+- `run/inc/run/`: Language runtimes (Node, JDK, PHP, Python).
+- `run/inc/dev/`: Developer tooling (Claude, Copilot, delta, lazygit, …).
+- `run/inc/ops/`: Ops tooling (AWS CLI, Terraform).
+- `run/inc/phy/`: Hardware-related tooling (eg. ROCm).
 - `docs/`: Installation, requirements, releasing, and considerations.
 - `skills/`: On-demand skills for agents working on this repo.
 
@@ -38,7 +38,7 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 
 ## Feature toggles
 
-CLI flags are parsed at the top of `run/bootstrap` and stored as global variables that any sourced install step can inspect via helpers in `run/_/utils.sh`:
+CLI flags are parsed at the top of `run/bootstrap` and stored as global variables that any sourced install step can inspect via helpers in `run/inc/utils.sh`:
 
 - `--gui` sets `install_gui=1`. Install steps that should only run with this flag must guard themselves with `is_gui_enabled || return 0` immediately before their `startNewTask` call.
 
@@ -56,7 +56,7 @@ Defaults are conservative: with no flags, only CLI tooling is installed.
 
 - MUST target Debian-based distros only. Do not add steps that assume other package managers besides APT.
 
-- MUST NOT commit ad-hoc one-off scripts to `run/_/`. Each file installs or configures one named tool.
+- MUST NOT commit ad-hoc one-off scripts to `run/inc/`. Each file installs or configures one named tool.
 
 - SHOULD pin upstream versions when the project publishes stable tags or `.deb` artifacts, so devcontainer builds are reproducible.
 

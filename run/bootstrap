@@ -10,7 +10,7 @@
 #
 
 # Feature toggles. Defaults are conservative: CLI-only.
-# Consumed by `is_gui_enabled` in `run/_/utils.sh` and any GUI install steps.
+# Consumed by `is_gui_enabled` in `run/inc/utils.sh` and any GUI install steps.
 # shellcheck disable=SC2034
 install_gui=0
 
@@ -33,7 +33,7 @@ for arg in "$@"; do
 done
 
 # Includes directory name.
-inc="./run/_"
+inc="./run/inc"
 
 # Load helper functions.
 source "${inc}/utils.sh"
