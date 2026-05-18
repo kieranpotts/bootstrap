@@ -31,6 +31,8 @@ cd "${cwd}" || true
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
 
+google-chrome --version
+
 # @deprecated: This might be causing problems in the devcontainer.
 #
 # The following is required to eliminate dbus errors when launching Google Chrome

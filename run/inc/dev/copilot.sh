@@ -13,3 +13,5 @@
 startNewTask "Install Copilot CLI"
 
 npm install -g @github/copilot
+
+copilot --version

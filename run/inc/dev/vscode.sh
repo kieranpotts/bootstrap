@@ -52,3 +52,5 @@ EOF
 # Install VS Code.
 superdo apt-get update
 superdo apt-get install -y code
+
+code --version

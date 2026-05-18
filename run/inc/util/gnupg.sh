@@ -16,3 +16,5 @@
 startNewTask "Installing gnupg"
 
 superdo apt-get install -y gnupg
+
+gpg --version

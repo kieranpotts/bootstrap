@@ -38,3 +38,5 @@ terraform -help
 # Install the autocomplete package. This will not take effect until
 # the shell is restarted (or ~/.bashrc is re-sourced).
 terraform -install-autocomplete
+
+terraform version

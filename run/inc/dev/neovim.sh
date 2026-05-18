@@ -9,3 +9,5 @@
 startNewTask "Install Neovim"
 
 superdo apt-get install -y neovim
+
+nvim --version

@@ -21,3 +21,5 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubc
 # Install the GitHub CLI.
 superdo apt-get update
 superdo apt-get install gh -y
+
+gh --version

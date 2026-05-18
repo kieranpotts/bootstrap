@@ -40,3 +40,5 @@ cd "${cwd}" || true
 
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
+
+delta --version

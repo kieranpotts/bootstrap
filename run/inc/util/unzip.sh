@@ -10,3 +10,5 @@
 startNewTask "Installing unzip"
 
 superdo apt-get install -y unzip
+
+unzip -v

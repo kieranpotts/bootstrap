@@ -13,3 +13,5 @@ superdo apt-get install git-lfs=3.7.1
 
 # Enable LFS in Git.
 git lfs install
+
+git lfs version

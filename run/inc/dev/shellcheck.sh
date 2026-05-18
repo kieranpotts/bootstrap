@@ -9,3 +9,5 @@
 startNewTask "Install shellcheck"
 
 superdo apt-get install -y shellcheck
+
+shellcheck --version
