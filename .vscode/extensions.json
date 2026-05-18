@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+
+    /* EditorConfig — .editorconfig file support. */
+    "editorconfig.editorconfig",
+
+    /* ShellCheck — Linter for shell scripts. */
+    "timonwong.shellcheck",
+
+  ]
+}
