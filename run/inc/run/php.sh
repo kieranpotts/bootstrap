@@ -67,7 +67,7 @@ cd "$(phpenv root)/plugins/php-build" || true
 superdo ./install.sh
 
 # Print list of available PHP "definitions" from the php-build repository.
-echo "Available PHP definitions:"
+print_info "Available PHP definitions:"
 php-build --definitions
 
 # Install php-dev, which will include the compiler needed to build PHP

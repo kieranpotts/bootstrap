@@ -31,7 +31,7 @@ superdo install lazygit /usr/local/bin
 
 # Print out the installed version, and other version information.
 installed_lazygit_version=$(lazygit --version | grep -Po 'version=\K[^"]*')
-echo "Installed LazyGit version ${installed_lazygit_version}"
+print_success "Installed LazyGit version ${installed_lazygit_version}"
 
 # Cleanup.
 rm -f lazygit.tar.gz
