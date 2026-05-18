@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Remove `git-secrets`.
+- Install GitHub CLI (`gh`).
 
 ## [1.2.0] - 2026-05-15
 
