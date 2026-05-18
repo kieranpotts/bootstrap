@@ -3,6 +3,34 @@
 #
 # Dev VM bootstrap script.
 #
+# Usage: ./run/bootstrap [--gui]
+#
+#   --gui         Also install GUI applications (in addition to CLI tools).
+#   -h, --help    Show this help and exit.
+#
+
+# Feature toggles. Defaults are conservative: CLI-only.
+# Consumed by `is_gui_enabled` in `run/_/utils.sh` and any GUI install steps.
+# shellcheck disable=SC2034
+install_gui=0
+
+# Parse CLI flags.
+for arg in "$@"; do
+  case "${arg}" in
+    --gui)
+      install_gui=1
+      ;;
+    -h|--help)
+      sed -n '4,11p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: ${arg}" >&2
+      echo "Run \`./run/bootstrap --help\` to see available options." >&2
+      exit 1
+      ;;
+  esac
+done
 
 # Includes directory name.
 inc="./run/_"

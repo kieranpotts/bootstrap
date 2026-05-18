@@ -56,3 +56,23 @@ function superdo {
   fi
 
 }
+
+# ------------------------------------------------------------------------------
+# Test whether GUI installs are enabled for the current run.
+#
+# Reads the `install_gui` flag set by `run/bootstrap` when parsing CLI args.
+# Use this from any install step that should only run when `--gui` was passed:
+#
+#   is_gui_enabled || return 0
+#   startNewTask "Install <gui-thing>"
+#   ...
+#
+# @global install_gui - Set by `run/bootstrap`.
+#
+# @return 0 if `--gui` was passed, 1 otherwise.
+#
+function is_gui_enabled {
+
+  [ "${install_gui:-0}" -eq 1 ]
+
+}

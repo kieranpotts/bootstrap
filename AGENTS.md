@@ -31,8 +31,18 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 
 ## Tools
 
-- `./run/bootstrap` to provision a target machine.
+- `./run/bootstrap` to provision a target machine (CLI tools only).
+- `./run/bootstrap --gui` to additionally install GUI applications.
+- `./run/bootstrap --help` to print the usage banner.
 - `shellcheck run/**/*.sh run/bootstrap` to lint shell scripts.
+
+## Feature toggles
+
+CLI flags are parsed at the top of `run/bootstrap` and stored as global variables that any sourced install step can inspect via helpers in `run/_/utils.sh`:
+
+- `--gui` sets `install_gui=1`. Install steps that should only run with this flag must guard themselves with `is_gui_enabled || return 0` immediately before their `startNewTask` call.
+
+Defaults are conservative: with no flags, only CLI tooling is installed.
 
 ## Rules
 
@@ -56,4 +66,4 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 
 ## Skills
 
-- [`./skills/install-step/SKILL.md`](./skills/install-steo/SKILL.md): Add or modify an install step in the bootstrap scripts.
+- [`./skills/install-step/SKILL.md`](./skills/install-step/SKILL.md): Add or modify an install step in the bootstrap scripts.

@@ -93,6 +93,22 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
     The first non-comment line of every install script must be `startNewTask "Install …"` (or an equivalent verb). The helper prints a numbered banner so the bootstrap run is self-narrating, and is the contract that downstream scripts depend on for step numbering.
 
+-   **Guard optional steps with feature toggles.**
+
+    CLI flags parsed by `run/bootstrap` are exposed as helper predicates in `run/_/utils.sh`. An install step that should only run under a given flag must short-circuit before its `startNewTask` call so the step number is not consumed:
+
+    ```bash
+    # GUI-only install. No-op unless `--gui` was passed.
+    is_gui_enabled || return 0
+
+    startNewTask "Install <gui-thing>"
+    # ...
+    ```
+
+    Available helpers:
+
+    - `is_gui_enabled` – true when `--gui` was passed (`install_gui=1`).
+
 -   **One tool per file.**
 
     Do not bundle unrelated installs into a single script. If a tool genuinely depends on another, install the dependency in its own file and source both from `run/bootstrap` in the right order.

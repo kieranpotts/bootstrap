@@ -4,5 +4,13 @@
 
 2. From the root directory of this repository, run `./run/bootstrap`.
 
+   By default this installs CLI tooling only. Pass `--gui` to additionally install GUI applications:
+
+   ```
+   ./run/bootstrap --gui
+   ```
+
+   Run `./run/bootstrap --help` to print the usage banner.
+
 > **Note:** The bootstrap script is designed to be idempotent, so you can run it multiple times without causing any issues. It can be re-run to update the system with new changes.
 
