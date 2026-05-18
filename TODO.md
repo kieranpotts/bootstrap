@@ -22,7 +22,7 @@ Discrete changes that would bring this repo's structure, conventions, and toolin
 
 ## Idempotency
 
-- [ ] For tools currently re-cloned/re-installed from scratch on every run (most visibly NVM in [run/inc/run/node.sh](run/inc/run/node.sh)), add a version check that skips the destructive reinstall when the pinned version is already present. The company repo's [run/inc/exec/nodejs.sh](../../../hacksltd/tools/development-environment-bootstrapper/run/inc/exec/nodejs.sh) shows the pattern (adapt it to respect this repo's *pinned*-version philosophy rather than its always-latest one).
+- [x] For tools currently re-cloned/re-installed from scratch on every run (most visibly NVM in [run/inc/run/node.sh](run/inc/run/node.sh)), add a version check that skips the destructive reinstall when the pinned version is already present. The company repo's [run/inc/exec/nodejs.sh](../../../hacksltd/tools/development-environment-bootstrapper/run/inc/exec/nodejs.sh) shows the pattern (adapt it to respect this repo's *pinned*-version philosophy rather than its always-latest one).
 
 - [ ] Print the installed version at the end of every install step where the tool exposes `--version`. The `install-step` skill already mandates this rule; audit each existing script in [run/inc/](run/inc/) for compliance and add the missing `echo`s.
 

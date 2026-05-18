@@ -20,16 +20,38 @@ nvm_version="0.40.0"
 # Remember the current working diectory, so we can change back here later.
 cwd=$(pwd)
 
+# If NVM is already installed, source it so we can query its version and
+# decide whether to reinstall, update, or skip. Without this branching, every
+# run wipes ~/.nvm and re-clones from scratch.
 # https://github.com/nvm-sh/nvm?tab=readme-ov-file#git-install
-cd ~/ || true
-rm -Rf .nvm
-git clone https://github.com/nvm-sh/nvm.git .nvm
+installed_nvm_version=""
+if [ -s "${HOME}/.nvm/nvm.sh" ]; then
+  # shellcheck disable=SC1091
+  . "${HOME}/.nvm/nvm.sh"
+  if command -v nvm >/dev/null 2>&1; then
+    installed_nvm_version=$(nvm --version)
+  fi
+fi
 
-cd ~/.nvm || true
-git checkout "v${nvm_version}"
-
-# Source nvm.sh to load NVM immediately into the current shell session.
-. ./nvm.sh
+if [ "${installed_nvm_version}" = "${nvm_version}" ]; then
+  print_info "NVM v${nvm_version} is already installed. Skipping reinstall."
+elif [ -n "${installed_nvm_version}" ]; then
+  print_info "Updating NVM from v${installed_nvm_version} to v${nvm_version}."
+  cd "${HOME}/.nvm" || true
+  git fetch --tags origin
+  git checkout "v${nvm_version}"
+  # shellcheck disable=SC1091
+  . ./nvm.sh
+else
+  print_info "Installing NVM v${nvm_version}."
+  cd ~/ || true
+  rm -Rf .nvm
+  git clone https://github.com/nvm-sh/nvm.git .nvm
+  cd ~/.nvm || true
+  git checkout "v${nvm_version}"
+  # shellcheck disable=SC1091
+  . ./nvm.sh
+fi
 
 # Define the content to be appended to the .bashrc file.
 # (Single quotes are deliberate to disable variable expansion.)

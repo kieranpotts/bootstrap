@@ -56,10 +56,17 @@ else
   . "$HOME/.bashrc"
 fi
 
-# Install php-build as a plugin.
+# Install php-build as a plugin. Clone on first run, pull on subsequent runs
+# (a bare `git clone` aborts when the target directory already exists).
 # https://github.com/php-build/php-build
-mkdir -p "$(phpenv root)/plugins/php-build"
-git clone https://github.com/php-build/php-build "$(phpenv root)/plugins/php-build"
+php_build_dir="$(phpenv root)/plugins/php-build"
+if [ ! -d "${php_build_dir}/.git" ]; then
+  mkdir -p "${php_build_dir}"
+  git clone https://github.com/php-build/php-build "${php_build_dir}"
+else
+  cd "${php_build_dir}" || true
+  git pull
+fi
 
 # Also install php-build as a standalone binary. This is required
 # to allow us to query the available PHP "definitions" (versions).
