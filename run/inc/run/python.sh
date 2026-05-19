@@ -9,7 +9,7 @@
 
 startNewTask "Install Python, pip, pipenv, etc."
 
-superdo apt install -y python3 python3-pip python3-venv ipython3 pipx
+superdo apt-get install -y python3 python3-pip python3-venv ipython3 pipx
 
 # https://pipenv.pypa.io/en/latest/
 pipx install pipenv

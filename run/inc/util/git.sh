@@ -6,6 +6,6 @@
 
 startNewTask "Install Git"
 
-superdo apt install -y git
+superdo apt-get install -y git
 
 git --version

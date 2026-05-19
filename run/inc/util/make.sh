@@ -6,6 +6,6 @@
 
 startNewTask "Install Make"
 
-superdo apt install -y make
+superdo apt-get install -y make
 
 make --version

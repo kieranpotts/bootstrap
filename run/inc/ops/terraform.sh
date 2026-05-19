@@ -27,7 +27,7 @@ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
   superdo tee /etc/apt/sources.list.d/hashicorp.list
 
 # Download the package information from HashiCorp.
-superdo apt update
+superdo apt-get update
 
 # Install Terraform from the new repository.
 superdo apt-get install -y terraform

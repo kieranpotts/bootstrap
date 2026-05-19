@@ -87,7 +87,7 @@ superdo apt-get install -y g++ libmcrypt-dev libreadline-dev
 
 # The following packages have been found to be dependencies of the build step,
 # which is handled by php-build when phpenv install is run.
-superdo apt install -y \
+superdo apt-get install -y \
   bzip2 \
   libbz2-dev \
   libcurl4-openssl-dev \

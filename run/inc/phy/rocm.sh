@@ -7,6 +7,6 @@
 startNewTask "Installing ROCm utilities"
 
 # ROCm System Management Interface.
-sudo apt install rocm-smi -y
+sudo apt-get install rocm-smi -y
 
 rocm-smi --version

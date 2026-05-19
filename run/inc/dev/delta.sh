@@ -11,8 +11,8 @@
 startNewTask "Install delta"
 
 # Remove any existing installations.
-superdo apt remove git-delta -y
-superdo apt remove git-delta-musl -y
+superdo apt-get remove git-delta -y
+superdo apt-get remove git-delta-musl -y
 
 # Version to install.
 delta_version="0.18.0"

@@ -23,7 +23,7 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 # Install the Debian package. The `--fix-missing` option is used to fix missing
 # dependencies that may arise during the installation process.
-superdo apt install -y --fix-missing ./google-chrome-stable_current_amd64.deb
+superdo apt-get install -y --fix-missing ./google-chrome-stable_current_amd64.deb
 
 # Move back to the original directory.
 cd "${cwd}" || true
@@ -60,7 +60,7 @@ google-chrome --version
 #
 #   # upower also required in WSL.
 #   # https://ubuntu.pkgs.org/20.04/ubuntu-main-arm64/upower_0.99.11-1build2_arm64.deb.html
-#   superdo apt install -y upower
+#   superdo apt-get install -y upower
 # fi
 #
 # To launch Chrome, type:

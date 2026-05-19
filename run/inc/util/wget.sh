@@ -6,6 +6,6 @@
 
 startNewTask "Install wget"
 
-superdo apt install -y wget
+superdo apt-get install -y wget
 
 wget --version
