@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Installs `git-delta`, a paging utility with built-in syntax highlighting. It

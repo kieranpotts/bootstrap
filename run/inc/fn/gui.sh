@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Predicates for runtime feature toggles set by `run/bootstrap`.

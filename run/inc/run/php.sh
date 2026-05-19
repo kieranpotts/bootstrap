@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Install PHP, using phpenv as the version manager and php-build to compile

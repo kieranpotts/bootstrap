@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Installs Google Chrome - required for Puppeteer etc.

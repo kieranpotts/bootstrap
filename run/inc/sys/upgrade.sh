@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Upgrade to the latest packages, without requiring user interaction.

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Utility functions to announce discrete steps in the bootstrap process.

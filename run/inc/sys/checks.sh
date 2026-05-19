@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Initial system compatibility checks.
@@ -51,7 +51,7 @@ if [[ "${ubuntu_version}" != "22.04" && "${ubuntu_version}" != "24.04" ]]; then
   fi
 fi
 
-# Architecture check. Some tools like Docker Desktop and ROCm 
+# Architecture check. Some tools like Docker Desktop and ROCm
 # specifically require x86_64.
 arch=$(uname -m)
 if [ "${arch}" != "x86_64" ]; then

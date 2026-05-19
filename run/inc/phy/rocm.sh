@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Install ROCm (AMD's open-source GPU computing platform) utilities.
