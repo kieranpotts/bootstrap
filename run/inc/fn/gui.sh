@@ -17,5 +17,5 @@
 #   0 if `--gui` was passed, 1 otherwise.
 #
 is_gui_enabled() {
-  [ "${install_gui:-0}" -eq 1 ]
+  [[ "${install_gui:-0}" -eq 1 ]]
 }

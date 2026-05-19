@@ -15,7 +15,7 @@
 #   $@ - Command and arguments to run.
 #
 superdo() {
-  if [ "$(id -u)" -eq 0 ]; then
+  if [[ "$(id -u)" -eq 0 ]]; then
     "$@"
   else
     sudo "$@"

@@ -6,7 +6,7 @@
 # https://pre-commit.com
 #
 
-print_step "Install pre-commit"
+print_step "Install pre-commit."
 
 pipx install pre-commit
 

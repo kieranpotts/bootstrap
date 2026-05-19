@@ -8,37 +8,67 @@
 # https://dandavison.github.io/delta/
 #
 
-print_step "Install delta"
+print_step "Installing Delta (git-delta)."
 
-# Remove any existing installations.
-superdo apt-get remove git-delta -y
-superdo apt-get remove git-delta-musl -y
+# Target Delta version we want to install (Delta's tags have no leading `v`).
+latest_version=$(gh_latest_tag dandavison/delta)
 
-# Version to install.
-delta_version="0.18.0"
+print_info "Latest available version of Delta is v${latest_version}."
 
-# Remember the current working diectory, so we can change back here later.
-cwd=$(pwd)
+# Discover the installed version of Delta, if it exists.
+installed_version=""
+if dpkg -s git-delta >/dev/null 2>&1; then
+  installed_version=$(dpkg -s git-delta | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
+fi
 
-# Create a temporary directory.
-tmp_dir="$(mktemp -d)"
+if [[ "${installed_version}" == "${latest_version}" ]]; then
+  print_info "Latest version of Delta, v${latest_version}, is already installed. Skipping."
+else
 
-# Move to the temporary directory.
-cd "$tmp_dir" || true
+  if [[ "${installed_version}" == "" ]]; then
+    print_info "Delta is not currently installed. Will install v${latest_version} via GitHub release channel. "
+  else
+    print_info "Delta v${installed_version} is installed. Will remove this version and install v${latest_version} via GitHub release channel."
+  fi
 
-# Fetch the latest .deb file from GitHub releases.
-wget "https://github.com/dandavison/delta/releases/download/${delta_version}/git-delta_${delta_version}_amd64.deb"
+  print_info "Installing Delta from .deb package."
 
-# Install the downloaded .deb file.
-superdo dpkg -i "git-delta_${delta_version}_amd64.deb"
+  # Remove the existing version of Delta, if there is one.
+  if dpkg -s git-delta >/dev/null 2>&1; then
+    superdo apt-get remove -y git-delta
+  fi
 
-# Install any missing dependencies.
-superdo apt-get install -f
+  # Remember the current working directory, so we can change back here later.
+  cwd=$(pwd)
 
-# Move back to the original directory.
-cd "${cwd}" || true
+  # Create a temporary directory.
+  tmp_dir=$(mktemp -d)
 
-# Remove the temporary directory.
-rm -rf "$tmp_dir"
+  # Fetch the latest .deb file from GitHub releases.
+  wget \
+    -O "${tmp_dir}/git-delta_${latest_version}_amd64.deb" \
+    "https://github.com/dandavison/delta/releases/download/${latest_version}/git-delta_${latest_version}_amd64.deb"
 
-delta --version
+  if [[ ! -f "${tmp_dir}/git-delta_${latest_version}_amd64.deb" ]]; then
+    print_error "Failed to download git-delta Debian package."
+    exit 1
+  fi
+
+  # Install the downloaded .deb file.
+  superdo dpkg -i "${tmp_dir}/git-delta_${latest_version}_amd64.deb"
+
+  # Install any missing dependencies.
+  superdo apt-get install -f -y
+
+  # Move back to the original directory.
+  cd "${cwd}" || true
+
+  # Remove the temporary directory and all its contents.
+  rm -rf "${tmp_dir}"
+
+  # Verify installed version.
+  delta --version
+
+  print_success "Delta v${latest_version} installed successfully."
+
+fi

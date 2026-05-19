@@ -14,6 +14,11 @@
 #   -u            Error on references to unset variables.
 #   -o pipefail   A pipeline fails if any element fails (not just the last).
 #
+# Note: the per-step subshells inside `step()` (see `run/inc/fn/steps.sh`)
+# intentionally use `set -e` only, not the full strict mode. That keeps
+# individual step files from breaking on unset-var references in the 50+
+# install scripts that pre-date the strict-mode convention.
+
 set -euo pipefail
 
 # Use this instead for debugging problems with the script.
@@ -50,13 +55,13 @@ for arg in "$@"; do
 done
 
 #
-# Global variables:
+# Global variables.
 #
 
 # Absolute path to this repository. This allows sourcing of files relative to
 # the repository root, and thus the bootstrap script can be run from any
 # working directory.
-#
+
 repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
 
 # Includes path.
@@ -65,7 +70,7 @@ inc_path="${repo_root}/run/inc"
 # Determine the bashrc file to use. If the user has a file called
 # `local.bashrc` in their home directory, use that instead of the
 # default `.bashrc` file.
-#
+
 bashrc="${HOME}/.bashrc"
 if [ -f "${HOME}/local.bashrc" ]; then
   # `bashrc` is used in sourced files.
@@ -76,67 +81,113 @@ else
 fi
 
 # Source ANSI code variables.
-source "${inc_path}/var/ansi-codes.sh"
+. "${inc_path}/var/ansi-codes.sh"
 
 #
-# Utility functions:
+# Utility functions.
 #
 
-source "${inc_path}/fn/gui.sh"
-source "${inc_path}/fn/statuses.sh"
-source "${inc_path}/fn/steps.sh"
-source "${inc_path}/fn/superdo.sh"
+. "${inc_path}/fn/bashrc-protect.sh"
+. "${inc_path}/fn/gh-release.sh"
+. "${inc_path}/fn/gui.sh"
+. "${inc_path}/fn/statuses.sh"
+. "${inc_path}/fn/steps.sh"
+. "${inc_path}/fn/superdo.sh"
 
 #
-# Main script:
+# Main script.
 #
 
 print_starting
 
+# Snapshot ~/.bashrc so third-party installers that bypass our `${bashrc}`
+# routing can be undone at the end of the bootstrap.
+bashrc_snapshot
+
 # Initial system compatibility checks and updates.
-source "${inc_path}/sys/checks.sh"
-source "${inc_path}/sys/apt.sh"
-source "${inc_path}/sys/upgrade.sh"
+. "${inc_path}/sys/checks.sh"
+. "${inc_path}/sys/apt.sh"
 
 # System utilities. Some of these, like curl and wget, are required for
 # the package repository setup scripts that follow.
-source "${inc_path}/util/curl.sh"
-source "${inc_path}/util/git.sh"
-source "${inc_path}/util/gnupg.sh"
-source "${inc_path}/util/make.sh"
-source "${inc_path}/util/software-properties-common.sh"
-source "${inc_path}/util/unzip.sh"
-source "${inc_path}/util/wget.sh"
+step "${inc_path}/util/apt-transport-https.sh"
+step "${inc_path}/util/ca-certificates.sh"
+step "${inc_path}/util/curl.sh"
+step "${inc_path}/util/git.sh"
+step "${inc_path}/util/gnome-terminal.sh"
+step "${inc_path}/util/gnupg.sh"
+step "${inc_path}/util/make.sh"
+step "${inc_path}/util/software-properties-common.sh"
+step "${inc_path}/util/tar.sh"
+step "${inc_path}/util/unzip.sh"
+step "${inc_path}/util/wget.sh"
 
-# Install runtime environments.
-source "${inc_path}/run/node.sh"
-source "${inc_path}/run/jdk.sh"
-source "${inc_path}/run/php.sh"
-source "${inc_path}/run/python.sh"
+# Add package repositories.
+step "${inc_path}/pkg/docker.sh"
+step "${inc_path}/pkg/git-lfs.sh"
+step "${inc_path}/pkg/hashicorp.sh"
+step "${inc_path}/pkg/keepassxc.sh"
+step "${inc_path}/pkg/microsoft.sh"
+step "${inc_path}/pkg/mozilla.sh"
 
-# Install dev tools.
-source "${inc_path}/dev/chrome.sh"
-source "${inc_path}/dev/claude.sh"
-source "${inc_path}/dev/copilot.sh"
-source "${inc_path}/dev/delta.sh"
-source "${inc_path}/dev/gh.sh"
-source "${inc_path}/dev/git-lfs.sh"
-source "${inc_path}/dev/lazygit.sh"
-source "${inc_path}/dev/maven.sh"
-source "${inc_path}/dev/neovim.sh"
-source "${inc_path}/dev/oh-my-posh.sh"
-source "${inc_path}/dev/pre-commit.sh"
-source "${inc_path}/dev/shellcheck.sh"
-source "${inc_path}/dev/tmux.sh"
-source "${inc_path}/dev/vscode.sh"
+# Refresh package lists with the new repositories, then upgrade everything
+# (base system + anything newly available via the added repos).
+step "${inc_path}/sys/update.sh"
+step "${inc_path}/sys/upgrade.sh"
 
-# Install ops tools.
-source "${inc_path}/ops/aws.sh"
-source "${inc_path}/ops/terraform.sh"
+# Runtime (execution) environments.
+step "${inc_path}/exec/docker.sh"
+step "${inc_path}/exec/jdk.sh"
+step "${inc_path}/exec/node.sh"
+step "${inc_path}/exec/php.sh"
+step "${inc_path}/exec/python.sh"
+
+# Web browsers.
+step "${inc_path}/web/chrome.sh"
+step "${inc_path}/web/firefox.sh"
+
+# Applications.
+step "${inc_path}/app/keepassxc.sh"
+step "${inc_path}/app/mozilla-vpn.sh"
+step "${inc_path}/app/pass.sh"
+step "${inc_path}/app/proton-mail.sh"
+step "${inc_path}/app/proton-vpn.sh"
+
+# Dev tools.
+step "${inc_path}/dev/claude.sh"
+step "${inc_path}/dev/copilot.sh"
+step "${inc_path}/dev/delta.sh"
+step "${inc_path}/dev/gh.sh"
+step "${inc_path}/dev/git-lfs.sh"
+step "${inc_path}/dev/lazygit.sh"
+step "${inc_path}/dev/maven.sh"
+step "${inc_path}/dev/neovim.sh"
+step "${inc_path}/dev/oh-my-posh.sh"
+step "${inc_path}/dev/pre-commit.sh"
+step "${inc_path}/dev/shellcheck.sh"
+step "${inc_path}/dev/tmux.sh"
+step "${inc_path}/dev/vscode.sh"
+
+# Ops tools.
+step "${inc_path}/ops/aws.sh"
+step "${inc_path}/ops/terraform.sh"
 
 # Hardware utilities.
-source "${inc_path}/phy/rocm.sh"
+step "${inc_path}/phy/rocm.sh"
 
-# Finalize.
-source "${inc_path}/sys/teardown.sh"
-source "${inc_path}/msg/finish.sh"
+# Tidy up.
+step "${inc_path}/sys/bashrc.sh"
+step "${inc_path}/sys/teardown.sh"
+
+# Restore ~/.bashrc to its starting state if a third-party
+# installer modified it. Any new lines are redirected
+# to ~/local.bashrc.
+bashrc_restore
+
+# Print outcomes.
+print_finished
+print_failures
+
+# Exit non-zero if any step failed, so that CI/wrappers
+# can detect failures.
+exit "${#FAILED_STEPS[@]}"

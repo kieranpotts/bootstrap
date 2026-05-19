@@ -6,37 +6,26 @@
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 #
 
-print_step "Install Terraform"
+print_step "Installing Terraform."
 
-# Install the HashiCorp GPG key.
-# Requires gnugp.
-wget -O- https://apt.releases.hashicorp.com/gpg | \
-  gpg --dearmor | \
-  superdo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-
-# Verify the key's fingerprint.
-gpg --no-default-keyring \
-  --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-  --fingerprint
-
-# Add the official HashiCorp repository to your system.
-# The `lsb_release -cs` command finds the distribution release codename for
-# your system, such as `buster`, `groovy`, or `sid`.
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-  superdo tee /etc/apt/sources.list.d/hashicorp.list
-
-# Download the package information from HashiCorp.
-superdo apt-get update
-
-# Install Terraform from the new repository.
+print_info "Installing/updating Terraform via APT."
 superdo apt-get install -y terraform
 
-# Verify the installation.
-terraform -help
+# Install the autocomplete package.
+# This will error and exit if the autocomplete configuration is already
+# installed - hence the "|| true" bit to allow the script to continue.
 
-# Install the autocomplete package. This will not take effect until
-# the shell is restarted (or ~/.bashrc is re-sourced).
-terraform -install-autocomplete
+#terraform -install-autocomplete 2> /dev/null || true
 
-terraform version
+# Better to just add the configuration directly to the user's bashrc file.
+# This is all the `terraform -install-autocomplete` command does anyway, and
+# this allows us to control where the configuration is added.
+
+# shellcheck disable=SC2154
+if [[ -f "${bashrc}" ]]; then
+  if ! grep -q "/usr/bin/terraform" "${bashrc}"; then
+    printf "%s\n" "complete -C /usr/bin/terraform terraform" >> "${bashrc}"
+  fi
+fi
+
+print_success "Terraform installed successfully."

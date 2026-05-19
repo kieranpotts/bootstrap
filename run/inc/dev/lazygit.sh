@@ -6,39 +6,47 @@
 # https://github.com/jesseduffield/lazygit#installation
 #
 
-print_step "Install LazyGit"
+print_step "Installing LazyGit."
 
-# Remember the current working diectory, so we can change back here later.
-cwd="$(pwd)"
+# Get the latest version from the GitHub releases page (strip leading `v`).
+latest_version=$(gh_latest_tag jesseduffield/lazygit | sed 's/^v//')
 
-# Create a temporary directory.
-tmp_dir="$(mktemp -d)"
+# Check if LazyGit is already installed, and which version it is.
+installed_version=""
+if command -v lazygit >/dev/null 2>&1; then
+  installed_version=$(lazygit --version | grep -oP '(?<!git )version=\K[^,]+')
+fi
 
-# Move to the temporary directory.
-cd "$tmp_dir" || true
+if [[ "${installed_version}" == "${latest_version}" ]]; then
+  print_info "LazyGit is already installed and at the latest version, v${installed_version}. Skipping."
+else
 
-# Find the latest release.
-lazygit_version=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+  print_info "Will install/upgrade LazyGit to v${latest_version}."
 
-# Fetch the latest release.
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${lazygit_version}_Linux_x86_64.tar.gz"
+  # Create a temporary directory.
+  tmp_dir=$(mktemp -d)
 
-# Unpack it.
-tar xf lazygit.tar.gz lazygit
+  # Fetch the latest release.
+  curl \
+    -Lo "${tmp_dir}/lazygit.tar.gz" \
+    "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${latest_version}_Linux_x86_64.tar.gz"
 
-# Install it.
-superdo install lazygit /usr/local/bin
+  # Check if the download was successful.
+  if [[ ! -f "${tmp_dir}/lazygit.tar.gz" ]]; then
+    print_error "Failed to download LazyGit package."
+    exit 1
+  fi
 
-# Print out the installed version, and other version information.
-installed_lazygit_version=$(lazygit --version | grep -Po 'version=\K[^"]*')
-print_success "Installed LazyGit version ${installed_lazygit_version}"
+  # Unpack it to the tmp directory.
+  tar xf "${tmp_dir}/lazygit.tar.gz" -C "${tmp_dir}" lazygit
 
-# Cleanup.
-rm -f lazygit.tar.gz
-rm -rf lazygit
+  # Install it.
+  superdo install "${tmp_dir}/lazygit" /usr/local/bin
 
-# Move back to the original directory.
-cd "${cwd}" || true
+  # Remove the temporary directory.
+  rm -rf "${tmp_dir}"
 
-# Remove the temporary directory.
-rm -rf "$tmp_dir"
+  # Print out the installed version, and other version information.
+  print_success "Installed/updated LazyGit to v${latest_version}."
+
+fi

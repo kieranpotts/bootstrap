@@ -8,12 +8,12 @@
 # and architecture so provisioning logs are self-describing.
 #
 
-print_step "Check system compatibility."
+print_step "Checking system compatibility."
 
 # Hard requirement: Debian-based Linux for `apt-get` / `dpkg`.
-if [ ! -f /etc/debian_version ]; then
+if [[ ! -f /etc/debian_version ]]; then
   print_error "Require a Debian-based Linux distribution."
-  if [ -f /etc/os-release ]; then
+  if [[ -f /etc/os-release ]]; then
     grep "PRETTY_NAME" /etc/os-release
   fi
   print_info "Aborting bootstrap script."
@@ -34,7 +34,7 @@ fi
 
 # Pull distribution details (ID, VERSION_ID, PRETTY_NAME, …) into the
 # current shell so they can be referenced below.
-source /etc/os-release
+. /etc/os-release
 print_success "Detected ${PRETTY_NAME:-${ID:-Debian-based Linux}}."
 
 ubuntu_version="${VERSION_ID}"
@@ -51,11 +51,13 @@ if [[ "${ubuntu_version}" != "22.04" && "${ubuntu_version}" != "24.04" ]]; then
   fi
 fi
 
-# Architecture check. Some tools like Docker Desktop and ROCm
-# specifically require x86_64.
+# Architecture check. Every download URL in this bootstrap hardcodes
+# amd64/x86_64, so non-x86_64 hosts will fail mid-run with confusing errors.
+# Fail fast instead.
 arch=$(uname -m)
-if [ "${arch}" != "x86_64" ]; then
-  print_warning "Detected ${arch} architecture. Some installed tools may not work as expected."
-else
-  print_success "Detected ${arch} architecture."
+if [[ "${arch}" != "x86_64" ]]; then
+  print_error "Detected ${arch} architecture. This bootstrap targets x86_64 only — package URLs are hardcoded and will fail."
+  print_info "Aborting bootstrap script."
+  exit 1
 fi
+print_success "Detected ${arch} architecture."

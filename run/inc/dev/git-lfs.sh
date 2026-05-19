@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
 #
-# Install Git Large File System (LFS).
-#
-# https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md
+# Install Git LFS (Large File System).
 #
 
-print_step "Install Git LFS"
+print_step "Installing Git LFS."
 
-curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | superdo bash
-superdo apt-get install git-lfs=3.7.1
+print_info "Installing/updating Git LFS via APT."
+superdo apt-get install -y git-lfs
 
 # Enable LFS in Git.
 git lfs install
 
-git lfs version
+print_success "Git LFS extension installed successfully."

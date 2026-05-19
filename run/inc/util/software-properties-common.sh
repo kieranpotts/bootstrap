@@ -15,4 +15,5 @@
 
 print_step "Installing software-properties-common"
 
+print_info "Installing/updating software-properties-common via APT."
 superdo apt-get install -y software-properties-common

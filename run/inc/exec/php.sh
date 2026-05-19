@@ -13,9 +13,10 @@
 # https://github.com/php-build/php-build
 #
 
-print_step "Install PHP via phpenv"
+print_step "Install PHP via phpenv."
 
-# Remember the current working diectory, so we can change back here later.
+# Remember the current working diectory,
+# so we can change back here later.
 cwd=$(pwd)
 
 # Checkout phpenv into ~/.phpenv. Else update it.
@@ -29,26 +30,20 @@ fi
 # Move back to the original directory.
 cd "${cwd}" || true
 
-# Add shell startup scripts in an idempotent way.
-if [ -f "$HOME/local.bashrc" ]; then
-  # (Single quotes are used to prevent variable expansion.)
-  # shellcheck disable=SC2016
-  if ! grep -q '.phpenv/bin' "$HOME/local.bashrc"; then
-    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> "$HOME/local.bashrc"
-    echo 'eval "$(phpenv init -)"' >> "$HOME/local.bashrc"
-  fi
-else
-  touch "$HOME/.bashrc"
-  # (Single quotes are used to prevent variable expansion.)
-  # shellcheck disable=SC2016
-  if ! grep -q '.phpenv/bin' "$HOME/.bashrc"; then
-    echo 'export PATH="$HOME/.phpenv/bin:$PATH"' >> "$HOME/.bashrc"
-    echo 'eval "$(phpenv init -)"' >> "$HOME/.bashrc"
+# shellcheck disable=SC2154
+if [[ -f "${bashrc}" ]]; then
+  if ! grep -q ".phpenv/bin" "${bashrc}"; then
+    {
+      echo 'export PATH="$HOME/.phpenv/bin:$PATH"'
+      echo 'eval "$(phpenv init -)"'
+    } >> "${bashrc}"
   fi
 fi
 
-# Re-source the shell startup scripts, to initialize phpenv now: `phpenv init -`.
-# Re-source the shell startup scripts, to initialize phpenv now: `phpenv init -`.
+
+# Re-source the shell startup scripts,
+# required to initialize phpenv now: `phpenv init -`.
+# This is used later in this script.
 if [ -f "$HOME/local.bashrc" ]; then
   . "$HOME/local.bashrc"
 else
@@ -104,6 +99,7 @@ superdo apt-get install -y \
   pkg-config
 
 # TODO: PHP versions require upgrade.
+#
 # Install the most recent definitions available for the current "active support"
 # PHP versions as of 2024-08-22. See https://www.php.net/supported-versions.php
 #
