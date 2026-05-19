@@ -6,7 +6,7 @@
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 #
 
-startNewTask "Install Terraform"
+print_step "Install Terraform"
 
 # Install the HashiCorp GPG key.
 # Requires gnugp.

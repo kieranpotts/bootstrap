@@ -7,7 +7,7 @@
 # oh-my-posh.
 #
 
-startNewTask "Installing unzip"
+print_step "Installing unzip"
 
 superdo apt-get install -y unzip
 

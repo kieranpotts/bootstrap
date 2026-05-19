@@ -6,7 +6,7 @@
 # https://github.com/koalaman/shellcheck
 #
 
-startNewTask "Install shellcheck"
+print_step "Install shellcheck"
 
 superdo apt-get install -y shellcheck
 

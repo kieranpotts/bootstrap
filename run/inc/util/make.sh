@@ -4,7 +4,7 @@
 # Install Make.
 #
 
-startNewTask "Install Make"
+print_step "Install Make"
 
 superdo apt-get install -y make
 

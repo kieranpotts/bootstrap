@@ -13,6 +13,6 @@
 # software packages, eg. this is required for installation of Terraform.
 #
 
-startNewTask "Installing software-properties-common"
+print_step "Installing software-properties-common"
 
 superdo apt-get install -y software-properties-common

@@ -7,7 +7,7 @@
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 #
 
-startNewTask "Install GitHub CLI"
+print_step "Install GitHub CLI"
 
 # Add the GitHub CLI keyring.
 superdo mkdir -p -m 755 /etc/apt/keyrings

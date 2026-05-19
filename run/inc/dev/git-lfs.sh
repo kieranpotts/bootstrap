@@ -6,7 +6,7 @@
 # https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md
 #
 
-startNewTask "Install Git LFS"
+print_step "Install Git LFS"
 
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | superdo bash
 superdo apt-get install git-lfs=3.7.1

@@ -9,7 +9,7 @@
 # https://learn.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-wsl
 #
 
-startNewTask "Install Node via NVM"
+print_step "Install Node via NVM"
 
 nvm_version="0.40.0"
 

@@ -8,7 +8,7 @@
 # https://github.com/shyiko/jabba
 #
 
-startNewTask "Install OpenJDK via Jabba"
+print_step "Install OpenJDK via Jabba"
 
 jabba_version="0.11.2"
 

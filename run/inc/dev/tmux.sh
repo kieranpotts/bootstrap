@@ -6,7 +6,7 @@
 # https://github.com/tmux/tmux
 #
 
-startNewTask "Install tmux"
+print_step "Install tmux"
 
 superdo apt-get install -y tmux
 

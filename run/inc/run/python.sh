@@ -7,7 +7,7 @@
 # Single quotes are used in this file to prevent variable expansion.
 # shellcheck disable=SC2016
 
-startNewTask "Install Python, pip, pipenv, etc."
+print_step "Install Python, pip, pipenv, etc."
 
 superdo apt-get install -y python3 python3-pip python3-venv ipython3 pipx
 

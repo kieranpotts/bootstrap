@@ -13,7 +13,7 @@
 # https://github.com/php-build/php-build
 #
 
-startNewTask "Install PHP via phpenv"
+print_step "Install PHP via phpenv"
 
 # Remember the current working diectory, so we can change back here later.
 cwd=$(pwd)

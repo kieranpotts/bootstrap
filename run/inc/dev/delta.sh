@@ -8,7 +8,7 @@
 # https://dandavison.github.io/delta/
 #
 
-startNewTask "Install delta"
+print_step "Install delta"
 
 # Remove any existing installations.
 superdo apt-get remove git-delta -y

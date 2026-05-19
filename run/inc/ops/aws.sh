@@ -6,7 +6,7 @@
 # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 #
 
-startNewTask "Install AWS CLI"
+print_step "Install AWS CLI"
 
 # Remember the current working diectory, so we can change back here later.
 cwd="$(pwd)"

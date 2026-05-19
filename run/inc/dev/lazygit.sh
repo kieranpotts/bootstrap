@@ -6,7 +6,7 @@
 # https://github.com/jesseduffield/lazygit#installation
 #
 
-startNewTask "Install LazyGit"
+print_step "Install LazyGit"
 
 # Remember the current working diectory, so we can change back here later.
 cwd="$(pwd)"

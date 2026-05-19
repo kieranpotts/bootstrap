@@ -6,7 +6,7 @@
 # https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-google-chrome-for-linux
 #
 
-startNewTask "Install Google Chrome"
+print_step "Install Google Chrome"
 
 # Remember the current working directory, so we can change back here later.
 cwd=$(pwd)

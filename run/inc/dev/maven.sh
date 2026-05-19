@@ -6,7 +6,7 @@
 # https://maven.apache.org/
 #
 
-startNewTask "Install Maven"
+print_step "Install Maven"
 
 superdo apt-get install -y maven
 

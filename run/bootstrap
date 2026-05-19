@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Dev VM bootstrap script.
+# Main entry point for the development environment bootstrapper.
 #
 # Usage: ./run/bootstrap [--gui]
 #
@@ -9,8 +9,20 @@
 #   -h, --help    Show this help and exit.
 #
 
+# Exit on any error.
+set -e
+
+# Use this instead for debugging problems with the script.
+#set -euxo pipefail
+
+#
+# CLI flag parsing:
+#
+
 # Feature toggles. Defaults are conservative: CLI-only.
 # Consumed by `is_gui_enabled` in `run/inc/utils.sh` and any GUI install steps.
+
+# `install_gui` is consumed by sourced files.
 # shellcheck disable=SC2034
 install_gui=0
 
@@ -18,6 +30,7 @@ install_gui=0
 for arg in "$@"; do
   case "${arg}" in
     --gui)
+      # shellcheck disable=SC2034
       install_gui=1
       ;;
     -h|--help)
@@ -32,60 +45,94 @@ for arg in "$@"; do
   esac
 done
 
-# Includes directory name.
-inc="./run/inc"
+#
+# Global variables:
+#
 
-# Load helper functions.
-source "${inc}/utils.sh"
+# Absolute path to this repository. This allows sourcing of files relative to
+# the repository root, and thus the bootstrap script can be run from any
+# working directory.
+#
+repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
 
-# Print start message.
-source "${inc}/msg/start.sh"
+# Includes path.
+inc_path="${repo_root}/run/inc"
 
-# Verify system compatibility and record detected OS/arch.
-source "${inc}/sys/checks.sh"
+# Determine the bashrc file to use. If the user has a file called
+# `local.bashrc` in their home directory, use that instead of the
+# default `.bashrc` file.
+#
+bashrc="${HOME}/.bashrc"
+if [ -f "${HOME}/local.bashrc" ]; then
+  # `bashrc` is used in sourced files.
+  # shellcheck disable=SC2034
+  bashrc="${HOME}/local.bashrc"
+else
+  touch "${HOME}/.bashrc"
+fi
 
-# Update and install system utilities.
-source "${inc}/sys/update.sh"
-source "${inc}/sys/upgrade.sh"
+# Source ANSI code variables.
+source "${inc_path}/var/ansi-codes.sh"
 
-# Install general utilities.
-source "${inc}/util/curl.sh"
-source "${inc}/util/git.sh"
-source "${inc}/util/gnupg.sh"
-source "${inc}/util/make.sh"
-source "${inc}/util/software-properties-common.sh"
-source "${inc}/util/unzip.sh"
-source "${inc}/util/wget.sh"
+#
+# Utility functions:
+#
+
+source "${inc_path}/fn/gui.sh"
+source "${inc_path}/fn/statuses.sh"
+source "${inc_path}/fn/steps.sh"
+source "${inc_path}/fn/superdo.sh"
+
+#
+# Main script:
+#
+
+print_starting
+
+# Initial system compatibility checks and updates.
+source "${inc_path}/sys/checks.sh"
+source "${inc_path}/sys/apt.sh"
+source "${inc_path}/sys/upgrade.sh"
+
+# System utilities. Some of these, like curl and wget, are required for
+# the package repository setup scripts that follow.
+source "${inc_path}/util/curl.sh"
+source "${inc_path}/util/git.sh"
+source "${inc_path}/util/gnupg.sh"
+source "${inc_path}/util/make.sh"
+source "${inc_path}/util/software-properties-common.sh"
+source "${inc_path}/util/unzip.sh"
+source "${inc_path}/util/wget.sh"
 
 # Install runtime environments.
-source "${inc}/run/node.sh"
-source "${inc}/run/jdk.sh"
-source "${inc}/run/php.sh"
-source "${inc}/run/python.sh"
+source "${inc_path}/run/node.sh"
+source "${inc_path}/run/jdk.sh"
+source "${inc_path}/run/php.sh"
+source "${inc_path}/run/python.sh"
 
 # Install dev tools.
-source "${inc}/dev/chrome.sh"
-source "${inc}/dev/claude.sh"
-source "${inc}/dev/copilot.sh"
-source "${inc}/dev/delta.sh"
-source "${inc}/dev/gh.sh"
-source "${inc}/dev/git-lfs.sh"
-source "${inc}/dev/lazygit.sh"
-source "${inc}/dev/maven.sh"
-source "${inc}/dev/neovim.sh"
-source "${inc}/dev/oh-my-posh.sh"
-source "${inc}/dev/pre-commit.sh"
-source "${inc}/dev/shellcheck.sh"
-source "${inc}/dev/tmux.sh"
-source "${inc}/dev/vscode.sh"
+source "${inc_path}/dev/chrome.sh"
+source "${inc_path}/dev/claude.sh"
+source "${inc_path}/dev/copilot.sh"
+source "${inc_path}/dev/delta.sh"
+source "${inc_path}/dev/gh.sh"
+source "${inc_path}/dev/git-lfs.sh"
+source "${inc_path}/dev/lazygit.sh"
+source "${inc_path}/dev/maven.sh"
+source "${inc_path}/dev/neovim.sh"
+source "${inc_path}/dev/oh-my-posh.sh"
+source "${inc_path}/dev/pre-commit.sh"
+source "${inc_path}/dev/shellcheck.sh"
+source "${inc_path}/dev/tmux.sh"
+source "${inc_path}/dev/vscode.sh"
 
 # Install ops tools.
-source "${inc}/ops/aws.sh"
-source "${inc}/ops/terraform.sh"
+source "${inc_path}/ops/aws.sh"
+source "${inc_path}/ops/terraform.sh"
 
 # Hardware utilities.
-source "${inc}/phy/rocm.sh"
+source "${inc_path}/phy/rocm.sh"
 
 # Finalize.
-source "${inc}/sys/teardown.sh"
-source "${inc}/msg/finish.sh"
+source "${inc_path}/sys/teardown.sh"
+source "${inc_path}/msg/finish.sh"

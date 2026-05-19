@@ -13,7 +13,7 @@
 # https://gnupg.org/
 #
 
-startNewTask "Installing gnupg"
+print_step "Installing gnupg"
 
 superdo apt-get install -y gnupg
 

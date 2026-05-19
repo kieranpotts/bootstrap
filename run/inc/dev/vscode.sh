@@ -17,7 +17,7 @@
 
 is_gui_enabled || return 0
 
-startNewTask "Install Visual Studio Code"
+print_step "Install Visual Studio Code"
 
 # Remember the current working directory, so we can change back here later.
 cwd=$(pwd)
@@ -39,7 +39,7 @@ cd "${cwd}" || true
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
 
-# Add the VS Code apt source.
+# Add the VS Code APT source.
 superdo tee /etc/apt/sources.list.d/vscode.sources > /dev/null << 'EOF'
 Types: deb
 URIs: https://packages.microsoft.com/repos/code

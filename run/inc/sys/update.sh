@@ -3,20 +3,23 @@
 #
 # System updates.
 #
-# - Set the system timezone to UTC.
 # - Clean up any failed packages, cached from previous builds.
 # - Fetch latest updates for all pre-installed software.
 #
 
-startNewTask "Updating the system"
+print_step "Updating system"
 
-# Set timezone to UTC.
-if command -v timedatectl &> /dev/null; then
-  superdo timedatectl set-timezone UTC
-else
-  echo "UTC" | superdo tee /etc/timezone
-  superdo dpkg-reconfigure -f noninteractive tzdata
-fi
+# @deprecated: We no longer set the host system timezone to UTC. It's a bit
+# annoying having your system clock change when you're in a different timezone!
+# Applications SHOULD run in environments in which the timezone is set to UTC;
+# containers and VMs should be set to UTC for this purpose. But we don't want to
+# force this on the host system.
+#if command -v timedatectl &> /dev/null; then
+#  superdo timedatectl set-timezone UTC
+#else
+#  echo "UTC" | superdo tee /etc/timezone
+#  superdo dpkg-reconfigure -f noninteractive tzdata
+#fi
 
 # Clean up any packages that were installed to satisfy dependencies,
 # but which are no longer needed.

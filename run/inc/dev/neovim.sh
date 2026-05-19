@@ -6,7 +6,7 @@
 # https://github.com/neovim/neovim/blob/master/INSTALL.md
 #
 
-startNewTask "Install Neovim"
+print_step "Install Neovim"
 
 superdo apt-get install -y neovim
 

@@ -10,7 +10,7 @@
 # Requires Node.js v22, NPM v10
 #
 
-startNewTask "Install Copilot CLI"
+print_step "Install Copilot CLI"
 
 npm install -g @github/copilot
 

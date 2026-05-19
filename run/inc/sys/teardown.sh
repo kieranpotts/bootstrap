@@ -4,7 +4,7 @@
 # Clean up disk space.
 #
 
-startNewTask "Cleaning up disk space"
+print_step "Cleaning up disk space"
 
 # Remove package dependencies that are no longer required.
 superdo apt-get -y autoremove
