@@ -67,4 +67,5 @@ Defaults are conservative: with no flags, only CLI tooling is installed.
 
 ## Skills
 
+- [`./skills/apt/SKILL.md`](./skills/apt/SKILL.md): Use the APT package manager correctly in bootstrap scripts.
 - [`./skills/install-step/SKILL.md`](./skills/install-step/SKILL.md): Add or modify an install step in the bootstrap scripts.

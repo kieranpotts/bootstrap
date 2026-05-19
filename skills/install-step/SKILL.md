@@ -195,6 +195,9 @@ An install step that downloads a release tarball and pins the upstream version â
 ## References
 
 - [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill builds on.
+
 - [`run/inc/utils.sh`](../../run/inc/utils.sh): Source of `print_step` and `superdo`.
+
 - [`docs/installation.md`](../../docs/installation.md): How the entry script is invoked.
+
 - [`docs/considerations.md`](../../docs/considerations.md): Why Docker is intentionally excluded.
