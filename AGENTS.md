@@ -18,9 +18,10 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 ## Repository structure
 
 - `run/bootstrap`: Entry script, sources every install step in order.
-- `run/inc/utils.sh`: Shared helpers (`startNewTask`, `superdo`).
+- `run/inc/fn/`: Shared helper functions (`print_step`, `superdo`, `is_gui_enabled`, status printers).
+- `run/inc/var/`: Shared variables (ANSI codes).
 - `run/inc/msg/`: Start and finish banners.
-- `run/inc/sys/`: System updates, upgrades, and teardown.
+- `run/inc/sys/`: Compatibility checks, APT setup, system updates, upgrades, and teardown.
 - `run/inc/util/`: General utilities (curl, git, gnupg, wget, …).
 - `run/inc/run/`: Language runtimes (Node, JDK, PHP, Python).
 - `run/inc/dev/`: Developer tooling (Claude, Copilot, delta, lazygit, …).
@@ -40,7 +41,7 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 
 CLI flags are parsed at the top of `run/bootstrap` and stored as global variables that any sourced install step can inspect via helpers in `run/inc/utils.sh`:
 
-- `--gui` sets `install_gui=1`. Install steps that should only run with this flag must guard themselves with `is_gui_enabled || return 0` immediately before their `startNewTask` call.
+- `--gui` sets `install_gui=1`. Install steps that should only run with this flag must guard themselves with `is_gui_enabled || return 0` immediately before their `print_step` call.
 
 Defaults are conservative: with no flags, only CLI tooling is installed.
 
@@ -48,7 +49,7 @@ Defaults are conservative: with no flags, only CLI tooling is installed.
 
 - MUST keep every script idempotent. Running `./run/bootstrap` repeatedly must converge, not duplicate, work.
 
-- MUST call `startNewTask "…"` as the first non-comment line of every install step, so the run is self-narrating.
+- MUST call `print_step "…"` as the first non-comment line of every install step, so the run is self-narrating.
 
 - MUST use the `superdo` helper instead of `sudo` directly, so scripts work both as root (eg. for Docker builds) and as a regular user (for local installs).
 

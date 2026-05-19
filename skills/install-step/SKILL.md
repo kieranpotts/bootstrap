@@ -41,7 +41,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
     # <Upstream install docs>
     #
 
-    startNewTask "Install <Program Name>"
+    print_step "Install <Program Name>"
 
     # Install commands here, using `superdo` instead of `sudo`.
     superdo apt-get install -y <package>
@@ -51,7 +51,7 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
 
 3.  **Wire the script into the entry point.**
 
-    Add a `source "${inc}/<group>/<name>.sh"` line to `run/bootstrap` in the correct group, keeping the lines within that group sorted alphabetically.
+    Add a `source "${repo_root}/<group>/<name>.sh"` line to `run/bootstrap` in the correct group, keeping the lines within that group sorted alphabetically.
 
 4.  **Pin versions when reasonable.**
 
@@ -89,19 +89,19 @@ Do NOT use this skill for one-off shell scripts that are not part of the bootstr
     sudo apt-get install -y <package>
     ```
 
--   **Announce each step with `startNewTask`.**
+-   **Announce each step with `print_step`.**
 
-    The first non-comment line of every install script must be `startNewTask "Install …"` (or an equivalent verb). The helper prints a numbered banner so the bootstrap run is self-narrating, and is the contract that downstream scripts depend on for step numbering.
+    The first non-comment line of every install script must be `print_step "Install …"` (or an equivalent verb). The helper prints a numbered banner so the bootstrap run is self-narrating, and is the contract that downstream scripts depend on for step numbering.
 
 -   **Guard optional steps with feature toggles.**
 
-    CLI flags parsed by `run/bootstrap` are exposed as helper predicates in `run/inc/utils.sh`. An install step that should only run under a given flag must short-circuit before its `startNewTask` call so the step number is not consumed:
+    CLI flags parsed by `run/bootstrap` are exposed as helper predicates in `run/inc/utils.sh`. An install step that should only run under a given flag must short-circuit before its `print_step` call so the step number is not consumed:
 
     ```bash
     # GUI-only install. No-op unless `--gui` was passed.
     is_gui_enabled || return 0
 
-    startNewTask "Install <gui-thing>"
+    print_step "Install <gui-thing>"
     # ...
     ```
 
@@ -146,7 +146,7 @@ A minimal install step backed by an apt package — see [`run/inc/util/curl.sh`]
 # Install Curl
 #
 
-startNewTask "Installing curl"
+print_step "Installing curl"
 
 superdo apt-get install -y curl
 ```
@@ -163,7 +163,7 @@ An install step that adds a third-party apt source and pins the version — see 
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 #
 
-startNewTask "Install GitHub CLI"
+print_step "Install GitHub CLI"
 
 superdo mkdir -p -m 755 /etc/apt/keyrings
 wget -nv -O- https://cli.github.com/packages/githubcli-archive-keyring.gpg | superdo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
@@ -195,6 +195,6 @@ An install step that downloads a release tarball and pins the upstream version �
 ## References
 
 - [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill builds on.
-- [`run/inc/utils.sh`](../../run/inc/utils.sh): Source of `startNewTask` and `superdo`.
+- [`run/inc/utils.sh`](../../run/inc/utils.sh): Source of `print_step` and `superdo`.
 - [`docs/installation.md`](../../docs/installation.md): How the entry script is invoked.
 - [`docs/considerations.md`](../../docs/considerations.md): Why Docker is intentionally excluded.
