@@ -9,8 +9,12 @@
 #   -h, --help    Show this help and exit.
 #
 
-# Exit on any error.
-set -e
+# Strict mode for the entry-point script:
+#   -e            Exit on any unhandled command failure.
+#   -u            Error on references to unset variables.
+#   -o pipefail   A pipeline fails if any element fails (not just the last).
+#
+set -euo pipefail
 
 # Use this instead for debugging problems with the script.
 #set -euxo pipefail
@@ -20,13 +24,13 @@ set -e
 #
 
 # Feature toggles. Defaults are conservative: CLI-only.
-# Consumed by `is_gui_enabled` in `run/inc/utils.sh` and any GUI install steps.
+# Consumed by `is_gui_enabled` in `run/inc/fn/gui.sh` and any GUI install
+# steps.
 
 # `install_gui` is consumed by sourced files.
 # shellcheck disable=SC2034
 install_gui=0
 
-# Parse CLI flags.
 for arg in "$@"; do
   case "${arg}" in
     --gui)
