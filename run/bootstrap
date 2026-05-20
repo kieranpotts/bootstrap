@@ -144,6 +144,7 @@ step "${inc_path}/exec/python.sh"
 
 # Web browsers.
 step "${inc_path}/web/chrome.sh"
+step "${inc_path}/web/edge.sh"
 step "${inc_path}/web/firefox.sh"
 
 # Applications.
