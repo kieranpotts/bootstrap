@@ -11,6 +11,6 @@ if compgen -G "/etc/apt/sources.list.d/phoerious-ubuntu-keepassxc-*" > /dev/null
   return 0
 fi
 
-superdo add-apt-repository -y -n ppa:phoerious/keepassxc
+superdo add-apt-repository -y ppa:phoerious/keepassxc
 
 print_success "KeePassXC's package registry added to APT sources."
