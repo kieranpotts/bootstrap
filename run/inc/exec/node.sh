@@ -101,6 +101,11 @@ if [[ -f "${bashrc}" ]]; then
   if ! grep -q "export NVM_DIR" "${bashrc}"; then
     echo "${content}" >> "${bashrc}"
   fi
+
+  # Re-source bashrc now, so `node` and `npm` are immediately available -
+  # subsequent programs will be installed in this runtime environment.
+  # shellcheck disable=SC1090
+  . "${bashrc}"
 fi
 
 # Use NVM to install the current LTS version of Node, plus previous LTS versions
