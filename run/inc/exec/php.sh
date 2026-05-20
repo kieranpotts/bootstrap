@@ -99,10 +99,11 @@ superdo apt-get install -y \
   libzip-dev \
   pkg-config
 
-# TODO: PHP versions require upgrade.
-#
 # Install the most recent definitions available for the current "active support"
-# PHP versions as of 2024-08-22. See https://www.php.net/supported-versions.php
+# PHP versions as of 2026-05-20. See:
+#
+# https://www.php.net/supported-versions.php
+# https://www.php.net/
 #
 # The compilation steps take some time, so we skip any existing installs.
 #
@@ -110,7 +111,9 @@ superdo apt-get install -y \
 # PEAR package. This can be ignored - it does not break the build, see:
 # https://github.com/php-build/php-build/issues/115
 
-phpenv install --skip-existing 8.3.8
+phpenv install --skip-existing 8.5.6
+phpenv install --skip-existing 8.4.21
+#phpenv install --skip-existing 8.3.8
 #phpenv install --skip-existing 8.2.20
 
 # Show available versions - should match the above.
@@ -118,7 +121,7 @@ phpenv versions
 
 # Set the global PHP version (ie the default for all shells). This can be
 # overridden on a project-by-project basis using `phpenv local`.
-phpenv global 8.3.8
+phpenv global 8.5.6
 
 # Show the current PHP version.
 phpenv version
