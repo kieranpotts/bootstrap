@@ -22,11 +22,24 @@ gpg --no-default-keyring \
   --fingerprint
 
 # Add the official HashiCorp registry to your system.
+#
+# Original script:
+#
+#   echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+#     https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+#     superdo tee /etc/apt/sources.list.d/hashicorp.list
+#
 # The `lsb_release -cs` command finds the distribution release codename for
-# your system, such as `buster`, `groovy`, or `sid`.
+# your system. On Linux Mint 22.2, this returns "zara", rather than a
+# valid Ubuntu release codename like "jammy" (22.04). Since there's no
+# package available for Ubuntu Zara, the package registry will return
+# an error when updates are requested.
+#
+# Our fix is to configure registry to fetch packages for Ubuntu 24.04,
+# codename "noble".
 
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-  https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  https://apt.releases.hashicorp.com noble main" | \
   superdo tee /etc/apt/sources.list.d/hashicorp.list
 
 print_success "Hashicorp's package registry added to sources."
