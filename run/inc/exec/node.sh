@@ -110,6 +110,14 @@ fi
 # changelog to find the first version number for each major LTS release.
 # https://nodejs.org/en/about/previous-releases
 
+# https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V24.md
+if ! nvm list | grep -q "v24.11.0"; then
+  print_info "Installing Node.js LTS v24.11.0."
+  nvm install 24.11.0
+else
+  print_info "Node.js LTS v24.11.0 is already installed."
+fi
+
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V22.md
 if ! nvm list | grep -q "v22.11.0"; then
   print_info "Installing Node.js LTS v22.11.0."
@@ -145,5 +153,5 @@ fi
 # nvm install 10.13.0
 
 # Use the current active LTS version as the default.
-print_info "Setting Node.js LTS v22.11.0 as the current version."
-nvm use 22.11.0
+print_info "Setting Node.js LTS v24.11.0 as the current version."
+nvm use 24.11.0
