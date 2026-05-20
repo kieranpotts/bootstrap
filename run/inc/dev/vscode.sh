@@ -3,6 +3,9 @@
 #
 # Install Visual Studio Code.
 #
+# Depends on `pkg/microsoft.sh`, which adds Microsoft's VS Code
+# package registry.
+#
 # https://code.visualstudio.com/docs/
 # https://github.com/microsoft/vscode/
 #
@@ -21,5 +24,3 @@ print_step "Installing Visual Studio Code."
 print_info "Installing/updating VS Code via APT."
 superdo apt-get install -y code
 code --version
-
-print_success "VS Code installed successfully."

@@ -13,18 +13,15 @@ print_step "Installing OpenJDKs via Jabba."
 # If Jabba is already installed, ensure it is available in the PATH for
 # non-interactive shells. This is required for the line that evaluates the
 # `jabba --version` command to capture the currently-installed version.
-
 if [[ -s "${HOME}/.jabba/jabba.sh" ]]; then
   . "${HOME}/.jabba/jabba.sh"
 fi
 
 # Target Jabba version we want to install (Jabba's tags have no leading `v`).
-
 latest_version=$(gh_latest_tag shyiko/jabba)
 print_info "Latest available version of Jabba is v${latest_version}."
 
 # Discover the installed version of Jabba, if it exists.
-
 installed_version=""
 if command -v jabba >/dev/null 2>&1; then
   installed_version=$(jabba --version)
@@ -42,13 +39,11 @@ else
 
   # Jabba's `install.sh` script uses this environment variable to determine the
   # version to install.
-
   export JABBA_VERSION=${latest_version}
 
   # Run the Jabba install script, which will download and install the target
   # Jabba version to ~/.jabba. Source the jabba.sh script to load Jabba into
   # the current shell session.
-
   curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash -s -- --skip-rc && source ~/.jabba/jabba.sh
 
   print_success "Installed/updated Jabba to v${latest_version}."
@@ -60,6 +55,7 @@ fi
 
 print_info "Configuring ~/.bashrc to source jabba.sh at shell startup."
 
+# shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
   if ! grep -q "export JABBA_VERSION" "${bashrc}"; then
 

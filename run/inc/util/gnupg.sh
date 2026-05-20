@@ -23,6 +23,7 @@ gpg --version
 # every time you use your GPG key – which can get annoying when signing lots
 # of Git commits, for instance.
 
+print_info "Enabling the GPG agent."
 mkdir -p "${HOME}/.gnupg"
 touch "${HOME}/.gnupg/gpg.conf"
 

@@ -13,13 +13,11 @@ print_step "Installing Node.js via NVM."
 # If NVM is already installed, ensure it is available in the PATH for
 # non-interactive shells. This is required for the line that evaluates the
 # `nvm --version` command to capture the currently-installed version.
-
 if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
   . "${HOME}/.nvm/nvm.sh"
 fi
 
 # Target NVM version we want to install (strip leading `v` from the tag).
-
 latest_version=$(gh_latest_tag nvm-sh/nvm | sed 's/^v//')
 print_info "Latest available version of NVM is v${latest_version}."
 
@@ -86,7 +84,7 @@ fi
 # Add to .bashrc to automatically load NVM when a new shell session is started.
 # Avoid duplication by checking for the presence of the export statement.
 # Always run this - on every bootstrap run - to restore this to the user's
-# .bashrc file, in case it was removed or modified.
+# bashrc file, in case it was removed or modified.
 
 print_info "Configuring ~/.bashrc to load NVM shell startup."
 
@@ -110,7 +108,6 @@ fi
 # install the first minor/patch version to receive the LTS label, rather than
 # the most recent version in that major line. See the links for each release's
 # changelog to find the first version number for each major LTS release.
-#
 # https://nodejs.org/en/about/previous-releases
 
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V22.md

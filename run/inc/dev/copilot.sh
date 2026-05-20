@@ -3,11 +3,11 @@
 #
 # Installs GitHub Copilot CLI.
 #
+# Requires Node.js v22, NPM v10.
+#
 # https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli
 # https://docs.github.com/en/copilot
 # https://github.com/orgs/community/discussions/categories/copilot-conversations
-#
-# Requires Node.js v22, NPM v10.
 #
 
 print_step "Install Copilot CLI."

@@ -14,8 +14,6 @@ print_info "Docker Desktop requires gnome-terminal if the host system is not usi
 if [[ "${XDG_CURRENT_DESKTOP}" != "GNOME" ]]; then
   print_info "Non-GNOME desktop detected. Installing gnome-terminal via APT."
   superdo apt-get install -y gnome-terminal
-
-  print_success "gnome-terminal installed successfully."
 else
   print_info "GNOME desktop detected. Skipping gnome-terminal installation."
 fi

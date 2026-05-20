@@ -3,6 +3,9 @@
 #
 # Install Git LFS (Large File System).
 #
+# Depends on `pkg/git-lfs.sh`, which adds the required
+# package registry to APT's sources.
+#
 
 print_step "Installing Git LFS."
 

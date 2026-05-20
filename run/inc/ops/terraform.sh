@@ -3,6 +3,9 @@
 #
 # Install Terraform.
 #
+# Depends on `pkg/hashicorp.sh`, which adds HashiCorp's package
+# registry to APT's package sources.
+#
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 #
 

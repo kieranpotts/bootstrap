@@ -3,7 +3,8 @@
 #
 # Installs Firefox.
 #
-# Requires Mozilla's official package repository to be added to APT.
+# Depends on `pkg/mozilla.sh` to add Mozilla's own package registry to APT.
+#
 # https://support.mozilla.org/en-US/kb/install-firefox-linux
 #
 

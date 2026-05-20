@@ -18,5 +18,6 @@ print_info "Installing Poetry via official installer script."
 curl -sSL https://install.python-poetry.org | python3 -
 
 python3 --version
+pip --version
 pipx --version
 poetry --version

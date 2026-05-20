@@ -5,7 +5,7 @@
 # multiple active versions of PHP.
 #
 # Building PHP from source is a brittle and slow process, but the trade-off is
-# it allows multiple PHP versions to be installed alongside each other, which
+# it allows multiple PHP versions to be installed alongside each other, with
 # phpenv allowing easy toggling between versions.
 #
 # https://www.php.net/
@@ -30,6 +30,7 @@ fi
 # Move back to the original directory.
 cd "${cwd}" || true
 
+# Add phpenv binaries to PATH.
 # shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
   if ! grep -q ".phpenv/bin" "${bashrc}"; then
@@ -40,10 +41,9 @@ if [[ -f "${bashrc}" ]]; then
   fi
 fi
 
-
-# Re-source the shell startup scripts,
-# required to initialize phpenv now: `phpenv init -`.
-# This is used later in this script.
+# Re-source the shell startup scripts.
+# This is equired to initialize phpenv immediately (`phpenv init -`).
+# The rest of this script depends on `phpenv` being available.
 if [ -f "$HOME/local.bashrc" ]; then
   . "$HOME/local.bashrc"
 else
@@ -54,6 +54,7 @@ fi
 # Install php-build as a plugin. Clone on first run, pull on subsequent runs
 # (a bare `git clone` aborts when the target directory already exists).
 # https://github.com/php-build/php-build
+
 php_build_dir="$(phpenv root)/plugins/php-build"
 if [ ! -d "${php_build_dir}/.git" ]; then
   mkdir -p "${php_build_dir}"
@@ -64,7 +65,7 @@ else
 fi
 
 # Also install php-build as a standalone binary. This is required
-# to allow us to query the available PHP "definitions" (versions).
+# to allow us to query the available PHP "definitions" (aka. versions).
 cd "$(phpenv root)/plugins/php-build" || true
 superdo ./install.sh
 
@@ -108,7 +109,7 @@ superdo apt-get install -y \
 # The phpenv install commands may show warnings about a missing PHP_Archive
 # PEAR package. This can be ignored - it does not break the build, see:
 # https://github.com/php-build/php-build/issues/115
-#
+
 phpenv install --skip-existing 8.3.8
 #phpenv install --skip-existing 8.2.20
 

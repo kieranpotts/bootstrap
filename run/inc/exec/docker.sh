@@ -10,11 +10,11 @@
 # - Docker Compose: for multi-container applications.
 # - And basic container orchestration features.
 #
+# Depends on `pkg/docker.sh`. The official Docker package registry
+# is expected to be prioritized as a package source.
+#
 
 print_step "Installing Docker Community Edition."
-
-# Install Docker CE - this is expected to prioritize the package available
-# from the official Docker repository due to the configured sources policies.
 
 print_info "Installing Docker CE via APT."
 superdo apt-get install -y docker-ce

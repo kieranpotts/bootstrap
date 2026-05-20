@@ -2,6 +2,7 @@
 
 #
 # List of useful ANSI color codes.
+#
 # https://stackoverflow.com/a/28938235
 # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 # https://github.com/fidian/ansi

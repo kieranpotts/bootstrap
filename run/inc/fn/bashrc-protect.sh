@@ -24,8 +24,8 @@
 
 # bashrc_snapshot - Record the starting state of ~/.bashrc.
 #
-# Activates only when ~/local.bashrc exists (i.e. when the user has opted into
-# the "~/.bashrc is sacred; write to ~/local.bashrc instead" convention).
+# Activates only when ~/local.bashrc exists, which means we should treat the
+# ~/.bashrc file as sacred ground and write change to ~/local.bashrc instead.
 #
 bashrc_snapshot() {
   # `bashrc_protected` and `bashrc_snapshot_dir` are intentionally global —
@@ -43,7 +43,7 @@ bashrc_snapshot() {
   bashrc_protected=1
   bashrc_snapshot_dir=$(mktemp -d)
 
-  # Record the symlink target if ~/.bashrc is a symlink, so we can re-create it.
+  # Record the symlink target if ~/.bashrc is a symlink, so we can recreate it.
   if [[ -L "${HOME}/.bashrc" ]]; then
     readlink "${HOME}/.bashrc" > "${bashrc_snapshot_dir}/symlink_target"
   fi
@@ -51,7 +51,7 @@ bashrc_snapshot() {
   # Snapshot the resolved content (follows symlinks).
   cp -L "${HOME}/.bashrc" "${bashrc_snapshot_dir}/content"
 
-  print_info "Snapshotted ~/.bashrc; any third-party modifications will be redirected to ~/local.bashrc."
+  print_info "Snapshotted ~/.bashrc. Any third-party modifications will be rewritten to ~/local.bashrc."
 }
 
 # bashrc_restore - Compare the current state of ~/.bashrc to the snapshot.
@@ -70,11 +70,12 @@ bashrc_restore() {
     return 0
   fi
 
+  # Tilde "~" not intended to be expanded to $HOME.
   # shellcheck disable=SC2088
   print_warning "~/.bashrc was modified during the bootstrap (likely by a third-party installer)."
 
   # Extract lines added in the current ~/.bashrc relative to the snapshot.
-  # `diff` exits non-zero when files differ; suppress under `set -e`.
+  # `diff` exits non-zero when files differ. Suppress under `set -e`.
   local added_lines
   added_lines=$(diff "${bashrc_snapshot_dir}/content" "${HOME}/.bashrc" 2>/dev/null | grep '^>' | sed 's/^> //' || true)
 

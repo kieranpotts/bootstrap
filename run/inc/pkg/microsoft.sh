@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 #
-# Add Microsoft's GPG signing key, and VS Code package repository.
+# Add Microsoft's GPG signing key, and VS Code package registry.
 #
 # https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions
 #
 
-print_step "Adding Microsoft's official package repository."
+print_step "Adding Microsoft's official package registry."
 
 if [[ -f /usr/share/keyrings/microsoft.gpg ]] && [[ -f /etc/apt/sources.list.d/vscode.sources ]]; then
-  print_info "Microsoft's GPG key and VS Code package repository are already configured. Skipping."
+  print_info "Microsoft's GPG key and VS Code package registry are already configured. Skipping."
   return 0
 fi
 
@@ -19,8 +19,8 @@ wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mi
 superdo install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
 rm -f microsoft.gpg
 
-# Add the VS Code repository.
-print_info "Adding VS Code package repository."
+# Add the VS Code registry.
+print_info "Adding VS Code package registry."
 superdo tee /etc/apt/sources.list.d/vscode.sources > /dev/null << 'EOF'
 Types: deb
 URIs: https://packages.microsoft.com/repos/code
@@ -30,4 +30,4 @@ Architectures: amd64,arm64,armhf
 Signed-By: /usr/share/keyrings/microsoft.gpg
 EOF
 
-print_success "Microsoft's GPG key and VS Code package repository added to APT sources."
+print_success "Microsoft's GPG key and VS Code package registry added to APT sources."

@@ -2,10 +2,11 @@
 
 #
 # Install ca-certificates.
-# Required by Docker.
+#
+# Required for Docker installation.
 #
 
 print_step "Installing ca-certificates."
-print_info "Installing/updating ca-certificates via APT."
 
+print_info "Installing/updating ca-certificates via APT."
 superdo apt-get install -y ca-certificates

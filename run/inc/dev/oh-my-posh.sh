@@ -13,5 +13,4 @@ print_step "Install Oh-My-Posh."
 # location as lazygit.
 
 curl -s https://ohmyposh.dev/install.sh | superdo bash -s -- -d /usr/local/bin
-
 oh-my-posh --version

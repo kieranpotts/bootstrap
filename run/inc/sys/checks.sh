@@ -19,6 +19,18 @@ if [[ ! -f /etc/debian_version ]]; then
   print_info "Aborting bootstrap script."
   exit 1
 fi
+print_success "Detected Debian-based Linux distribution."
+
+# Architecture check. Every download URL in this bootstrap hardcodes
+# amd64/x86_64, so non-x86_64 hosts will fail mid-run with confusing errors.
+# Fail fast instead.
+arch=$(uname -m)
+if [[ "${arch}" != "x86_64" ]]; then
+  print_error "Detected ${arch} architecture. This bootstrap targets x86_64 only — package URLs are hardcoded and will fail."
+  print_info "Aborting bootstrap script."
+  exit 1
+fi
+print_success "Detected ${arch} architecture."
 
 # DEPRECATED: Improved Ubuntu OS detection below.
 # Docker Desktop requires Ubuntu 22.04 LTS or 24.04 LTS. Since Pop!_OS is based
@@ -50,14 +62,3 @@ if [[ "${ubuntu_version}" != "22.04" && "${ubuntu_version}" != "24.04" ]]; then
     exit 1
   fi
 fi
-
-# Architecture check. Every download URL in this bootstrap hardcodes
-# amd64/x86_64, so non-x86_64 hosts will fail mid-run with confusing errors.
-# Fail fast instead.
-arch=$(uname -m)
-if [[ "${arch}" != "x86_64" ]]; then
-  print_error "Detected ${arch} architecture. This bootstrap targets x86_64 only — package URLs are hardcoded and will fail."
-  print_info "Aborting bootstrap script."
-  exit 1
-fi
-print_success "Detected ${arch} architecture."
