@@ -44,6 +44,7 @@ else
   # Run the Jabba install script, which will download and install the target
   # Jabba version to ~/.jabba. Source the jabba.sh script to load Jabba into
   # the current shell session.
+  # shellcheck disable=SC1090
   curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash -s -- --skip-rc && source ~/.jabba/jabba.sh
 
   print_success "Installed/updated Jabba to v${latest_version}."

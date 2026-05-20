@@ -10,6 +10,6 @@
 
 print_step "Installing Claude Code."
 
-print_info "Installing Claude Code globally via NPM."
+print_info "Installing/updating Claude Code globally via NPM."
 npm install -g @anthropic-ai/claude-code
 claude --version

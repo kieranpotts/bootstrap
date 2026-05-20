@@ -21,5 +21,5 @@ is_gui_enabled || return 0
 
 print_step "Installing Mozilla VPN."
 
-print_info "Installing Mozilla VPN via APT."
+print_info "Installing/updating Mozilla VPN via APT."
 superdo apt-get install -y mozillavpn

@@ -11,5 +11,5 @@ is_gui_enabled || return 0
 
 print_step "Installing KeePassXC."
 
-print_info "Installing KeePassXC via APT."
+print_info "Installing/updating KeePassXC via APT."
 superdo apt-get install -y keepassxc

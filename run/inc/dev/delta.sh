@@ -31,7 +31,7 @@ else
     print_info "Delta v${installed_version} is installed. Will remove this version and install v${latest_version} via GitHub release channel."
   fi
 
-  print_info "Installing Delta from .deb package."
+  print_info "Installing/updating Delta from .deb package."
 
   # Remove the existing version of Delta, if there is one.
   if dpkg -s git-delta >/dev/null 2>&1; then

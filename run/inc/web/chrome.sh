@@ -23,7 +23,7 @@ if dpkg -s google-chrome-stable >/dev/null 2>&1; then
   print_info "Google Chrome is already installed. Skipping."
 else
 
-  print_info "Installing Google Chrome from the official Debian package."
+  print_info "Installing/updating Google Chrome from the official Debian package."
 
   # Create a temporary directory.
   tmp_dir=$(mktemp -d)

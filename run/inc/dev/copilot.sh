@@ -12,6 +12,6 @@
 
 print_step "Install Copilot CLI."
 
-print_info "Installing GitHub Copilot CLI globally via NPM."
+print_info "Installing/updating GitHub Copilot CLI globally via NPM."
 npm install -g @github/copilot
 copilot --version

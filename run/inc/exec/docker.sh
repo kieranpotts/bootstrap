@@ -16,7 +16,7 @@
 
 print_step "Installing Docker Community Edition."
 
-print_info "Installing Docker CE via APT."
+print_info "Installing/updating Docker CE via APT."
 superdo apt-get install -y docker-ce
 
 # By default, the `docker` command can be run only by the root user, or by a
