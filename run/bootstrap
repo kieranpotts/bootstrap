@@ -168,6 +168,7 @@ step "${inc_path}/dev/pre-commit.sh"
 step "${inc_path}/dev/shellcheck.sh"
 step "${inc_path}/dev/tmux.sh"
 step "${inc_path}/dev/vscode.sh"
+step "${inc_path}/dev/zed.sh"
 
 # Ops tools.
 step "${inc_path}/ops/aws.sh"
