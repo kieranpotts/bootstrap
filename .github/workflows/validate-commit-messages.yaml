@@ -1,4 +1,8 @@
-name: Commit validation
+#
+# Validate message format of newly-pushed commits.
+#
+
+name: Validate commit messages
 
 on:
   push:
@@ -19,7 +23,5 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Validate the messages of commits added in the push event.
-      # https://github.com/kieranpotts/actions/tree/dev/validate-commits#readme
       - name: Validate new commit messages
-        uses: kieranpotts/actions/validate-commits@dev
+        uses: kieranpotts/actions/validate-commit-messages@dev
