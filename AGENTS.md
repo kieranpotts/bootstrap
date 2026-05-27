@@ -47,6 +47,8 @@ Defaults are conservative: with no flags, only CLI tooling is installed.
 
 ## Rules
 
+The capitalized words REQUIRED, MUST, MUST NOT, RECOMMENDED, SHOULD, SHOULD NOT, OPTIONAL, and MAY, in the context of this document and agent skills/instructions/rules, are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
 - MUST keep every script idempotent. Running `./run/bootstrap` repeatedly must converge, not duplicate, work.
 
 - MUST call `print_step "…"` as the first non-comment line of every install step, so the run is self-narrating.
