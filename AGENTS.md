@@ -28,7 +28,6 @@ Tagged released of this repository are used to pin builds of the [`docker-devcon
 - `run/inc/ops/`: Ops tooling (AWS CLI, Terraform).
 - `run/inc/phy/`: Hardware-related tooling (eg. ROCm).
 - `docs/`: Installation, requirements, releasing, and considerations.
-- `skills/`: On-demand skills for agents working on this repo.
 
 ## Tools
 
@@ -69,5 +68,8 @@ The capitalized words REQUIRED, MUST, MUST NOT, RECOMMENDED, SHOULD, SHOULD NOT,
 
 ## Skills
 
-- [`./skills/apt/SKILL.md`](./skills/apt/SKILL.md): Use the APT package manager correctly in bootstrap scripts.
-- [`./skills/install-step/SKILL.md`](./skills/install-step/SKILL.md): Add or modify an install step in the bootstrap scripts.
+The following skills, scoped to this project, are installed in the `./agents/skills/` directory:
+
+- [`./agents/skills/apt/SKILL.md`](./skills/apt/SKILL.md): Use the APT package manager correctly in bootstrap scripts.
+
+- [`./agents/skills/install-step/SKILL.md`](./skills/install-step/SKILL.md): Add or modify an install step in the bootstrap scripts.
