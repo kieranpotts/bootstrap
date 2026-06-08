@@ -13,8 +13,10 @@ $ git commit -m "release: v<major>.<minor>.<patch>"
 Tag the release:
 
 ```
-$ git tag -a v<major>.<minor>.<patch> -F RELEASE.md
+$ git tag -a v<major>.<minor>.<patch>
 ```
+
+Copy-and-paste the release notes from the changelog entry into the commit message.
 
 Then push the commit and tag:
 
