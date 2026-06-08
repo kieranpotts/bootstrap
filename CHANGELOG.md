@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-06-08
+
+- Fix system check (fails on Debian bookworm).
+
 ## [1.3.0] - 2026-06-08
 
 - Install Ghostty.
