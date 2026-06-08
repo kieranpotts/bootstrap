@@ -42,7 +42,7 @@ if [[ -f "${bashrc}" ]]; then
 fi
 
 # Re-source the shell startup scripts.
-# This is equired to initialize phpenv immediately (`phpenv init -`).
+# This is required to initialize phpenv immediately (`phpenv init -`).
 # The rest of this script depends on `phpenv` being available.
 if [ -f "$HOME/local.bashrc" ]; then
   . "$HOME/local.bashrc"
