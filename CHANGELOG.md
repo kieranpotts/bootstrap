@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Install Ghostty.
 - Remove `git-secrets`.
 - Install GitHub CLI (`gh`).
 - Renamed entry script from `run/bootstrap.sh` to `run/bootstrap` (now executable).
