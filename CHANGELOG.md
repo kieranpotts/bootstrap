@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- fix: select appropriate linux distro target for docker
+- fix: export phpenv bin to path
+- fix: export ~/.local/bin tp path so poetry/pipx binaries immediately available
+
 ## [1.3.3] - 2026-06-08
 
 - Fix unbound variables.

@@ -41,15 +41,14 @@ if [[ -f "${bashrc}" ]]; then
   fi
 fi
 
-# Re-source the shell startup scripts.
-# This is required to initialize phpenv immediately (`phpenv init -`).
-# The rest of this script depends on `phpenv` being available.
-if [ -f "$HOME/local.bashrc" ]; then
-  . "$HOME/local.bashrc"
-else
-  touch "$HOME/.bashrc"
-  . "$HOME/.bashrc"
-fi
+# Make phpenv available to the rest of this script. We can't rely on re-sourcing
+# the shell startup files: they are typically guarded to do nothing in a
+# non-interactive shell (eg. `[[ $- != *i* ]] && return`), so the phpenv setup
+# appended above is skipped during a non-interactive run such as a `docker build`
+# layer, leaving `phpenv` unavailable here (exit 127, "phpenv: command not
+# found"). Initialize it directly instead.
+export PATH="$HOME/.phpenv/bin:$PATH"
+eval "$(phpenv init -)"
 
 # Install php-build as a plugin. Clone on first run, pull on subsequent runs
 # (a bare `git clone` aborts when the target directory already exists).
