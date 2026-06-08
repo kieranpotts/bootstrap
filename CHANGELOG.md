@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.4] - 2026-06-08
+
 - fix: select appropriate linux distro target for docker
 - fix: export phpenv bin to path
 - fix: export ~/.local/bin tp path so poetry/pipx binaries immediately available
