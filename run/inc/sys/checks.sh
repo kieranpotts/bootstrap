@@ -49,16 +49,29 @@ print_success "Detected ${arch} architecture."
 . /etc/os-release
 print_success "Detected ${PRETTY_NAME:-${ID:-Debian-based Linux}}."
 
-ubuntu_version="${VERSION_ID}"
-if [[ "${ubuntu_version}" != "22.04" && "${ubuntu_version}" != "24.04" ]]; then
-  print_error "Docker Desktop officially supports Ubuntu 22.04, 24.04, or latest non-LTS."
-  print_error "Your version (${ubuntu_version}) may not be fully supported."
+# Docker Desktop officially supports specific Ubuntu LTS releases. Only gate on
+# this when running on the Ubuntu family (Ubuntu, Pop!_OS, …); other Debian-based
+# distributions — including Debian itself, as used by container base images like
+# debian:bookworm-slim — use a different versioning scheme (VERSION_ID=12) and
+# are allowed through.
+if [[ "${ID}" == "ubuntu" || "${ID_LIKE}" == *ubuntu* ]]; then
+  if [[ "${VERSION_ID}" != "22.04" && "${VERSION_ID}" != "24.04" ]]; then
+    print_error "Docker Desktop officially supports Ubuntu 22.04, 24.04, or latest non-LTS."
+    print_error "Your version (${VERSION_ID}) may not be fully supported."
 
-  read -p "Do you want to continue? (y/N): " -n 1 -r
-  echo
+    # Only prompt when attached to a terminal. In non-interactive contexts (eg.
+    # a `docker build` layer) there is no TTY to answer the prompt, so continue
+    # rather than blocking on a `read` that would receive EOF and abort.
+    if [[ -t 0 ]]; then
+      read -p "Do you want to continue? (y/N): " -n 1 -r
+      echo
 
-  if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
-    print_info "Bootstrap script aborted."
-    exit 1
+      if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
+        print_info "Bootstrap script aborted."
+        exit 1
+      fi
+    else
+      print_info "Non-interactive shell detected; continuing."
+    fi
   fi
 fi
