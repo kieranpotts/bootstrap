@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.3.5] - 2026-06-08
+
+- fix: guard against missing systemd
+
 ## [1.3.4] - 2026-06-08
 
 - fix: select appropriate linux distro target for docker
