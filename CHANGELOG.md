@@ -4,6 +4,7 @@
 
 - Fix unbound variables.
 - Fix reading of Ubuntu package registries from plain Debian distros.
+- Skip some package registries requires only for GUI apps.
 
 ## [1.3.2] - 2026-06-08
 
