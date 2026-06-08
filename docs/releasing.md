@@ -6,7 +6,6 @@ Update the changelog and release note, and commit those:
 
 ```
 $ git add CHANGELOG.md
-$ git add RELEASE.md
 $ git commit -m "release: v<major>.<minor>.<patch>"
 ```
 

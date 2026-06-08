@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-06-08
+
 - Install Ghostty.
 - Install `ripgrep`.
 - Remove `git-secrets`.
