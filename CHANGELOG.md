@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix unbound variables.
+
 ## [1.3.2] - 2026-06-08
 
 - Fallback for missing `ID_LIKE` env var from `/etc/os-release`.

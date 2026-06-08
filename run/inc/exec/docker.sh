@@ -25,8 +25,11 @@ superdo apt-get install -y docker-ce
 # they can run Docker commands without `sudo`. This change will take effect
 # the next time the user logs in.
 
+# Resolve the current user via `id -un` rather than ${USER}: the latter is not
+# set in non-interactive contexts like a `docker build` RUN layer (even after a
+# `USER` instruction), which would abort under `set -u`.
 print_info "Adding current user to 'docker' group."
-superdo usermod -aG docker "${USER}"
+superdo usermod -aG docker "$(id -un)"
 
 # Register the Docker Engine to start automatically on subsequent boots, so
 # it is available in the background for tools like VS Code devcontainers
