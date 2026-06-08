@@ -31,15 +31,21 @@ superdo apt-get install -y docker-ce
 print_info "Adding current user to 'docker' group."
 superdo usermod -aG docker "$(id -un)"
 
-# Register the Docker Engine to start automatically on subsequent boots, so
-# it is available in the background for tools like VS Code devcontainers
-# without needing to be started manually each session.
+# Enabling and starting the engine requires systemd as the init system. In
+# environments without it — such as inside a container / `docker build` layer
+# (which reports "System has not been booted with systemd as init system") — skip
+# this. There the daemon is managed by the host or container runtime instead.
+if [[ -d /run/systemd/system ]]; then
+  # Register the Docker Engine to start automatically on subsequent boots, so
+  # it is available in the background for tools like VS Code devcontainers
+  # without needing to be started manually each session.
+  print_info "Enabling the docker engine to start automatically."
+  superdo systemctl enable docker
 
-print_info "Enabling the docker engine to start automatically."
-superdo systemctl enable docker
-
-# Start the Docker daemon immediately so it is available in the current session
-# for tools installed later in the bootstrap process.
-
-print_info "Starting the docker engine now."
-superdo systemctl start docker
+  # Start the Docker daemon immediately so it is available in the current session
+  # for tools installed later in the bootstrap process.
+  print_info "Starting the docker engine now."
+  superdo systemctl start docker
+else
+  print_info "systemd not available (eg. inside a container). Skipping docker engine enable/start."
+fi
