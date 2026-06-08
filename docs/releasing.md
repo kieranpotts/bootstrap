@@ -22,3 +22,5 @@ Then push the commit and tag:
 $ git push
 $ git push --tags
 ```
+
+Manually prepare the GitHub release.
