@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fallback for missing `ID_LIKE` env var from `/etc/os-release`.
+
 ## [1.3.1] - 2026-06-08
 
 - Fix system check (fails on Debian bookworm).

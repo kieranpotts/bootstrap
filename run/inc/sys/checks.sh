@@ -54,10 +54,10 @@ print_success "Detected ${PRETTY_NAME:-${ID:-Debian-based Linux}}."
 # distributions — including Debian itself, as used by container base images like
 # debian:bookworm-slim — use a different versioning scheme (VERSION_ID=12) and
 # are allowed through.
-if [[ "${ID}" == "ubuntu" || "${ID_LIKE}" == *ubuntu* ]]; then
-  if [[ "${VERSION_ID}" != "22.04" && "${VERSION_ID}" != "24.04" ]]; then
+if [[ "${ID:-}" == "ubuntu" || "${ID_LIKE:-}" == *ubuntu* ]]; then
+  if [[ "${VERSION_ID:-}" != "22.04" && "${VERSION_ID:-}" != "24.04" ]]; then
     print_error "Docker Desktop officially supports Ubuntu 22.04, 24.04, or latest non-LTS."
-    print_error "Your version (${VERSION_ID}) may not be fully supported."
+    print_error "Your version (${VERSION_ID:-unknown}) may not be fully supported."
 
     # Only prompt when attached to a terminal. In non-interactive contexts (eg.
     # a `docker build` layer) there is no TTY to answer the prompt, so continue
