@@ -9,6 +9,14 @@
 
 print_step "Adding community Ubuntu package registry for Ghostty."
 
+# Installed from a community Ubuntu PPA, which only resolves on the Ubuntu family.
+# Skip on other Debian-based systems (eg. debian:bookworm-slim), where
+# `add-apt-repository ppa:` cannot reach Launchpad and crashes.
+is_ubuntu_family || {
+  print_info "Non-Ubuntu system detected. Skipping Ghostty's Ubuntu PPA."
+  return 0
+}
+
 if compgen -G "/etc/apt/sources.list.d/mkasberg-ubuntu-ghostty-ubuntu-*" > /dev/null; then
   print_info "Ghostty's package registry is already configured. Skipping."
   return 0

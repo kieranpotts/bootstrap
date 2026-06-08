@@ -88,6 +88,7 @@ fi
 . "${inc_path}/fn/bashrc-protect.sh"
 . "${inc_path}/fn/gh-release.sh"
 . "${inc_path}/fn/gui.sh"
+. "${inc_path}/fn/os.sh"
 . "${inc_path}/fn/statuses.sh"
 . "${inc_path}/fn/steps.sh"
 . "${inc_path}/fn/superdo.sh"

@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Fix unbound variables.
+- Fix reading of Ubuntu package registries from plain Debian distros.
 
 ## [1.3.2] - 2026-06-08
 
