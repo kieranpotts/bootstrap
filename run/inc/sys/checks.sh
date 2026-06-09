@@ -32,31 +32,19 @@ if [[ "${arch}" != "x86_64" ]]; then
 fi
 print_success "Detected ${arch} architecture."
 
-# DEPRECATED: Improved Ubuntu OS detection below.
-# Docker Desktop requires Ubuntu 22.04 LTS or 24.04 LTS. Since Pop!_OS is based
-# on Ubuntu and follows the same versioning, it works too.
-# if ! grep -Eq 'Ubuntu|Pop!_OS' /etc/os-release; then
-#   print_error "This script is designed for Ubuntu or Pop!_OS. Detected OS:"
-#   grep "PRETTY_NAME" /etc/os-release
-#   print_info "Aborting bootstrap script."
-#   exit 1
-# else
-#   print_success "Detected Ubuntu or Pop!_OS system."
-# fi
-
 # Pull distribution details (ID, VERSION_ID, PRETTY_NAME, …) into the
 # current shell so they can be referenced below.
 . /etc/os-release
 print_success "Detected ${PRETTY_NAME:-${ID:-Debian-based Linux}}."
 
-# Docker Desktop officially supports specific Ubuntu LTS releases. Only gate on
+# This bootstrap is tested against the current Ubuntu LTS releases. Only gate on
 # this when running on the Ubuntu family (Ubuntu, Pop!_OS, …); other Debian-based
 # distributions — including Debian itself, as used by container base images like
 # debian:bookworm-slim — use a different versioning scheme (VERSION_ID=12) and
 # are allowed through.
 if is_ubuntu_family; then
   if [[ "${VERSION_ID:-}" != "22.04" && "${VERSION_ID:-}" != "24.04" ]]; then
-    print_error "Docker Desktop officially supports Ubuntu 22.04, 24.04, or latest non-LTS."
+    print_error "This bootstrap is tested on Ubuntu 22.04 and 24.04."
     print_error "Your version (${VERSION_ID:-unknown}) may not be fully supported."
 
     # Only prompt when attached to a terminal. In non-interactive contexts (eg.
