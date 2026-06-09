@@ -75,3 +75,17 @@ else
   print_info "If you are already running Docker Desktop, you may need to restart it to apply the changes."
 
 fi
+
+# Docker Desktop hijacks the active Docker CLI context, repointing the `docker`
+# command at its own daemon socket (the `desktop-linux` context) on first GUI
+# launch. We want the native Docker Engine — enabled as a systemd service in
+# `exec/docker.sh` to start headlessly on every boot — to remain the daemon the
+# CLI talks to, so containers are available in the background without the Desktop
+# GUI ever running. Pin the active context back to `default`, which points at
+# the native engine's socket (unix:///var/run/docker.sock).
+#
+# `docker context use` edits the invoking user's ~/.docker/config.json, so it
+# runs as that user (not via `superdo`), and it does not require the daemon to
+# be running.
+print_info "Pinning Docker CLI context to the native engine ('default')."
+docker context use default
