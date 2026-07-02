@@ -8,8 +8,6 @@
 # https://www.passwordstore.org/
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing pass."
 
 print_info "Installing/updating pass via APT."
