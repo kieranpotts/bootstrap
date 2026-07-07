@@ -1,17 +1,13 @@
 ---
 name: install-step
-description: Add, modify, or remove a program installation step.
+description: Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one. Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/utils.sh` (the shared helpers).
 compatibility: requires bash, Debian-based Linux (apt/dpkg)
 license: MIT
 ---
 
 # Install step
 
-Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one.
-
-The conventions below keep `./run/bootstrap` idempotent, readable, and reproducible across the host machine and the [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) image.
-
-Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/utils.sh` (the shared helpers).
+The conventions defined in this skill keep `./run/bootstrap` idempotent, readable, and reproducible across the host machine and the [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer) image.
 
 ## Instructions
 
@@ -180,17 +176,11 @@ An install step that downloads a release tarball and pins the upstream version �
 
 ## Edge cases
 
--   **Tools requiring a runtime:**
+- **Tools requiring a runtime:** If the tool depends on Node, Python, or another runtime installed earlier in the run (eg. global npm packages like Claude Code or Copilot CLI), confirm that the runtime's `source` line in `run/bootstrap` appears before the new step. Do not re-install the runtime inside the tool's script.
 
-    If the tool depends on Node, Python, or another runtime installed earlier in the run (eg. global npm packages like Claude Code or Copilot CLI), confirm that the runtime's `source` line in `run/bootstrap` appears before the new step. Do not re-install the runtime inside the tool's script.
+- **Tools that modify `.bashrc`:** Guard appends with a `grep -q` check so re-running the bootstrap does not duplicate exports. See `run/inc/run/node.sh` for the established pattern.
 
--   **Tools that modify `.bashrc`:**
-
-    Guard appends with a `grep -q` check so re-running the bootstrap does not duplicate exports. See `run/inc/run/node.sh` for the established pattern.
-
--   **Removing a tool:**
-
-    Delete the install script, remove its `source` line from `run/bootstrap`, and add an "[Unreleased]" changelog entry. Consider whether the bootstrap should also remove an already-installed copy on existing machines (`apt-get remove …`) — usually yes, so the cleanup converges on the new desired state.
+- **Removing a tool:** Delete the install script, remove its `source` line from `run/bootstrap`, and add an "[Unreleased]" changelog entry. Consider whether the bootstrap should also remove an already-installed copy on existing machines (`apt-get remove …`) — usually yes, so the cleanup converges on the new desired state.
 
 ## References
 

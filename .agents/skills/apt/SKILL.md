@@ -1,15 +1,11 @@
 ---
 name: apt
-description: Use the APT package manager correctly in bootstrap scripts.
+description: Use this skill when writing or reviewing bootstrap scripts that install, remove, or query packages via APT on Debian-based systems.
 compatibility: requires Debian-based Linux (apt-get/dpkg)
 license: MIT
 ---
 
 # APT package manager
-
-Use this skill when writing or reviewing bootstrap scripts that install, remove, or query packages via APT on Debian-based systems.
-
-## apt-get vs apt
 
 There are two front-ends to APT:
 
