@@ -20,11 +20,8 @@ cd "$tmp_dir" || true
 # Download and unzip the bundle (~50MB). AWS doesn't publish the version
 # in the canonical download URL, so we re-fetch unconditionally; the bundled
 # installer's `--update` flag handles the "already-current" case efficiently.
-
 print_info "Downloading official AWS CLI installer."
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-
-print_info "Unzipping AWS CLI installer."
 unzip -u awscliv2.zip
 
 # Run the installation. Update the CLI if it's already installed.
@@ -39,5 +36,8 @@ cd "${cwd}" || true
 
 # Remove the temporary directory.
 rm -rf "$tmp_dir"
+
+# Check the installed version.
+aws --version
 
 print_success "AWS CLI installed successfully."

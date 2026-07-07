@@ -16,4 +16,3 @@ print_info "Installing/updating ripgrep via APT."
 superdo apt-get install -y ripgrep
 
 rg --version
-

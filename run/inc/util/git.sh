@@ -14,4 +14,5 @@ print_step "Installing Git."
 
 print_info "Installing/updating Git via APT."
 superdo apt-get install -y git
+
 git --version

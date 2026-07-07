@@ -18,4 +18,5 @@ fi
 
 print_info "Installing/updating Claude Code globally via NPM."
 npm install -g @anthropic-ai/claude-code
+
 claude --version
