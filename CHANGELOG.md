@@ -8,6 +8,7 @@ This release sees the removal of Docker Desktop. On Linux it runs its own daemon
 - feature: add lazydocker and ctop
 - feature: install pass in all environments
 - feature: install pi
+- feature: add XPDF Reader
 
 ## [1.3.5] - 2026-06-08
 
