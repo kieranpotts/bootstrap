@@ -9,8 +9,10 @@
 
 print_step "Adding Microsoft's official package registry."
 
-if [[ -f /usr/share/keyrings/microsoft.gpg ]] && [[ -f /etc/apt/sources.list.d/vscode.sources ]]; then
-  print_info "Microsoft's GPG key and VS Code package registry are already configured. Skipping."
+if [[ -f /usr/share/keyrings/microsoft.gpg ]] \
+  && [[ -f /etc/apt/sources.list.d/microsoft-edge-stable.list ]] \
+  && [[ -f /etc/apt/sources.list.d/vscode.sources ]]; then
+  print_info "Microsoft's GPG key and Edge/VS Code package registries are already configured. Skipping."
   return 0
 fi
 
