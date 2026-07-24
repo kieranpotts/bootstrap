@@ -70,7 +70,7 @@ inc_path="${repo_root}/run/inc"
 # default `.bashrc` file.
 
 bashrc="${HOME}/.bashrc"
-if [ -f "${HOME}/local.bashrc" ]; then
+if [[ -f "${HOME}/local.bashrc" ]]; then
   # `bashrc` is used in sourced files.
   # shellcheck disable=SC2034
   bashrc="${HOME}/local.bashrc"

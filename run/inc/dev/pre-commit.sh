@@ -15,5 +15,5 @@ pipx install pre-commit
 # pipx installs into ~/.local/bin, which is added to .bashrc by python.sh, but
 # it may not yet be in the current bootstrap shell's PATH.
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="${HOME}/.local/bin:${PATH}"
 pre-commit --version

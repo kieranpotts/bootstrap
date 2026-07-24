@@ -15,7 +15,7 @@ cwd=$(pwd)
 tmp_dir=$(mktemp -d)
 
 # Move to the temporary directory.
-cd "$tmp_dir" || true
+cd "${tmp_dir}" || true
 
 # Download and unzip the bundle (~50MB). AWS doesn't publish the version
 # in the canonical download URL, so we re-fetch unconditionally; the bundled
@@ -35,7 +35,7 @@ aws --version
 cd "${cwd}" || true
 
 # Remove the temporary directory.
-rm -rf "$tmp_dir"
+rm -rf "${tmp_dir}"
 
 # Check the installed version.
 aws --version

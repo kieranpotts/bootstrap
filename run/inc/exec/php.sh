@@ -20,10 +20,10 @@ print_step "Install PHP via phpenv."
 cwd=$(pwd)
 
 # Checkout phpenv into ~/.phpenv. Else update it.
-if [ ! -d "$HOME/.phpenv" ]; then
-  git clone https://github.com/phpenv/phpenv.git "$HOME/.phpenv"
+if [[ ! -d "${HOME}/.phpenv" ]]; then
+  git clone https://github.com/phpenv/phpenv.git "${HOME}/.phpenv"
 else
-  cd "$HOME/.phpenv" || true
+  cd "${HOME}/.phpenv" || true
   git pull
 fi
 
@@ -35,7 +35,7 @@ cd "${cwd}" || true
 if [[ -f "${bashrc}" ]]; then
   if ! grep -q ".phpenv/bin" "${bashrc}"; then
     {
-      echo 'export PATH="$HOME/.phpenv/bin:$PATH"'
+      echo 'export PATH="${HOME}/.phpenv/bin:${PATH}"'
       echo 'eval "$(phpenv init -)"'
     } >> "${bashrc}"
   fi
@@ -47,7 +47,7 @@ fi
 # appended above is skipped during a non-interactive run such as a `docker build`
 # layer, leaving `phpenv` unavailable here (exit 127, "phpenv: command not
 # found"). Initialize it directly instead.
-export PATH="$HOME/.phpenv/bin:$PATH"
+export PATH="${HOME}/.phpenv/bin:${PATH}"
 eval "$(phpenv init -)"
 
 # Install php-build as a plugin. Clone on first run, pull on subsequent runs
@@ -55,7 +55,7 @@ eval "$(phpenv init -)"
 # https://github.com/php-build/php-build
 
 php_build_dir="$(phpenv root)/plugins/php-build"
-if [ ! -d "${php_build_dir}/.git" ]; then
+if [[ ! -d "${php_build_dir}/.git" ]]; then
   mkdir -p "${php_build_dir}"
   git clone https://github.com/php-build/php-build "${php_build_dir}"
 else

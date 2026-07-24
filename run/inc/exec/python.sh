@@ -21,7 +21,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 # PATH in a non-interactive shell (eg. a `docker build` layer). Add it so the
 # checks below — and the rest of this run — can find them (else `poetry` fails
 # with exit 127, "poetry: command not found").
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="${HOME}/.local/bin:${PATH}"
 
 python3 --version
 pip --version
