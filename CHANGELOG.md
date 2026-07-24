@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- feature: install 
+- feature: install déjà dup backups
+- feature: install draw.io
 
 ## [1.4.0] - 2026-07-24
 

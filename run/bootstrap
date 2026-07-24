@@ -151,6 +151,7 @@ step "${inc_path}/web/firefox.sh"
 
 # Applications.
 step "${inc_path}/app/deja-dup.sh"
+step "${inc_path}/app/drawio.sh"
 step "${inc_path}/app/keepassxc.sh"
 step "${inc_path}/app/mozilla-vpn.sh"
 step "${inc_path}/app/pass.sh"
