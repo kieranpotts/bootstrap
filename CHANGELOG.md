@@ -4,6 +4,8 @@
 
 - feature: install voxd
 - feature: install litellm
+- feature: install docker-credential-pass and wire it up as a `docker pass` CLI plugin
+- feature: install Docker MCP Gateway (`docker mcp`)
 
 ## [1.5.0] - 2026-07-24
 
