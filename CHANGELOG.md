@@ -24,6 +24,7 @@
 - feature: install sourcegit
 - feature: install vs code insiders
 - feature: install vscodium
+- feature: install warp
 
 ## [1.4.0] - 2026-07-24
 
