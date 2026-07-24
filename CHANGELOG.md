@@ -57,40 +57,40 @@ running. The native engine alone is simpler and avoids the conflict.
 
 ## [1.3.3] - 2026-06-08
 
-- Fix unbound variables.
-- Fix reading of Ubuntu package registries from plain Debian distros.
-- Skip some package registries requires only for GUI apps.
+- fix: unbound variables
+- fix: reading of ubuntu package registries from plain debian distros
+- fix: skip some package registries requires only for gui apps
 
 ## [1.3.2] - 2026-06-08
 
-- Fallback for missing `ID_LIKE` env var from `/etc/os-release`.
+- fix: fallback for missing `ID_LIKE` env var from `/etc/os-release`
 
 ## [1.3.1] - 2026-06-08
 
-- Fix system check (fails on Debian bookworm).
+- fix: system check (fails on debian bookworm)
 
 ## [1.3.0] - 2026-06-08
 
-- Install Ghostty.
-- Install `ripgrep`.
-- Remove `git-secrets`.
-- Install GitHub CLI (`gh`).
-- Renamed entry script from `run/bootstrap.sh` to `run/bootstrap` (now executable).
-- Added `--gui` feature toggle for opting into GUI installs; install steps can check via the new `is_gui_enabled` helper.
-- Added Zed settings.
-- Added pre-commit hooks.
+- feature: install ghostty
+- feature: install `ripgrep`
+- feature: remove `git-secrets`
+- feature: install GitHub CLI (`gh`)
+- refactor: renamed entry script from `run/bootstrap.sh` to `run/bootstrap` (now executable)
+- feature: added `--gui` feature toggle for opting into GUI installs; install steps can check via the new `is_gui_enabled` helper
+- maintenance: added Zed settings
+- maintenance: added pre-commit hooks
 
 ## [1.2.0] - 2026-05-15
 
-- Renamed container name: kieranpotts/devenv → kieranpotts/devcontainer.
-- Installed rocm-smi.
-- Added Git pre-commit.com hook framework.
+- refactor: renamed container name: kieranpotts/devenv → kieranpotts/devcontainer.
+- feature: install rocm-smi.
+- feature: add git pre-commit.com hook framework
 
 ## [1.1.0] - 2026-04-06
 
-- Small fixes.
+- small fixes
 
 ## [1.0.0] - 2026-03-20
 
-- Initial release.
-- Docker-aware scripts.
+- initial release
+- docker-aware scripts
