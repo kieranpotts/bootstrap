@@ -21,6 +21,7 @@
 - feature: install openclaw
 - feature: install postman
 - feature: install qwen code
+- feature: install sourcegit
 
 ## [1.4.0] - 2026-07-24
 
