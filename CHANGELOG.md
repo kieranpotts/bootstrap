@@ -16,6 +16,7 @@
 - feature: install insomnia
 - feature: install jetbrains toolbox
 - feature: install lm studio
+- feature: install ollama
 
 ## [1.4.0] - 2026-07-24
 
