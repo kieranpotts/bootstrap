@@ -214,6 +214,7 @@ step "${inc_path}/dev/zed.sh"
 
 # Ops tools.
 step "${inc_path}/ops/aws.sh"
+step "${inc_path}/ops/litellm.sh"
 step "${inc_path}/ops/terraform.sh"
 
 # Hardware utilities.

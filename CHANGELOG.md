@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - feature: install voxd
+- feature: install litellm
 
 ## [1.5.0] - 2026-07-24
 
