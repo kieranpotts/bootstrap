@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-07-24
+
 This release sees the removal of Docker Desktop. On Linux it runs its own
 daemon in a VM and hijacks the active Docker CLI context (flipping it to
 `desktop-linux` while running, `default` when stopped), which conflicted with

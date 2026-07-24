@@ -4,7 +4,7 @@ Releases are tagged in Git. I use the version numbers to pin builds of my
 [devcontainer](https://hub.docker.com/r/kieranpotts/docker-devcontainer) to a
 specific point in this repository's history.
 
-Update the changelog and release note, and commit those:
+Update the changelog and release notes, and commit those:
 
 ```
 $ git add CHANGELOG.md
