@@ -14,6 +14,7 @@
 - feature: install frame0
 - feature: install hermes agent
 - feature: install insomnia
+- feature: install jetbrains toolbox
 
 ## [1.4.0] - 2026-07-24
 
