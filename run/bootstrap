@@ -123,6 +123,7 @@ step "${inc_path}/util/unzip.sh"
 step "${inc_path}/util/wget.sh"
 
 # Add package repositories.
+step "${inc_path}/pkg/bruno.sh"
 step "${inc_path}/pkg/docker.sh"
 step "${inc_path}/pkg/ghostty.sh"
 step "${inc_path}/pkg/git-lfs.sh"
@@ -131,6 +132,7 @@ step "${inc_path}/pkg/hashicorp.sh"
 step "${inc_path}/pkg/keepassxc.sh"
 step "${inc_path}/pkg/microsoft.sh"
 step "${inc_path}/pkg/mozilla.sh"
+step "${inc_path}/pkg/sourcegit.sh"
 
 # Refresh package lists with the new repositories, then upgrade everything
 # (base system + anything newly available via the added repos).
