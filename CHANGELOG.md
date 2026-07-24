@@ -2,7 +2,12 @@
 
 ## [Unreleased]
 
-This release sees the removal of Docker Desktop. On Linux it runs its own daemon in a VM and hijacks the active Docker CLI context (flipping it to `desktop-linux` while running, `default` when stopped), which conflicted with the native Docker Engine and broke tools that follow the default daemon — most notably VS Code devcontainers, which failed to start whenever Desktop was not running. The native engine alone is simpler and avoids the conflict.
+This release sees the removal of Docker Desktop. On Linux it runs its own
+daemon in a VM and hijacks the active Docker CLI context (flipping it to
+`desktop-linux` while running, `default` when stopped), which conflicted with
+the native Docker Engine and broke tools that follow the default daemon — most
+notably VS Code devcontainers, which failed to start whenever Desktop was not
+running. The native engine alone is simpler and avoids the conflict.
 
 - feature: remove docker desktop - BREAKING
 - feature: add lazydocker and ctop
