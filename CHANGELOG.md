@@ -12,6 +12,7 @@
 - feature: install continue
 - feature: install cursor cli and gui
 - feature: install frame0
+- feature: install hermes agent
 
 ## [1.4.0] - 2026-07-24
 
