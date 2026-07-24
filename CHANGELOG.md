@@ -8,6 +8,7 @@
 - feature: install obsidian
 - feature: install aider
 - feature: install bruno
+- feature: install cline
 
 ## [1.4.0] - 2026-07-24
 
