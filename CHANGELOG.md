@@ -19,6 +19,7 @@
 - feature: install ollama
 - feature: install open web ui
 - feature: install openclaw
+- feature: install postman
 
 ## [1.4.0] - 2026-07-24
 
