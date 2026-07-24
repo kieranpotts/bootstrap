@@ -10,6 +10,7 @@
 - feature: install bruno
 - feature: install cline
 - feature: install continue
+- feature: install cursor cli and gui
 
 ## [1.4.0] - 2026-07-24
 
