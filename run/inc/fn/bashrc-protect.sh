@@ -79,11 +79,24 @@ bashrc_restore() {
   local added_lines
   added_lines=$(diff "${bashrc_snapshot_dir}/content" "${HOME}/.bashrc" 2>/dev/null | grep '^>' | sed 's/^> //' || true)
 
-  if [[ -n "${added_lines}" ]]; then
+  # Drop any added line that's already present in ~/local.bashrc, so that a
+  # third-party installer re-adding the same line on every run (because our
+  # restore below removes it from ~/.bashrc before it can persist there)
+  # doesn't accumulate duplicate entries in ~/local.bashrc.
+  local new_lines=""
+  local line
+  while IFS= read -r line; do
+    [[ -z "${line}" ]] && continue
+    if ! grep -qF -- "${line}" "${HOME}/local.bashrc" 2>/dev/null; then
+      new_lines+="${line}"$'\n'
+    fi
+  done <<< "${added_lines}"
+
+  if [[ -n "${new_lines}" ]]; then
     print_info "Redirecting added lines to ~/local.bashrc."
     {
       printf '\n# Added by bootstrap on %s (redirected from ~/.bashrc).\n' "$(date +%F)"
-      printf '%s\n' "${added_lines}"
+      printf '%s' "${new_lines}"
     } >> "${HOME}/local.bashrc"
   fi
 
