@@ -26,6 +26,8 @@
 - feature: install vscodium
 - feature: install warp
 - feature: install htop
+- feature: install icoutils
+- feature: install inotify tools
 
 ## [1.4.0] - 2026-07-24
 
