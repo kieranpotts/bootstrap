@@ -133,6 +133,7 @@ step "${inc_path}/pkg/keepassxc.sh"
 step "${inc_path}/pkg/microsoft.sh"
 step "${inc_path}/pkg/mozilla.sh"
 step "${inc_path}/pkg/sourcegit.sh"
+step "${inc_path}/pkg/vscodium.sh"
 
 # Refresh package lists with the new repositories, then upgrade everything
 # (base system + anything newly available via the added repos).
@@ -201,6 +202,7 @@ step "${inc_path}/dev/sourcegit.sh"
 step "${inc_path}/dev/tmux.sh"
 step "${inc_path}/dev/vscode.sh"
 step "${inc_path}/dev/vscode-insiders.sh"
+step "${inc_path}/dev/vscodium.sh"
 step "${inc_path}/dev/zed.sh"
 
 # Ops tools.

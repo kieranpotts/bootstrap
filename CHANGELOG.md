@@ -23,6 +23,7 @@
 - feature: install qwen code
 - feature: install sourcegit
 - feature: install vs code insiders
+- feature: install vscodium
 
 ## [1.4.0] - 2026-07-24
 
