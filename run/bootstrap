@@ -162,6 +162,7 @@ step "${inc_path}/app/proton-vpn.sh"
 	step "${inc_path}/app/xpdf-reader.sh"
 
 # Dev tools.
+step "${inc_path}/dev/aider.sh"
 step "${inc_path}/dev/claude.sh"
 step "${inc_path}/dev/copilot.sh"
 step "${inc_path}/dev/ctop.sh"

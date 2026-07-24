@@ -6,6 +6,7 @@
 - feature: install draw.io
 - feature: install dropbox
 - feature: install obsidian
+- feature: install aider
 
 ## [1.4.0] - 2026-07-24
 
