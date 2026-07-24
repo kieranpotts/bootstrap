@@ -17,6 +17,7 @@
 - feature: install jetbrains toolbox
 - feature: install lm studio
 - feature: install ollama
+- feature: install open web ui
 
 ## [1.4.0] - 2026-07-24
 
