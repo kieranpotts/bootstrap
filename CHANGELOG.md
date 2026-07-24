@@ -18,6 +18,7 @@
 - feature: install lm studio
 - feature: install ollama
 - feature: install open web ui
+- feature: install openclaw
 
 ## [1.4.0] - 2026-07-24
 
