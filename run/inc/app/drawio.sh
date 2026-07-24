@@ -43,7 +43,7 @@ else
   # Install Draw.io from the downloaded Debian package. Fix (-f) any broken
   # dependencies - this is RECOMMENDED for packages installed directly from
   # Debian packages.
-  superdo apt-get -f install ./drawio-amd64-*.deb
+  superdo apt-get install -f -y ./drawio-amd64-*.deb
 
   # Change back.
   cd "${cwd}" || true

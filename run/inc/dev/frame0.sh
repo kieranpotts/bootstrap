@@ -38,7 +38,7 @@ else
   cd "${tmp_dir}" || true
 
   wget -q "${deb_url}"
-  superdo apt-get -f install "./frame0_${latest_version}_amd64.deb"
+  superdo apt-get install -f -y "./frame0_${latest_version}_amd64.deb"
 
   cd "${cwd}" || true
   rm -rf "${tmp_dir}"

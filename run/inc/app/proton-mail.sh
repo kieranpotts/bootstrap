@@ -27,7 +27,7 @@ else
   cd "${tmp_dir}" || true
 
   wget -q "${deb_url}"
-  superdo apt-get -f install ./ProtonMail-desktop-beta.deb
+  superdo apt-get install -f -y ./ProtonMail-desktop-beta.deb
 
   cd "${cwd}" || true
   rm -rf "${tmp_dir}"

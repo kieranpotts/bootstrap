@@ -50,7 +50,7 @@ else
   # Install Obsidian from the downloaded Debian package. Fix (-f) any broken
   # dependencies - this is RECOMMENDED for packages installed directly from
   # Debian packages.
-  superdo apt-get -f install ./obsidian_*_amd64.deb
+  superdo apt-get install -f -y ./obsidian_*_amd64.deb
 
   # Change back.
   cd "${cwd}" || true
