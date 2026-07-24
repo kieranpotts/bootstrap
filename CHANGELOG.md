@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- feature: install 
+
 ## [1.4.0] - 2026-07-24
 
 This release sees the removal of Docker Desktop. On Linux it runs its own
