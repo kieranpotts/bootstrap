@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- feature: install voxd
+
 ## [1.5.0] - 2026-07-24
 
 - feature: install déjà dup backups

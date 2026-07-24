@@ -167,6 +167,7 @@ step "${inc_path}/app/obsidian.sh"
 step "${inc_path}/app/pass.sh"
 step "${inc_path}/app/proton-mail.sh"
 step "${inc_path}/app/proton-vpn.sh"
+step "${inc_path}/app/voxd.sh"
 step "${inc_path}/app/xpdf-reader.sh"
 
 # Dev tools.
