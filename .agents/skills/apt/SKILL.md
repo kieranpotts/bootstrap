@@ -7,55 +7,86 @@ license: MIT
 
 # APT package manager
 
-There are two front-ends to APT:
+Use the APT package manager correctly in bootstrap scripts. Always use
+`apt-get` (the stable scripting interface) rather than `apt` (the
+interactive front-end), pass `-y` to suppress prompts, and prefix every
+call with `superdo`.
 
-- `apt-get`: Designed for scripts and automation, this offers a stable API that is guaranteed not to change.
+## Input
 
-- `apt`: Designed for interactive terminal use, this is explicitly unstable across versions.
+Determine the following information from the surrounding context and
+environment. You MUST NOT prompt the user for clarification on this task's
+requirements. If you cannot determine the required inputs, stop and alert
+the user with an error message.
 
-**Always use `apt-get` in scripts.** `apt` will warn you with `WARNING: apt does not have a stable CLI interface` if called from a non-interactive context. Worse, its output format may change between Ubuntu/Debian releases, breaking any parsing or log diffing your scripts depend on.
+- The APT operation to perform — REQUIRED. The package(s) to install,
+  remove, or query, and the context of the bootstrap script being written
+  or reviewed.
 
-Use `apt` only when typing interactively at a terminal where its progress bar and colorized output are helpful.
+## Output
+
+Correctly-formed `apt-get` commands in the bootstrap script, using
+`superdo`, passing `-y` for non-interactive operation, and running
+`apt-get update` before installing from a new source.
+
+This task runs non-interactively to completion. It does not block for
+user input. If in doubt about any of the requirements of this task, stop
+and print an error message.
 
 ## Rules
 
--   **Use `apt-get`, never `apt`, in scripts.**
+- Use `apt-get`, never `apt`, in scripts.
 
-    ```bash
-    # ✅ Yes:
-    superdo apt-get install -y curl
+  ```bash
+  # ✅ Yes:
+  superdo apt-get install -y curl
 
-    # ❌ No:
-    superdo apt install curl
-    ```
+  # ❌ No:
+  superdo apt install curl
+  ```
 
--   **Always pass `-y` to non-interactive commands.**
+  `apt` will warn you with `WARNING: apt does not have a stable CLI
+  interface` if called from a non-interactive context. Worse, its output
+  format may change between Ubuntu/Debian releases, breaking any parsing
+  or log diffing your scripts depend on.
 
-    `apt-get install`, `apt-get remove`, and `apt-get autoremove` all require `-y` to suppress the confirmation prompt so the bootstrap run completes unattended.
+  Use `apt` only when typing interactively at a terminal where its
+  progress bar and colorized output are helpful.
 
-    ```bash
-    superdo apt-get install -y <package>
-    superdo apt-get remove -y <package>
-    ```
+- Always pass `-y` to non-interactive commands.
 
--   **Run `apt-get update` before installing from a new source.**
+  `apt-get install`, `apt-get remove`, and `apt-get autoremove` all
+  require `-y` to suppress the confirmation prompt so the bootstrap run
+  completes unattended.
 
-    When a step adds a new APT source (a `.list` file or a Signed-By keyring), immediately follow with `apt-get update` so the new index is available before the install:
+  ```bash
+  superdo apt-get install -y <package>
+  superdo apt-get remove -y <package>
+  ```
 
-    ```bash
-    superdo apt-get update
-    superdo apt-get install -y <package>
-    ```
+- Run `apt-get update` before installing from a new source.
 
-    You do not need to run `apt-get update` before installing from sources that were already present. The bootstrap entry point handles the initial update.
+  When a step adds a new APT source (a `.list` file or a Signed-By
+  keyring), immediately follow with `apt-get update` so the new index
+  is available before the install:
 
--   **Use `superdo`, never `sudo` directly.**
+  ```bash
+  superdo apt-get update
+  superdo apt-get install -y <package>
+  ```
 
-    See the [install-step skill](../install-step/SKILL.md) for the rationale. Every `apt-get` call must be prefixed with `superdo`:
+  You do not need to run `apt-get update` before installing from sources
+  that were already present. The bootstrap entry point handles the
+  initial update.
 
-    ```bash
-    superdo apt-get install -y <package>
-    ```
+- Use `superdo`, never `sudo` directly.
+
+  See the [install-step skill](../install-step/SKILL.md) for the
+  rationale. Every `apt-get` call must be prefixed with `superdo`:
+
+  ```bash
+  superdo apt-get install -y <package>
+  ```
 
 ## Common commands
 
@@ -67,7 +98,8 @@ Use `apt` only when typing interactively at a terminal where its progress bar an
 
 - Update package index: `superdo apt-get update`
 
-- Check if a package is installed: `dpkg -l <package> 2>/dev/null \| grep -q '^ii'`
+- Check if a package is installed:
+  `dpkg -l <package> 2>/dev/null \| grep -q '^ii'`
 
 - List installed packages: `dpkg -l`
 
@@ -75,8 +107,20 @@ Use `apt` only when typing interactively at a terminal where its progress bar an
 
 - Show package details: `apt-cache show <package>`
 
+## Success criteria
+
+- All APT commands in the script use `apt-get`, not `apt`.
+
+- All non-interactive commands pass `-y`.
+
+- Every `apt-get` call is prefixed with `superdo`.
+
+- `apt-get update` is run before installing from any newly-added source.
+
 ## References
 
-- [install-step skill](../install-step/SKILL.md): Conventions for writing bootstrap install scripts.
+- [install-step skill](../install-step/SKILL.md): Conventions for writing
+  bootstrap install scripts.
 
-- [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of the `superdo` helper.
+- [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of the
+  `superdo` helper.
