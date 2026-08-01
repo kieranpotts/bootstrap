@@ -3,6 +3,8 @@ name: apt
 description: Use this skill when writing or reviewing bootstrap scripts that install, remove, or query packages via APT on Debian-based systems.
 compatibility: requires Debian-based Linux (apt-get/dpkg)
 license: MIT
+metadata:
+  preferred_model: ollama/CODE_BASIC
 ---
 
 # APT package manager
