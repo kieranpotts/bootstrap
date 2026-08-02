@@ -2,9 +2,17 @@
 
 #
 # Install `docker-credential-pass`, the `pass`-backed Docker credential
-# helper, and wire it up as a Docker CLI plugin (`docker pass`) so the
-# Docker MCP Gateway (`dev/docker-mcp.sh`) can store secrets without Docker
-# Desktop.
+# helper, so that Docker stores registry credentials in a GPG-encrypted
+# password store rather than base64-encoded in `~/.docker/config.json`, and
+# does so without depending on Docker Desktop.
+#
+# Also wires the helper up as a Docker CLI plugin (`docker pass`), which is
+# what allows the Docker MCP Gateway to store secrets on hosts where that
+# gateway is installed.
+#
+# Depends on `pass` - installed via `app/pass.sh`, but note that `pass` must
+# additionally be initialized against a GPG key by hand before Docker can
+# use it.
 #
 # https://github.com/docker/docker-credential-helpers
 # https://dev.to/udondan/running-docker-mcp-gateway-on-linux-without-docker-desktop-4da2
