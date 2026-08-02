@@ -5,7 +5,7 @@ Debian-based Linux – which may include Ubuntu 24.04 LTS under WSL2.
 
 The scripts are idempotent – safe to re-run to pick up new changes.
 
-The boostrap script may be used to provision host environments, or to create
+The bootstrap script may be used to provision host environments, or to create
 an image for a containerized environment.
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
 is a Docker image that can be used for a guest
