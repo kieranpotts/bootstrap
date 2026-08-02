@@ -1,0 +1,36 @@
+#
+# Lint all shell scripts with ShellCheck.
+#
+
+name: ShellCheck
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  lint-shell-scripts:
+    name: Lint shell scripts
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ShellCheck is pre-installed on ubuntu-latest runners. Lint the entry
+      # point and every `.sh` file under `run/`. The project's `.shellcheckrc`
+      # is picked up automatically.
+      #
+      # `--severity=warning` is the strictest threshold the codebase currently
+      # passes. The two remaining findings below that threshold are both
+      # SC2016 in `run/inc/exec/php.sh`, and both are deliberate: they write
+      # literal lines into `.bashrc` that must expand when that file is
+      # sourced, not when this script runs. Ratcheting up to `info` would
+      # therefore require suppressing them first.
+      - name: Run ShellCheck
+        run: |
+          find run -type f \( -name '*.sh' -o -name 'bootstrap' \) -print0 \
+            | xargs -0 shellcheck -x --severity=warning
