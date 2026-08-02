@@ -25,7 +25,7 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip -u awscliv2.zip
 
 # Run the installation. Update the CLI if it's already installed.
-print_info "Running the AWS CLI installer."
+print_info "Installing/updating AWS CLI via official installer script."
 superdo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
 
 # Check the installed version.

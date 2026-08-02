@@ -7,7 +7,7 @@
 # https://askubuntu.com/a/147079
 #
 
-print_step "Upgrading software packages"
+print_step "Upgrading software packages."
 
 # Install available upgrades to all existing packages (`upgrade`).
 superdo env DEBIAN_FRONTEND=noninteractive apt-get --yes \
