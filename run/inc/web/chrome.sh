@@ -33,7 +33,7 @@ else
     -O "${tmp_dir}/google-chrome-stable_current_amd64.deb" \
     https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
-  # Install the Debian pakcage. The `--fix-missing` option is used to fix missing
+  # Install the Debian package. The `--fix-missing` option is used to fix missing
   # dependencies that may arise during the installation process.
   superdo apt-get install -y --fix-missing "${tmp_dir}/google-chrome-stable_current_amd64.deb"
 

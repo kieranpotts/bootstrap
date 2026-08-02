@@ -15,7 +15,7 @@
 
 print_step "Install PHP via phpenv."
 
-# Remember the current working diectory,
+# Remember the current working directory,
 # so we can change back here later.
 cwd=$(pwd)
 

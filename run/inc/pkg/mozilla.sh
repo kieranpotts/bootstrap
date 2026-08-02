@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Add Mozilla's package registry, and correspondining GPG key, to APT.
+# Add Mozilla's package registry, and corresponding GPG key, to APT.
 #
 # https://support.mozilla.org/en-US/kb/install-firefox-linux
 #

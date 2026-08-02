@@ -8,7 +8,7 @@
 
 print_step "Installing AWS CLI."
 
-# Remember the current working diectory, so we can change back here later.
+# Remember the current working directory, so we can change back here later.
 cwd=$(pwd)
 
 # Create a temporary directory.
