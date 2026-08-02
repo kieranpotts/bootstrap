@@ -6,7 +6,7 @@
 # https://github.com/codespell-project/codespell
 #
 
-print_step "Install codespell."
+print_step "Installing codespell."
 
 print_info "Installing/updating codespell via pipx."
 pipx install codespell

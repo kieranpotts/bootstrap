@@ -13,7 +13,7 @@
 # https://github.com/php-build/php-build
 #
 
-print_step "Install PHP via phpenv."
+print_step "Installing PHP via phpenv."
 
 # Remember the current working directory,
 # so we can change back here later.

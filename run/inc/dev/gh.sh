@@ -9,7 +9,7 @@
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 #
 
-print_step "Install GitHub CLI"
+print_step "Installing GitHub CLI."
 
 # Install the GitHub CLI.
 superdo apt-get update

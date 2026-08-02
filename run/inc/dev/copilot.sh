@@ -10,7 +10,7 @@
 # https://github.com/orgs/community/discussions/categories/copilot-conversations
 #
 
-print_step "Install Copilot CLI."
+print_step "Installing Copilot CLI."
 
 # Install steps are run in non-interactive subshells.
 # Need to re-source NVM, so npm is available in the subshell.
