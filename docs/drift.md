@@ -14,7 +14,7 @@ installs, for convenient quick-reference.
 | `chrome`                     |     ✅      |     ✅     |
 | `claude`                     |     ✅      |     ✅     |
 | `cline`                      |     ✅      |     ✅     |
-| `codespell`                  |     ✅      |     —      |
+| `codespell`                  |     ✅      |     ✅     |
 | `continue`                   |     ✅      |     ✅     |
 | `copilot`                    |     ✅      |     ✅     |
 | `ctop`                       |     ✅      |     ✅     |
@@ -25,7 +25,7 @@ installs, for convenient quick-reference.
 | `delta`                      |     ✅      |     ✅     |
 | `docker`                     |     ✅      |     ✅     |
 | `docker-credential-pass`     |     ✅      |     ✅     |
-| `docker-mcp`                 |     ✅      |     —      |
+| `docker-mcp`                 |     ✅      |     ✅     |
 | `drawio`                     |     ✅      |     ✅     |
 | `dropbox`                    |     ✅      |     ✅     |
 | `edge`                       |     ✅      |     ✅     |
@@ -47,7 +47,7 @@ installs, for convenient quick-reference.
 | `keepassxc`                  |     ✅      |     ✅     |
 | `lazydocker`                 |     ✅      |     ✅     |
 | `lazygit`                    |     ✅      |     ✅     |
-| `litellm`                    |     ✅      |     —      |
+| `litellm`                    |     ✅      |     ✅     |
 | `lmstudio`                   |     ✅      |     ✅     |
 | `lsb-release`                |     ✅      |     ✅     |
 | `make`                       |     ✅      |     ✅     |
