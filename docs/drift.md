@@ -7,6 +7,7 @@ installs, for convenient quick-reference.
 | Program                      | kieranpotts | hacksltd   |
 |------------------------------|-------------|------------|
 | `aider`                      |     ✅      |     ✅     |
+| `amdgpu-top`                 |     ✅      |     —      |
 | `apt-transport-https`        |     ✅      |     ✅     |
 | `aws`                        |     ✅      |     ✅     |
 | `bruno`                      |     ✅      |     ✅     |

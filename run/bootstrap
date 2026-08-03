@@ -223,6 +223,7 @@ step "${inc_path}/ops/litellm.sh"
 step "${inc_path}/ops/terraform.sh"
 
 # Hardware utilities.
+step "${inc_path}/phy/amdgpu-top.sh"
 step "${inc_path}/phy/rocm.sh"
 
 # Tidy up.
