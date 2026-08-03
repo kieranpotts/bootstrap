@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install pied (UI for piper)
 - feature: install voxd
 - feature: install litellm
 - feature: install docker-credential-pass and wire it up as a `docker pass` CLI plugin

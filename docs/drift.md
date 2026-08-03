@@ -64,6 +64,7 @@ installs, for convenient quick-reference.
 | `pass`                       |     ✅      |     ✅     |
 | `php`                        |     ✅      |     —      |
 | `pi`                         |     ✅      |     ✅     |
+| `pied`/`piper`               |     ✅      |     —      |
 | `postman`                    |     ✅      |     ✅     |
 | `pre-commit`                 |     ✅      |     ✅     |
 | `proton-mail`                |     ✅      |     ✅     |
