@@ -61,6 +61,7 @@ installs, for convenient quick-reference.
 | `openclaw`                   |     ✅      |     ✅     |
 | `opencode`                   |     ✅      |     ✅     |
 | `open-webui`                 |     ✅      |     ✅     |
+| `orca`                       |     ✅      |     —      |
 | `pass`                       |     ✅      |     ✅     |
 | `php`                        |     ✅      |     —      |
 | `pi`                         |     ✅      |     ✅     |

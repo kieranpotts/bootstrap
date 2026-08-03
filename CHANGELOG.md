@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install orca screen reader
 - feature: install pied (UI for piper)
 - feature: install voxd
 - feature: install litellm
