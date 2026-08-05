@@ -10,6 +10,7 @@
 - feature: install docker-credential-pass and wire it up as a `docker pass` CLI plugin
 - feature: install Docker MCP Gateway (`docker mcp`)
 - feature: install codespell
+- feature: enable oh-my-posh auto-updates
 
 ## [1.5.0] - 2026-07-24
 
