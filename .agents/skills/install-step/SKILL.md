@@ -2,9 +2,7 @@
 name: install-step
 description: Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one. Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/utils.sh` (the shared helpers).
 compatibility: requires bash, Debian-based Linux (apt/dpkg)
-license: MIT
-metadata:
-  preferred_model: ollama/CODE_STANDARD
+license: CC0-1.0
 ---
 
 # Install step
