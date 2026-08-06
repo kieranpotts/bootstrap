@@ -2,10 +2,15 @@
 
 ## [Unreleased]
 
+- feature: install inshellisense
+- feature: install lazynpm
+- feature: prompt for confirmation before each app/dev/ops/phy/web install or update
+- feature: add `--yes`/`-y` to skip all prompts
 - feature: install Rust and Cargo via Rustup
-- refactor: rename `./run/bootstrap` to `./run/install`; `./run/bootstrap` remains as a deprecated wrapper
+- refactor: rename `./run/bootstrap` to `./run/install`
 - feature: add `./run/update` for updating an already-provisioned machine
 - refactor: `./run/update` skips installation of tools that already exist
+- feature: enable oh-my-posh auto-updates
 - feature: install amdgpu_top
 - feature: install orca screen reader
 - feature: install pied (UI for piper)
@@ -14,10 +19,6 @@
 - feature: install docker-credential-pass and wire it up as a `docker pass` CLI plugin
 - feature: install Docker MCP Gateway (`docker mcp`)
 - feature: install codespell
-- feature: enable oh-my-posh auto-updates
-- feature: install lazynpm
-- feature: prompt for confirmation before each app/dev/ops/phy/web install or update
-- feature: add `--yes`/`-y` to skip all prompts
 
 ## [1.5.0] - 2026-07-24
 
