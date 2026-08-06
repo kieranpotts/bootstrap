@@ -97,6 +97,7 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/cursor-cli.sh" "Cursor CLI"
   confirm_step "${inc_path}/dev/cursor-gui.sh" "Cursor GUI"
   confirm_step "${inc_path}/dev/delta.sh" "Delta (git-delta)"
+  confirm_step "${inc_path}/dev/dive.sh" "Dive"
   confirm_step "${inc_path}/dev/docker-credential-pass.sh" "docker-credential-pass"
   confirm_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
   confirm_step "${inc_path}/dev/editorconfig-checker.sh" "editorconfig-checker"

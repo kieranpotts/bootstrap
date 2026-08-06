@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install dive
 - feature: install editorconfig-checker
 - feature: install lynx
 - feature: install gh-dash
