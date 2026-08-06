@@ -88,6 +88,7 @@ fi
 . "${inc_path}/fn/bashrc-protect.sh"
 . "${inc_path}/fn/gh-release.sh"
 . "${inc_path}/fn/gui.sh"
+. "${inc_path}/fn/install-steps.sh"
 . "${inc_path}/fn/os.sh"
 . "${inc_path}/fn/statuses.sh"
 . "${inc_path}/fn/steps.sh"
@@ -103,12 +104,14 @@ print_starting
 # routing can be undone at the end of the bootstrap.
 bashrc_snapshot
 
-# Initial system compatibility checks and updates.
+# Initial system compatibility checks. Sourced directly (not via `step()`)
+# so its `exit 1` on an unsupported OS aborts the entire bootstrap.
 . "${inc_path}/sys/checks.sh"
-. "${inc_path}/sys/apt.sh"
 
 # System utilities. Some of these, like curl and wget, are required for
-# the package repository setup scripts that follow.
+# the package repository setup scripts that follow. These base utilities are
+# first-time-only. `run/update` skips them and relies on the machine having
+# already been bootstrapped.
 step "${inc_path}/util/apt-transport-https.sh"
 step "${inc_path}/util/ca-certificates.sh"
 step "${inc_path}/util/curl.sh"
@@ -126,109 +129,9 @@ step "${inc_path}/util/tar.sh"
 step "${inc_path}/util/unzip.sh"
 step "${inc_path}/util/wget.sh"
 
-# Add package repositories.
-step "${inc_path}/pkg/bruno.sh"
-step "${inc_path}/pkg/docker.sh"
-step "${inc_path}/pkg/ghostty.sh"
-step "${inc_path}/pkg/git-lfs.sh"
-step "${inc_path}/pkg/github.sh"
-step "${inc_path}/pkg/hashicorp.sh"
-step "${inc_path}/pkg/keepassxc.sh"
-step "${inc_path}/pkg/microsoft.sh"
-step "${inc_path}/pkg/mozilla.sh"
-step "${inc_path}/pkg/sourcegit.sh"
-step "${inc_path}/pkg/vscodium.sh"
-step "${inc_path}/pkg/warp.sh"
-
-# Refresh package lists with the new repositories, then upgrade everything
-# (base system + anything newly available via the added repos).
-step "${inc_path}/sys/update.sh"
-step "${inc_path}/sys/upgrade.sh"
-
-# Runtime (execution) environments.
-step "${inc_path}/exec/docker.sh"
-step "${inc_path}/exec/jdk.sh"
-step "${inc_path}/exec/node.sh"
-step "${inc_path}/exec/php.sh"
-step "${inc_path}/exec/python.sh"
-
-# Web browsers.
-step "${inc_path}/web/chrome.sh"
-step "${inc_path}/web/edge.sh"
-step "${inc_path}/web/firefox.sh"
-
-# Applications.
-step "${inc_path}/app/deja-dup.sh"
-step "${inc_path}/app/drawio.sh"
-step "${inc_path}/app/dropbox.sh"
-step "${inc_path}/app/keepassxc.sh"
-step "${inc_path}/app/mozilla-vpn.sh"
-step "${inc_path}/app/obsidian.sh"
-step "${inc_path}/app/orca.sh"
-step "${inc_path}/app/pass.sh"
-step "${inc_path}/app/pied.sh"
-step "${inc_path}/app/proton-mail.sh"
-step "${inc_path}/app/proton-vpn.sh"
-step "${inc_path}/app/voxd.sh"
-step "${inc_path}/app/xpdf-reader.sh"
-
-# Dev tools.
-step "${inc_path}/dev/aider.sh"
-step "${inc_path}/dev/bruno.sh"
-step "${inc_path}/dev/claude.sh"
-step "${inc_path}/dev/cline.sh"
-step "${inc_path}/dev/codespell.sh"
-step "${inc_path}/dev/continue.sh"
-step "${inc_path}/dev/copilot.sh"
-step "${inc_path}/dev/ctop.sh"
-step "${inc_path}/dev/cursor-cli.sh"
-step "${inc_path}/dev/cursor-gui.sh"
-step "${inc_path}/dev/delta.sh"
-step "${inc_path}/dev/docker-credential-pass.sh"
-step "${inc_path}/dev/docker-mcp.sh"
-step "${inc_path}/dev/frame0.sh"
-step "${inc_path}/dev/gh.sh"
-step "${inc_path}/dev/ghostty.sh"
-step "${inc_path}/dev/git-lfs.sh"
-step "${inc_path}/dev/hermes-agent.sh"
-step "${inc_path}/dev/insomnia.sh"
-step "${inc_path}/dev/jetbrains-toolbox.sh"
-step "${inc_path}/dev/lazydocker.sh"
-step "${inc_path}/dev/lazygit.sh"
-step "${inc_path}/dev/lmstudio.sh"
-step "${inc_path}/dev/maven.sh"
-step "${inc_path}/dev/neovim.sh"
-step "${inc_path}/dev/oh-my-posh.sh"
-step "${inc_path}/dev/ollama.sh"
-step "${inc_path}/dev/open-webui.sh"
-step "${inc_path}/dev/openclaw.sh"
-step "${inc_path}/dev/opencode.sh"
-step "${inc_path}/dev/pi.sh"
-step "${inc_path}/dev/postman.sh"
-step "${inc_path}/dev/pre-commit.sh"
-step "${inc_path}/dev/qwen-code.sh"
-step "${inc_path}/dev/shellcheck.sh"
-step "${inc_path}/dev/skills-ref.sh"
-step "${inc_path}/dev/sourcegit.sh"
-step "${inc_path}/dev/tmux.sh"
-step "${inc_path}/dev/vscode.sh"
-step "${inc_path}/dev/vscode-insiders.sh"
-step "${inc_path}/dev/vscodium.sh"
-step "${inc_path}/dev/warp.sh"
-step "${inc_path}/dev/zed.sh"
-
-# Ops tools.
-step "${inc_path}/ops/aws.sh"
-step "${inc_path}/ops/litellm.sh"
-step "${inc_path}/ops/terraform.sh"
-
-# Hardware utilities.
-step "${inc_path}/phy/amdgpu-top.sh"
-step "${inc_path}/phy/rocm.sh"
-
-# Tidy up.
-step "${inc_path}/sys/bashrc.sh"
-step "${inc_path}/sys/teardown.sh"
+# Shared install/update step sequence. This is the same sequence
+# `run/update` runs, so the two entry points stay in lockstep.
+run_install_steps
 
 # Restore ~/.bashrc to its starting state if a third-party
 # installer modified it. Any new lines are redirected

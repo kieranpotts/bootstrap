@@ -28,20 +28,32 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Project structure
 
-- **`run/bootstrap`**: Entry script, sources every install step in order.
+- **`run/bootstrap`**: Entry script for full provisioning from scratch.
+  Sources every install step in order.
 
-- **`run/inc/fn/`**: Shared helper functions (`print_step`, `superdo`,
-  `is_gui_enabled`, status printers).
+- **`run/update`**: Entry script for updating an already-provisioned machine.
+  Runs the shared step sequence (see `run/inc/fn/install-steps.sh`) but skips
+  the first-time-only phases that `run/bootstrap` runs (system compatibility
+  checks and base `util/*` installs).
+
+- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, `superdo`,
+  `is_gui_enabled`, status printers, banners) and `install-steps.sh`, which
+  defines `run_install_steps` — the shared install/update step sequence that
+  both entry scripts run.
 
 - **`run/inc/var/`**: Shared variables (ANSI codes).
-
-- **`run/inc/msg/`**: Start and finish banners.
 
 - **`run/inc/sys/`**: Compatibility checks, APT setup, system updates, upgrades, and teardown.
 
 - **`run/inc/util/`**: General utilities (curl, git, gnupg, wget, …).
 
-- **`run/inc/run/`**: Language runtimes (Node, JDK, PHP, Python).
+- **`run/inc/exec/`**: Language runtimes (Node, JDK, PHP, Python).
+
+- **`run/inc/pkg/`**: Third-party APT repository registration.
+
+- **`run/inc/web/`**: Web browsers.
+
+- **`run/inc/app/`**: GUI/end-user applications.
 
 - **`run/inc/dev/`**: Developer tooling (Claude, Copilot, delta, lazygit, …).
 
@@ -53,13 +65,20 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Tools
 
-- **`./run/bootstrap`** to provision a target machine (CLI tools only).
+- **`./run/bootstrap`** to provision a target machine from scratch (CLI tools
+  only).
 
 - **`./run/bootstrap --gui`** to additionally install GUI applications.
 
 - **`./run/bootstrap --help`** to print the usage banner.
 
-- **`shellcheck run/**/*.sh run/bootstrap`** to lint shell scripts.
+- **`./run/update`** to update an already-provisioned machine (CLI tools only).
+
+- **`./run/update --gui`** to also update GUI applications.
+
+- **`./run/update --help`** to print the usage banner.
+
+- **`shellcheck run/**/*.sh run/bootstrap run/update`** to lint shell scripts.
 
 ## Feature toggles
 
@@ -85,8 +104,11 @@ Defaults are conservative: with no flags, only CLI tooling is installed.
   both as root (eg. for Docker builds) and as a regular user (for local
   installs).
 
-- MUST source every new install script from `run/bootstrap` in the correct
-  group, sorted alphabetically within that group.
+- MUST source every new install script from `run_install_steps` (in
+  `run/inc/fn/install-steps.sh`) in the correct group, sorted alphabetically
+  within that group, so it runs on both `./run/bootstrap` and `./run/update`.
+  First-time-only steps (system checks, base `util/*` installs) are the
+  exception and live inline in `run/bootstrap`.
 
 - MUST target Debian-based distros only. Do not add steps that assume other
   package managers besides APT.

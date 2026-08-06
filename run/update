@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+
+#
+# Update an already-provisioned development environment.
+#
+# Usage: ./run/update [--gui]
+#
+#   --gui         Also update GUI applications.
+#   -h, --help    Show this help and exit.
+#
+# `./run/update` is the lighter-weight companion to `./run/bootstrap`. It
+# assumes the target machine has already been bootstrapped, and skips the
+# first-time-only phases (system compatibility checks and base `util/*`
+# installs). It refreshes APT repositories, upgrades installed packages, and
+# re-runs every per-tool install step — each of which is idempotent, so
+# already-current tools are left as-is and outdated ones are upgraded.
+#
+# To provision a machine from scratch, run `./run/bootstrap` instead.
+#
+
+# Strict mode for the entry-point script (see `run/bootstrap` for rationale).
+set -euo pipefail
+
+#
+# CLI flag parsing.
+#
+
+# Consumed by `is_gui_enabled` in `run/inc/fn/gui.sh`.
+# shellcheck disable=SC2034
+install_gui=0
+
+for arg in "$@"; do
+  case "${arg}" in
+    --gui)
+      # shellcheck disable=SC2034
+      install_gui=1
+      ;;
+    -h|--help)
+      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: ${arg}" >&2
+      echo "Run \`./run/update --help\` to see available options." >&2
+      exit 1
+      ;;
+  esac
+done
+
+#
+# Global variables.
+#
+
+# Absolute path to this repository (mirrors `run/bootstrap`).
+repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
+inc_path="${repo_root}/run/inc"
+
+# Determine the bashrc file to use. If the user has a file called
+# `local.bashrc` in their home directory, use that instead of the default
+# `.bashrc` file.
+bashrc="${HOME}/.bashrc"
+if [[ -f "${HOME}/local.bashrc" ]]; then
+  # `bashrc` is used in sourced files.
+  # shellcheck disable=SC2034
+  bashrc="${HOME}/local.bashrc"
+else
+  touch "${HOME}/.bashrc"
+fi
+
+# Source ANSI code variables.
+. "${inc_path}/var/ansi-codes.sh"
+
+#
+# Utility functions.
+#
+
+. "${inc_path}/fn/bashrc-protect.sh"
+. "${inc_path}/fn/gh-release.sh"
+. "${inc_path}/fn/gui.sh"
+. "${inc_path}/fn/install-steps.sh"
+. "${inc_path}/fn/os.sh"
+. "${inc_path}/fn/statuses.sh"
+. "${inc_path}/fn/steps.sh"
+. "${inc_path}/fn/superdo.sh"
+
+#
+# Main script.
+#
+
+# Minimal sanity check. `run/bootstrap` runs a fuller set of compatibility
+# checks (architecture, Ubuntu version prompt); `run/update` assumes the
+# machine is already bootstrapped, so we only guard the hard requirement.
+if [[ ! -f /etc/debian_version ]]; then
+  print_error "Require a Debian-based Linux distribution."
+  print_info "Run \`./run/bootstrap\` to provision this machine from scratch."
+  exit 1
+fi
+
+print_updating
+
+# Snapshot ~/.bashrc so third-party installers that bypass our `${bashrc}`
+# routing can be undone at the end of the run.
+bashrc_snapshot
+
+# Shared install/update step sequence (same as `run/bootstrap` runs after its
+# first-time-only phases): APT setup + repository registration, system update
+# + upgrade, runtimes, browsers, applications, dev/ops/phy tooling, and
+# `.bashrc` configuration + cleanup.
+run_install_steps
+
+# Restore ~/.bashrc to its starting state if a third-party installer
+# modified it. Any new lines are redirected to ~/local.bashrc.
+bashrc_restore
+
+# Print outcomes.
+print_updated
+print_failures
+
+# Exit non-zero if any step failed, so that CI/wrappers can detect failures.
+exit "${#FAILED_STEPS[@]}"

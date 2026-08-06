@@ -33,6 +33,21 @@ EOF
   echo "${out}"
 }
 
+# print_updating - Announce the start of an update pass (`run/update`).
+#
+print_updating() {
+
+  local out
+  out=$(cat <<EOF
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ UPDATING                                                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+EOF
+)
+
+  echo "${out}"
+}
+
 # step - Run a bootstrap step in an isolated subshell.
 #
 # Sources the given file inside `( set -e; source FILE )`, so that:
@@ -120,6 +135,24 @@ print_finished() {
 ┃                                                                              ┃
 ┃ You should periodically re-sync the development environment repository, and  ┃
 ┃ re-run the bootstrap script, to keep your host system up-to-date.            ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+EOF
+)
+
+  echo "${out}"
+}
+
+# print_updated - Announce the completion of an update pass (`run/update`).
+#
+print_updated() {
+
+  local out
+  out=$(cat <<EOF
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ UPDATED                                                                      ┃
+┃                                                                              ┃
+┃ You should periodically re-sync the development environment repository, and  ┃
+┃ re-run this script, to keep your host system up-to-date.                     ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 EOF
 )

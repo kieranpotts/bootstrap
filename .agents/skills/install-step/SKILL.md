@@ -1,6 +1,6 @@
 ---
 name: install-step
-description: Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one. Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/utils.sh` (the shared helpers).
+description: Use this skill when adding a new tool to the bootstrap provisioning run, changing how an existing tool is installed, or removing one. Do NOT use this skill for one-off shell scripts that are not part of the bootstrap run, or for changes to `run/inc/fn/*.sh` (the shared helpers).
 compatibility: requires bash, Debian-based Linux (apt/dpkg)
 license: CC0-1.0
 ---
@@ -26,9 +26,11 @@ the user with an error message.
 ## Output
 
 A new or modified install script under `run/inc/<group>/<name>.sh`, wired
-into `run/bootstrap` in the correct group, with a changelog entry under
-`[Unreleased]` in `CHANGELOG.md`. The script passes ShellCheck and
-smoke-tests cleanly on a clean target.
+into `run_install_steps` (in `run/inc/fn/install-steps.sh`) in the correct
+group, with a changelog entry under `[Unreleased]` in `CHANGELOG.md`. The
+script passes ShellCheck and smoke-tests cleanly on a clean target. Wiring
+it into `run_install_steps` makes it run on both `./run/bootstrap` (full
+provisioning) and `./run/update` (update passes).
 
 This task runs non-interactively to completion. It does not block for user
 input. If in doubt about any of the requirements of this task, stop and
@@ -74,11 +76,18 @@ print an error message.
     The leading comment block is required. It documents what the script
     installs and points readers at the upstream install instructions.
 
-3.  Wire the script into the entry point.
+3.  Wire the script into the step sequence.
 
-    Add a `source "${repo_root}/<group>/<name>.sh"` line to
-    `run/bootstrap` in the correct group, keeping the lines within that
-    group sorted alphabetically.
+    Add a `step "${inc_path}/<group>/<name>.sh"` line to `run_install_steps`
+    in `run/inc/fn/install-steps.sh`, in the correct group, keeping the lines
+    within that group sorted alphabetically. `run_install_steps` is the shared
+    sequence that both `run/bootstrap` and `run/update` run, so a step added
+    here automatically runs on fresh bootstraps and on update passes.
+
+    First-time-only steps (system compatibility checks in `sys/checks.sh`
+    and base `util/*` installs) are the exception: they live inline in
+    `run/bootstrap` rather than in `run_install_steps`, so `run/update`
+    skips them.
 
 4.  Pin versions when reasonable.
 
@@ -111,17 +120,17 @@ print an error message.
 
 - Scripts must be idempotent.
 
-  `./run/bootstrap` is re-run to apply updates as well as on first
-  provisioning. Each step must converge on the same end state whether it
-  runs against a fresh machine or one that has been bootstrapped many
-  times before.
+  `./run/bootstrap` and `./run/update` are both re-run to apply updates as
+  well as on first provisioning. Each step must converge on the same end
+  state whether it runs against a fresh machine or one that has been
+  bootstrapped many times before.
 
   Prefer package-manager installs and guarded mutations
   (`grep -q … || echo … >> …`) over blind appends.
 
 - Use `superdo`, never `sudo` directly.
 
-  The `superdo` helper in `run/inc/utils.sh` invokes the command
+  The `superdo` helper in `run/inc/fn/superdo.sh` invokes the command
   directly when running as root (Docker image builds) and prefixes
   `sudo` otherwise (local installs). Calling `sudo` directly breaks
   the Docker build path.
@@ -143,10 +152,10 @@ print an error message.
 
 - Guard optional steps with feature toggles.
 
-  CLI flags parsed by `run/bootstrap` are exposed as helper predicates
-  in `run/inc/utils.sh`. An install step that should only run under a
-  given flag must short-circuit before its `print_step` call so the
-  step number is not consumed:
+  CLI flags parsed by `run/bootstrap` and `run/update` are exposed as
+  helper predicates in `run/inc/fn/gui.sh`. An install step that should
+  only run under a given flag must short-circuit before its `print_step`
+  call so the step number is not consumed:
 
   ```bash
   # GUI-only install. No-op unless `--gui` was passed.
@@ -165,7 +174,7 @@ print an error message.
 
   Do not bundle unrelated installs into a single script. If a tool
   genuinely depends on another, install the dependency in its own file
-  and source both from `run/bootstrap` in the right order.
+  and add both `step` lines to `run_install_steps` in the right order.
 
 - Download into a temp directory; restore the working directory.
 
@@ -253,19 +262,20 @@ for the temp-dir pattern.
 
 - Tools requiring a runtime: If the tool depends on Node, Python, or
   another runtime installed earlier in the run (eg. global npm packages
-  like Claude Code or Copilot CLI), confirm that the runtime's `source`
-  line in `run/bootstrap` appears before the new step. Do not re-install
-  the runtime inside the tool's script.
+  like Claude Code or Copilot CLI), confirm that the runtime's `step` line
+  in `run_install_steps` appears before the new step. Do not re-install the
+  runtime inside the tool's script.
 
 - Tools that modify `.bashrc`: Guard appends with a `grep -q` check so
   re-running the bootstrap does not duplicate exports. See
-  `run/inc/run/node.sh` for the established pattern.
+  `run/inc/exec/node.sh` for the established pattern.
 
-- Removing a tool: Delete the install script, remove its `source` line
-  from `run/bootstrap`, and add an "[Unreleased]" changelog entry.
-  Consider whether the bootstrap should also remove an already-installed
-  copy on existing machines (`apt-get remove …`) — usually yes, so the
-  cleanup converges on the new desired state.
+- Removing a tool: Delete the install script, remove its `step` line
+  from `run_install_steps` in `run/inc/fn/install-steps.sh`, and add an
+  "[Unreleased]" changelog entry. Consider whether the bootstrap should
+  also remove an already-installed copy on existing machines
+  (`apt-get remove …`) — usually yes, so the cleanup converges on the new
+  desired state.
 
 ## Success criteria
 
@@ -276,8 +286,8 @@ for the temp-dir pattern.
 
 - The first non-comment line is a `print_step` call.
 
-- The script is wired into `run/bootstrap` in the correct group,
-  alphabetically sorted.
+- The script is wired into `run_install_steps` in `run/inc/fn/install-steps.sh`
+  in the correct group, alphabetically sorted.
 
 - The script passes `shellcheck` with no findings.
 
@@ -288,8 +298,13 @@ for the temp-dir pattern.
 - [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill
   builds on.
 
-- [`run/inc/utils.sh`](../../run/inc/utils.sh): Source of `print_step`
-  and `superdo`.
+- [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh): Source of `print_step`
+  and `step`.
+
+- [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of `superdo`.
+
+- [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh): The
+  shared `run_install_steps` sequence that new steps are wired into.
 
 - [`docs/installation.md`](../../docs/installation.md): How the entry
   script is invoked.
