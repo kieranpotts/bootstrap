@@ -6,6 +6,10 @@
 # https://github.com/sourcegit-scm/sourcegit
 #
 
+# SourceGit is a GUI app (installed by dev/sourcegit.sh only when --gui is
+# passed), so there is no point adding its registry without GUI installs.
+is_gui_enabled || return 0
+
 print_step "Adding SourceGit's package registry."
 
 if [[ -f /etc/apt/keyrings/sourcegit.asc ]] && [[ -f /etc/apt/sources.list.d/sourcegit.list ]]; then

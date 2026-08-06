@@ -6,6 +6,11 @@
 # https://support.mozilla.org/en-US/kb/install-firefox-linux
 #
 
+# Everything served by this registry is a GUI app (web/firefox.sh and
+# app/mozilla-vpn.sh, both installed only when --gui is passed), so there is
+# no point adding it without GUI installs.
+is_gui_enabled || return 0
+
 print_step "Adding Mozilla's official package registry."
 
 if [[ -f /etc/apt/keyrings/packages.mozilla.org.asc ]] \

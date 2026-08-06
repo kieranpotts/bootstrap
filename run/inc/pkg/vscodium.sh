@@ -7,6 +7,10 @@
 # https://github.com/VSCodium/vscodium/
 #
 
+# VSCodium is a GUI app (installed by dev/vscodium.sh only when --gui is
+# passed), so there is no point adding its registry without GUI installs.
+is_gui_enabled || return 0
+
 print_step "Adding VSCodium package registry."
 
 if [[ -f /usr/share/keyrings/vscodium-archive-keyring.asc ]] && [[ -f /etc/apt/sources.list.d/vscodium.list ]]; then

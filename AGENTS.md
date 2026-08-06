@@ -96,7 +96,16 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`./run/update --help`** to print the usage banner.
 
-- **`shellcheck run/**/*.sh run/install run/update`** to lint shell scripts.
+- **`shellcheck -x --severity=warning run/**/*.sh run/install run/update`**
+  to lint shell scripts, at the same threshold CI enforces.
+
+- **`ec`** (editorconfig-checker) to validate files against `.editorconfig`.
+  Configured by `.editorconfig-checker.json`, which disables only the
+  IndentSize check.
+
+- **`codespell --skip='./.git'`** to check for common misspellings.
+
+  All three run in CI on every push — see `.github/workflows/`.
 
 ## Feature toggles
 
@@ -182,14 +191,29 @@ install of a tool that isn't wanted:
   profile (`docker build`, CI, `--yes`). Update `docs/tools.md` to match
   whichever you choose.
 
+- MUST guard a `pkg/*` registry step with `is_gui_enabled || return 0` when
+  every package that registry serves is installed by a GUI-gated step.
+  Registering a repository the run can never install from only slows down
+  `apt update` and adds a key to the machine (or image) for nothing.
+
 - MUST target Debian-based distros only. Do not add steps that assume other
   package managers besides APT.
 
 - MUST NOT commit ad-hoc one-off scripts to `run/inc/`. Each file installs
   or configures one named tool.
 
-- SHOULD pin upstream versions when the project publishes stable tags or
-  `.deb` artifacts, so devcontainer builds are reproducible.
+- SHOULD resolve upstream versions at run time, not pin them. Steps that
+  install from GitHub releases use `gh_latest_tag`/`gh_asset_url` (see
+  `run/inc/fn/gh-release.sh`), APT steps take whatever the registry serves,
+  and npm globals install the current tag. Re-running the bootstrap is
+  therefore how a machine gets upgraded, and two builds of the same
+  bootstrap tag are not byte-identical.
+
+  The reproducibility pin is the git tag on *this* repository, which fixes
+  the install *logic* — `docker-devcontainer` builds against a tag, not
+  against `latest/dev`. Pin an individual upstream version only when a
+  specific build has to be reproduced exactly, or when a known-bad upstream
+  release has to be avoided, and record why in a comment beside the pin.
 
 - SHOULD restore the original working directory and clean up any temporary
   directories created during an install step.

@@ -47,6 +47,13 @@
   not install Docker
 - docs: bring the `install-step` skill back in line with the codebase
   (`core_step`/agent profile, group names, shebang, required doc updates)
+- refactor: gate the Bruno, Microsoft, Mozilla, SourceGit, VSCodium, and
+  Warp APT registries behind `--gui` - every package they serve is a
+  GUI-only install
+- maintenance: run editorconfig-checker and codespell in CI
+- docs: drop the "pin upstream versions" rule, which no install step
+  followed - versions resolve at run time, and the git tag on this
+  repository is the reproducibility pin
 
 ## [1.5.0] - 2026-07-24
 

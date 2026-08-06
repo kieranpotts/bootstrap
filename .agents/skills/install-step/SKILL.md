@@ -131,13 +131,20 @@ print an error message.
     `run/install` rather than in `run_install_steps`, so `run/update`
     skips them.
 
-4.  Pin versions when reasonable.
+4.  Resolve the upstream version at run time.
 
-    Where the upstream project ships tagged releases or `.deb`
-    artifacts, pin the version in a local variable at the top of the
-    script so the install is reproducible. Add a short comment beside
-    any pinned version that records where the version number came from
-    (eg. an upstream changelog link).
+    Do not pin. APT steps take whatever the registry serves; npm globals
+    install the current tag; steps installing from GitHub releases resolve
+    the version with `gh_latest_tag` or `gh_asset_url` (see
+    `run/inc/fn/gh-release.sh`), compare it against the installed version,
+    and skip the download when they already match — see
+    `run/inc/dev/lazygit.sh`.
+
+    The reproducibility pin for the devcontainer image is the git tag on
+    this repository, which fixes the install logic rather than the tool
+    versions. Pin an individual version only to reproduce a specific build
+    or dodge a known-bad upstream release, and say so in a comment beside
+    the pin.
 
 5.  Update the changelog.
 
