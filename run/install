@@ -3,11 +3,15 @@
 #
 # Main entry point for the development environment bootstrapper.
 #
-# Usage: ./run/install [--gui] [--yes]
+# Usage: ./run/install [--gui] [--yes] [--profile=agent]
 #
-#   --gui         Also install GUI applications (in addition to CLI tools).
-#   -y, --yes     Assume yes to all per-tool install/update prompts.
-#   -h, --help    Show this help and exit.
+#   --gui             Also install GUI applications (in addition to CLI tools).
+#   -y, --yes         Assume yes to all per-tool install/update prompts.
+#   --profile=agent   Install only the "core" step set - the minimal tooling
+#                     a coding agent needs in a headless container. Skips
+#                     every web/app/dev/ops/phy tool that would otherwise
+#                     run via a per-tool prompt. See docs/tools.md.
+#   -h, --help        Show this help and exit.
 #
 # `./run/bootstrap` still exists as a deprecated wrapper around this script,
 # for machines/images pinned to older tags. Prefer `./run/install` directly.
@@ -42,6 +46,11 @@ install_gui=0
 # shellcheck disable=SC2034
 assume_yes=0
 
+# Consumed by `is_agent_profile` in `run/inc/fn/gui.sh`. Empty string means
+# the default "workstation" profile (every step runs, subject to --gui/--yes).
+# shellcheck disable=SC2034
+profile=""
+
 for arg in "$@"; do
   case "${arg}" in
     --gui)
@@ -52,8 +61,12 @@ for arg in "$@"; do
       # shellcheck disable=SC2034
       assume_yes=1
       ;;
+    --profile=agent)
+      # shellcheck disable=SC2034
+      profile="agent"
+      ;;
     -h|--help)
-      sed -n '4,14p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)

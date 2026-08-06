@@ -82,6 +82,25 @@ step() {
   fi
 }
 
+# core_step - Run a step that belongs in every profile, including "agent".
+#
+# A thin wrapper around `step()`, used at the call site in
+# `run/inc/fn/install-steps.sh` to mark a step as core: useful to a coding
+# agent working unattended inside a minimal container, as well as on a full
+# workstation. Core steps always run, unprompted, in both profiles.
+#
+# This exists as a distinct name (rather than calling `step` directly) so
+# that "what's in the agent profile" is answered by grep'ing for
+# `core_step` calls in one file, instead of being scattered across guards
+# inside dozens of step files. See `docs/tools.md` for the resulting table.
+#
+# Arguments:
+#   $1 - Absolute path to the step file to source.
+#
+core_step() {
+  step "$1"
+}
+
 # confirm_step - Prompt for confirmation, then run a step via `step()`.
 #
 # Used for "one tool per script" steps (the app/*, dev/*, ops/*, phy/*, and
@@ -91,9 +110,16 @@ step() {
 # `print_step` banner never prints, and the skip does not count as a failure
 # in `FAILED_STEPS`.
 #
-# The prompt defaults to yes — pressing Enter, or any reply other than
-# `n`/`N`, runs the step. The prompt itself is skipped, and the step always
-# runs, when there is nothing to usefully prompt:
+# Under the "agent" profile (`--profile=agent`, see `is_agent_profile`),
+# every `confirm_step` is skipped outright — no prompt, no fallback to
+# yes/no defaults. The agent profile installs only `core_step` steps (plus
+# the always-on `sys/*`/`util/*`/`pkg/*` plumbing); confirm_step exists for
+# exactly the tools a workstation user might want but a headless agent
+# container has no use for.
+#
+# Otherwise, the prompt defaults to yes — pressing Enter, or any reply other
+# than `n`/`N`, runs the step. The prompt itself is skipped, and the step
+# always runs, when there is nothing to usefully prompt:
 #
 #   - `--yes`/`-y` was passed (`is_yes_enabled`).
 #   - stdin is not a terminal (piped output, `docker build`, CI) — mirrors
@@ -107,6 +133,11 @@ step() {
 confirm_step() {
   local file="$1"
   local name="$2"
+
+  if is_agent_profile; then
+    print_info "Skipping ${name} (not part of the agent profile)."
+    return 0
+  fi
 
   if ! is_yes_enabled && [[ -t 0 ]]; then
     read -r -p "Install/update ${name}? (Y/n): " -n 1 -r

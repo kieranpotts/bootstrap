@@ -9,6 +9,11 @@
 # Depends on `exec/docker.sh` (Docker engine) and pairs with `dev/ollama.sh`
 # (the LLM backend, reachable from the container via host.docker.internal).
 #
+# Categorized as a GUI app, not a dev tool: it's a browser-based end-user
+# interface, not something scripts or agents drive directly.
+#
+
+is_gui_enabled || return 0
 
 print_step "Installing Open WebUI."
 

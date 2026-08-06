@@ -6,6 +6,7 @@ Provisioning scripts for my standard local development environment.
 
 - [**Requirements**](./docs/requirements.md)
 - [**Installation**](./docs/installation.md)
+- [**Tools**](./docs/tools.md)
 - [**Releasing**](./docs/releasing.md)
 - [**Considerations**](./docs/considerations.md)
 - [**Drift**](./docs/drift.md)

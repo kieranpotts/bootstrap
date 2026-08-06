@@ -21,8 +21,16 @@
 # those runs via `confirm_step` rather than `step` directly — the user gets
 # a per-tool Y/n prompt (see `run/inc/fn/steps.sh`) and can skip individual
 # applications/tools without editing this file. Every other category
-# (apt/pkg/sys/exec setup) always runs unprompted, since those steps are
+# (apt/pkg/sys setup) always runs unprompted, since those steps are
 # bootstrap plumbing rather than a discrete tool the user might opt out of.
+#
+# A handful of steps that would otherwise be `confirm_step` calls run via
+# `core_step` instead: tooling useful to a coding agent working unattended
+# in a headless container, as well as on a full workstation. `core_step`
+# always runs, unprompted, in every profile. Passing `--profile=agent` (see
+# `is_agent_profile`) skips every `confirm_step` outright, so the resulting
+# install is exactly the `core_step` set plus the always-on plumbing above.
+# See `docs/tools.md` for the full breakdown of what installs where.
 #
 
 # run_install_steps - Run the shared install/update step sequence.
@@ -57,13 +65,16 @@ run_install_steps() {
   step "${inc_path}/sys/update.sh"
   step "${inc_path}/sys/upgrade.sh"
 
-  # Runtime (execution) environments.
-  step "${inc_path}/exec/docker.sh"
-  step "${inc_path}/exec/jdk.sh"
-  step "${inc_path}/exec/node.sh"
-  step "${inc_path}/exec/php.sh"
-  step "${inc_path}/exec/python.sh"
-  step "${inc_path}/exec/rust.sh"
+  # Runtime (execution) environments. Node and Python are core - most agent
+  # CLIs are npm-installed, and a lot of tooling is Python. The others are
+  # workstation-only: not every machine (or agent container) needs a JVM,
+  # PHP, Rust, or a full Docker Engine of its own.
+  confirm_step "${inc_path}/exec/docker.sh" "Docker CE"
+  confirm_step "${inc_path}/exec/jdk.sh" "OpenJDK (via Jabba)"
+  core_step "${inc_path}/exec/node.sh"
+  confirm_step "${inc_path}/exec/php.sh" "PHP (via phpenv)"
+  core_step "${inc_path}/exec/python.sh"
+  confirm_step "${inc_path}/exec/rust.sh" "Rust (via Rustup)"
 
   # Web browsers.
   confirm_step "${inc_path}/web/chrome.sh" "Google Chrome"
@@ -77,6 +88,7 @@ run_install_steps() {
   confirm_step "${inc_path}/app/keepassxc.sh" "KeePassXC"
   confirm_step "${inc_path}/app/mozilla-vpn.sh" "Mozilla VPN"
   confirm_step "${inc_path}/app/obsidian.sh" "Obsidian"
+  confirm_step "${inc_path}/app/open-webui.sh" "Open WebUI"
   confirm_step "${inc_path}/app/orca.sh" "Orca"
   confirm_step "${inc_path}/app/pass.sh" "pass"
   confirm_step "${inc_path}/app/pied.sh" "Pied"
@@ -90,23 +102,23 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/bruno.sh" "Bruno"
   confirm_step "${inc_path}/dev/claude.sh" "Claude Code"
   confirm_step "${inc_path}/dev/cline.sh" "Cline Kanban"
-  confirm_step "${inc_path}/dev/codespell.sh" "codespell"
+  core_step "${inc_path}/dev/codespell.sh"
   confirm_step "${inc_path}/dev/continue.sh" "Continue CLI"
   confirm_step "${inc_path}/dev/copilot.sh" "Copilot CLI"
   confirm_step "${inc_path}/dev/ctop.sh" "ctop"
   confirm_step "${inc_path}/dev/cursor-cli.sh" "Cursor CLI"
   confirm_step "${inc_path}/dev/cursor-gui.sh" "Cursor GUI"
-  confirm_step "${inc_path}/dev/delta.sh" "Delta (git-delta)"
+  core_step "${inc_path}/dev/delta.sh"
   confirm_step "${inc_path}/dev/dive.sh" "Dive"
   confirm_step "${inc_path}/dev/docker-credential-pass.sh" "docker-credential-pass"
   confirm_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
-  confirm_step "${inc_path}/dev/editorconfig-checker.sh" "editorconfig-checker"
+  core_step "${inc_path}/dev/editorconfig-checker.sh"
   confirm_step "${inc_path}/dev/ffmpeg.sh" "FFmpeg"
   confirm_step "${inc_path}/dev/frame0.sh" "Frame0"
-  confirm_step "${inc_path}/dev/gh.sh" "GitHub CLI"
+  core_step "${inc_path}/dev/gh.sh"
   confirm_step "${inc_path}/dev/gh-dash.sh" "gh-dash"
   confirm_step "${inc_path}/dev/ghostty.sh" "Ghostty"
-  confirm_step "${inc_path}/dev/git-lfs.sh" "Git LFS"
+  core_step "${inc_path}/dev/git-lfs.sh"
   confirm_step "${inc_path}/dev/hermes-agent.sh" "Hermes Agent"
   confirm_step "${inc_path}/dev/inshellisense.sh" "inshellisense"
   confirm_step "${inc_path}/dev/insomnia.sh" "Insomnia"
@@ -120,17 +132,16 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/neovim.sh" "Neovim"
   confirm_step "${inc_path}/dev/oh-my-posh.sh" "Oh-My-Posh"
   confirm_step "${inc_path}/dev/ollama.sh" "Ollama"
-  confirm_step "${inc_path}/dev/open-webui.sh" "Open WebUI"
   confirm_step "${inc_path}/dev/openclaw.sh" "OpenClaw"
   confirm_step "${inc_path}/dev/opencode.sh" "OpenCode"
   confirm_step "${inc_path}/dev/pi.sh" "Pi Coding Agent"
   confirm_step "${inc_path}/dev/postman.sh" "Postman"
-  confirm_step "${inc_path}/dev/pre-commit.sh" "pre-commit"
+  core_step "${inc_path}/dev/pre-commit.sh"
   confirm_step "${inc_path}/dev/qwen-code.sh" "Qwen Code"
-  confirm_step "${inc_path}/dev/shellcheck.sh" "ShellCheck"
-  confirm_step "${inc_path}/dev/skills-ref.sh" "skills-ref"
+  core_step "${inc_path}/dev/shellcheck.sh"
+  core_step "${inc_path}/dev/skills-ref.sh"
   confirm_step "${inc_path}/dev/sourcegit.sh" "SourceGit"
-  confirm_step "${inc_path}/dev/tmux.sh" "tmux"
+  core_step "${inc_path}/dev/tmux.sh"
   confirm_step "${inc_path}/dev/vscode.sh" "Visual Studio Code"
   confirm_step "${inc_path}/dev/vscode-insiders.sh" "Visual Studio Code Insiders"
   confirm_step "${inc_path}/dev/vscodium.sh" "VS Codium"

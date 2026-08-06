@@ -1,6 +1,10 @@
 # Plan: narrow the devcontainer tool set
 
-Status: proposed, not yet implemented.
+Status: implemented in this repository (`core_step`/`--profile=agent`,
+reclassified call sites, `docs/tools.md`, `ffmpeg`/`open-webui` fixes).
+Open: updating `src/Dockerfile` in the `docker-devcontainer` repository to
+call `./run/install --profile=agent` (and to drop the deprecated
+`./run/bootstrap` wrapper) — deliberately left for a separate pass.
 
 Narrow the set of tools installed into the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
@@ -130,17 +134,21 @@ Everything else moves to tier 2 (workstation).
 - **`dev/tmux.sh`** — RECOMMENDED for core. Useful for agent-managed
   long-running processes, and there is a supporting ADR at
   `docs/adr/0001-tmux-session-persistence.md`.
+  Decision: **INCLUDE** in the devcontainer.
 
 - **`dev/docker-mcp.sh`** — depends on whether the container is given a
   host Docker socket.
+  Decision: **EXCLUDE** from the devcontainer.
 
 - **`exec/jdk.sh`, `dev/maven.sh`, `exec/php.sh`, `exec/rust.sh`** —
   core only if that work happens in-container.
+  Decision: **EXCLUDE** from the devcontainer
 
 ## Open question
 
 **Which agent CLI(s) belong in core?** This is the crux, and it drives
 most of the size win. Unresolved — must be settled before implementation.
+Decision: **NONE** of them!!!
 
 ## Incidental fixes
 
@@ -149,12 +157,16 @@ These are independent of the tiering work and can land separately:
 - `src/Dockerfile` (in the `docker-devcontainer` repository) calls
   `./run/bootstrap`, the DEPRECATED wrapper. It works, but prints a
   warning to stderr. It MUST be updated to call `./run/install`.
+  NOTE: This will be fixed separately.
 
 - `run/inc/dev/ffmpeg.sh` SHOULD pass `--no-install-recommends`. That
   alone removes the MIDI soundfont from the image.
+  Decision: add `--no-install-recommends` anyway, but also exclude this
+  from the container.
 
 - `run/inc/dev/open-webui.sh` is a web UI but is not GUI-gated. Review
   its categorization.
+  Decision: agreed, this is a GUI - update its categorization.
 
 ## Implementation outline
 

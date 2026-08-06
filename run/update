@@ -3,11 +3,13 @@
 #
 # Update an already-provisioned development environment.
 #
-# Usage: ./run/update [--gui] [--yes]
+# Usage: ./run/update [--gui] [--yes] [--profile=agent]
 #
-#   --gui         Also update GUI applications.
-#   -y, --yes     Assume yes to all per-tool install/update prompts.
-#   -h, --help    Show this help and exit.
+#   --gui             Also update GUI applications.
+#   -y, --yes         Assume yes to all per-tool install/update prompts.
+#   --profile=agent   Update only the "core" step set - see
+#                     `./run/install --help` and docs/tools.md.
+#   -h, --help        Show this help and exit.
 #
 # `./run/update` is the lighter-weight companion to `./run/install`. It
 # assumes the target machine has already been provisioned, and skips the
@@ -42,6 +44,11 @@ updating=1
 # shellcheck disable=SC2034
 assume_yes=0
 
+# Consumed by `is_agent_profile` in `run/inc/fn/gui.sh`. Empty string means
+# the default "workstation" profile (every step runs, subject to --gui/--yes).
+# shellcheck disable=SC2034
+profile=""
+
 for arg in "$@"; do
   case "${arg}" in
     --gui)
@@ -52,8 +59,12 @@ for arg in "$@"; do
       # shellcheck disable=SC2034
       assume_yes=1
       ;;
+    --profile=agent)
+      # shellcheck disable=SC2034
+      profile="agent"
+      ;;
     -h|--help)
-      sed -n '4,19p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,21p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)

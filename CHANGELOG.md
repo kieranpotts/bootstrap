@@ -25,6 +25,18 @@
 - feature: install Docker MCP Gateway (`docker mcp`)
 - feature: install codespell
 - fix: use `superdo` (not `sudo` directly) for ROCm and Microsoft Edge installs
+- feature: add `--profile=agent` to `./run/install`/`./run/update`, and a
+  `core_step` install-step tier, for a minimal tool set suited to a coding
+  agent in a headless container - see `docs/tools.md`
+- feature: install Node.js and Python via the agent profile (`core_step`)
+- refactor: install Docker CE, OpenJDK, PHP, and Rust via `confirm_step`
+  instead of unconditionally, so they're skippable and excluded from the
+  agent profile
+- refactor: recategorize Open WebUI as a GUI app (`run/inc/app/`, gated by
+  `--gui`), not a CLI dev tool
+- fix: FFmpeg install no longer pulls in a MIDI soundfont
+  (`--no-install-recommends`)
+- docs: add `docs/tools.md`, an Agent/CLI/GUI table of what installs where
 
 ## [1.5.0] - 2026-07-24
 

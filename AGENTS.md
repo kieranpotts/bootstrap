@@ -41,9 +41,10 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   `run/install` directly.
 
 - **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`,
-  `confirm_step`, `superdo`, `is_gui_enabled`, status printers, banners) and
-  `install-steps.sh`, which defines `run_install_steps` — the shared
-  install/update step sequence that both entry scripts run.
+  `core_step`, `confirm_step`, `superdo`, `is_gui_enabled`,
+  `is_agent_profile`, status printers, banners) and `install-steps.sh`,
+  which defines `run_install_steps` — the shared install/update step
+  sequence that both entry scripts run.
 
 - **`run/inc/var/`**: Shared variables (ANSI codes).
 
@@ -65,9 +66,9 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`run/inc/phy/`**: Hardware-related tooling (eg. ROCm).
 
-- **`docs/`**: Installation, requirements, releasing, considerations, drift
-  (vs. the private `hacksltd` bootstrapper), and architecture decision
-  records (`docs/adr/`).
+- **`docs/`**: Installation, requirements, tools (what installs under each
+  profile), releasing, considerations, drift (vs. the private `hacksltd`
+  bootstrapper), and architecture decision records (`docs/adr/`).
 
 ## Tools
 
@@ -79,6 +80,10 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 - **`./run/install --yes`** (or **`-y`**) to skip the per-tool
   install/update prompts and assume yes to all of them.
 
+- **`./run/install --profile=agent`** to install only the `core_step` set —
+  the minimal tooling a coding agent needs in a headless container. See
+  `docs/tools.md`.
+
 - **`./run/install --help`** to print the usage banner.
 
 - **`./run/update`** to update an already-provisioned machine (CLI tools only).
@@ -86,6 +91,8 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 - **`./run/update --gui`** to also update GUI applications.
 
 - **`./run/update --yes`** (or **`-y`**) to skip the per-tool prompts.
+
+- **`./run/update --profile=agent`** to update only the `core_step` set.
 
 - **`./run/update --help`** to print the usage banner.
 
@@ -108,6 +115,14 @@ helper predicates in `run/inc/fn/gui.sh`:
   `run_install_steps`. The prompt defaults to yes and is skipped
   entirely — the step always runs — when `--yes` was passed or stdin
   is not a terminal (piped output, `docker build`, CI).
+
+- **`--profile=agent`** sets `profile="agent"`, exposed via
+  `is_agent_profile`. Consumed by `confirm_step`, which skips its step
+  outright (no prompt, no fallback) whenever the agent profile is active.
+  The resulting install is exactly the `core_step` set, plus the always-on
+  `sys/*`/`util/*`/`pkg/*` plumbing. Intended for headless containers (eg.
+  `docker-devcontainer`) where there is no human to prompt and no display.
+  Any other `--profile=<value>` is rejected as an unknown argument.
 
 Defaults are conservative: with no flags, only CLI tooling is installed
 (with a confirmation prompt per tool).
@@ -155,7 +170,17 @@ install of a tool that isn't wanted:
   `run/inc/fn/install-steps.sh`) in the correct group, sorted alphabetically
   within that group, so it runs on both `./run/install` and `./run/update`.
   First-time-only steps (system checks, base `util/*` installs) are the
-  exception and live inline in `run/install`.
+  exception and live inline in `run/install`. Alphabetical order is by
+  filename regardless of whether the call uses `core_step` or
+  `confirm_step` — do not group by step type.
+
+- MUST call a `web/*`, `app/*`, `dev/*`, `ops/*`, or `phy/*` step via
+  `core_step` only if it belongs in a minimal, unattended, headless coding
+  agent container — not merely "something most workstations want". When in
+  doubt, use `confirm_step`: it is the safe default, and still installs
+  unprompted on any non-interactive `./run/install` run outside the agent
+  profile (`docker build`, CI, `--yes`). Update `docs/tools.md` to match
+  whichever you choose.
 
 - MUST target Debian-based distros only. Do not add steps that assume other
   package managers besides APT.
@@ -175,6 +200,11 @@ install of a tool that isn't wanted:
 - SHOULD add a row to `docs/drift.md` when adding or removing an install
   step, so the comparison against the private `hacksltd` bootstrapper
   doesn't fall out of sync.
+
+- SHOULD update `docs/tools.md` when adding, removing, or reclassifying an
+  install step (`step`/`core_step`/`confirm_step`, or adding/removing an
+  `is_gui_enabled` guard), so the Agent/CLI/GUI table stays a trustworthy
+  summary of `run_install_steps`.
 
 ## Skills
 

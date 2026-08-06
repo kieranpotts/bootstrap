@@ -66,3 +66,20 @@ is_updating() {
 is_yes_enabled() {
   [[ "${assume_yes:-0}" -eq 1 ]]
 }
+
+# is_agent_profile - Test whether the run is scoped to the "agent" profile.
+#
+# Reads the `profile` flag set by `run/install` or `run/update` when parsing
+# CLI args (`--profile=agent`). Used by `confirm_step` (see
+# `run/inc/fn/steps.sh`) to skip every step in the "one tool per script"
+# categories (`web/*`, `app/*`, `dev/*`, `ops/*`, `phy/*`) outright — the
+# agent profile installs only `core_step` steps (plus the always-on `sys/*`,
+# `util/*`, and `pkg/*` plumbing), for a minimal image intended to run coding
+# agents rather than be driven interactively by a human.
+#
+# Returns:
+#   0 if `--profile=agent` was passed, 1 otherwise.
+#
+is_agent_profile() {
+  [[ "${profile:-}" == "agent" ]]
+}
