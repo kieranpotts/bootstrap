@@ -3,8 +3,8 @@
 #
 # Shared install step sequence.
 #
-# Sourced by both `run/bootstrap` (full provisioning from scratch) and
-# `run/update` (update an already-bootstrapped machine). Defines
+# Sourced by both `run/install` (full provisioning from scratch) and
+# `run/update` (update an already-provisioned machine). Defines
 # `run_install_steps`, which does:
 #
 #   - APT setup and third-party repository registration (`sys/apt.sh`, `pkg/*`)

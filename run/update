@@ -8,8 +8,8 @@
 #   --gui         Also update GUI applications.
 #   -h, --help    Show this help and exit.
 #
-# `./run/update` is the lighter-weight companion to `./run/bootstrap`. It
-# assumes the target machine has already been bootstrapped, and skips the
+# `./run/update` is the lighter-weight companion to `./run/install`. It
+# assumes the target machine has already been provisioned, and skips the
 # first-time-only phases (system compatibility checks and base `util/*`
 # installs). It refreshes APT repositories and upgrades installed packages
 # (`apt upgrade`), then re-runs every per-tool install step — each of which
@@ -18,10 +18,10 @@
 # no-op, and steps using a non-APT install mechanism only upgrade a tool
 # that is already installed — `./run/update` never performs a first install.
 #
-# To provision a machine from scratch, run `./run/bootstrap` instead.
+# To provision a machine from scratch, run `./run/install` instead.
 #
 
-# Strict mode for the entry-point script (see `run/bootstrap` for rationale).
+# Strict mode for the entry-point script (see `run/install` for rationale).
 set -euo pipefail
 
 #
@@ -32,7 +32,7 @@ set -euo pipefail
 # shellcheck disable=SC2034
 install_gui=0
 
-# Consumed by `is_updating` in `run/inc/fn/gui.sh`. Never set by `run/bootstrap`,
+# Consumed by `is_updating` in `run/inc/fn/gui.sh`. Never set by `run/install`,
 # so install steps default to first-time-install behaviour.
 # shellcheck disable=SC2034
 updating=1
@@ -59,7 +59,7 @@ done
 # Global variables.
 #
 
-# Absolute path to this repository (mirrors `run/bootstrap`).
+# Absolute path to this repository (mirrors `run/install`).
 repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
 inc_path="${repo_root}/run/inc"
 
@@ -95,12 +95,12 @@ fi
 # Main script.
 #
 
-# Minimal sanity check. `run/bootstrap` runs a fuller set of compatibility
+# Minimal sanity check. `run/install` runs a fuller set of compatibility
 # checks (architecture, Ubuntu version prompt); `run/update` assumes the
-# machine is already bootstrapped, so we only guard the hard requirement.
+# machine is already provisioned, so we only guard the hard requirement.
 if [[ ! -f /etc/debian_version ]]; then
   print_error "Require a Debian-based Linux distribution."
-  print_info "Run \`./run/bootstrap\` to provision this machine from scratch."
+  print_info "Run \`./run/install\` to provision this machine from scratch."
   exit 1
 fi
 
@@ -110,7 +110,7 @@ print_updating
 # routing can be undone at the end of the run.
 bashrc_snapshot
 
-# Shared install/update step sequence (same as `run/bootstrap` runs after its
+# Shared install/update step sequence (same as `run/install` runs after its
 # first-time-only phases): APT setup + repository registration, system update
 # + upgrade, runtimes, browsers, applications, dev/ops/phy tooling, and
 # `.bashrc` configuration + cleanup.

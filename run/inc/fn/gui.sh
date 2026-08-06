@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 #
-# Predicates for runtime feature toggles set by `run/bootstrap` and
+# Predicates for runtime feature toggles set by `run/install` and
 # `run/update`.
 #
 
 # is_gui_enabled - Test whether GUI installs are enabled for the current run.
 #
-# Reads the `install_gui` flag set by `run/bootstrap` or `run/update` when
+# Reads the `install_gui` flag set by `run/install` or `run/update` when
 # parsing CLI args. Use this from any install step that should only run when
 # `--gui` was passed:
 #
@@ -23,7 +23,7 @@ is_gui_enabled() {
 }
 
 # is_updating - Test whether the current run is an update pass (`run/update`)
-# rather than a first-time bootstrap (`run/bootstrap`).
+# rather than a first-time bootstrap (`run/install`).
 #
 # Reads the `updating` flag, set only by `run/update`. Use this from any
 # install step that must not perform a first-time install on an update pass:
@@ -46,7 +46,7 @@ is_gui_enabled() {
 #       ...
 #
 # Returns:
-#   0 if running under `run/update`, 1 otherwise (including `run/bootstrap`).
+#   0 if running under `run/update`, 1 otherwise (including `run/install`).
 #
 is_updating() {
   [[ "${updating:-0}" -eq 1 ]]

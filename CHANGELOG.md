@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- refactor: rename `./run/bootstrap` to `./run/install`; `./run/bootstrap` remains as a deprecated wrapper
 - feature: add `./run/update` for updating an already-provisioned machine
 - refactor: `./run/update` skips installation of tools that already exist
 - feature: install amdgpu_top

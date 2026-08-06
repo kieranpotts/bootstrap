@@ -28,13 +28,17 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Project structure
 
-- **`run/bootstrap`**: Entry script for full provisioning from scratch.
+- **`run/install`**: Entry script for full provisioning from scratch.
   Sources every install step in order.
 
 - **`run/update`**: Entry script for updating an already-provisioned machine.
   Runs the shared step sequence (see `run/inc/fn/install-steps.sh`) but skips
-  the first-time-only phases that `run/bootstrap` runs (system compatibility
+  the first-time-only phases that `run/install` runs (system compatibility
   checks and base `util/*` installs).
+
+- **`run/bootstrap`**: DEPRECATED. A thin wrapper that execs `run/install`,
+  kept for machines/images pinned to older tags. New references MUST use
+  `run/install` directly.
 
 - **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, `superdo`,
   `is_gui_enabled`, status printers, banners) and `install-steps.sh`, which
@@ -65,12 +69,12 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Tools
 
-- **`./run/bootstrap`** to provision a target machine from scratch (CLI tools
+- **`./run/install`** to provision a target machine from scratch (CLI tools
   only).
 
-- **`./run/bootstrap --gui`** to additionally install GUI applications.
+- **`./run/install --gui`** to additionally install GUI applications.
 
-- **`./run/bootstrap --help`** to print the usage banner.
+- **`./run/install --help`** to print the usage banner.
 
 - **`./run/update`** to update an already-provisioned machine (CLI tools only).
 
@@ -78,11 +82,11 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`./run/update --help`** to print the usage banner.
 
-- **`shellcheck run/**/*.sh run/bootstrap run/update`** to lint shell scripts.
+- **`shellcheck run/**/*.sh run/install run/update`** to lint shell scripts.
 
 ## Feature toggles
 
-CLI flags are parsed at the top of `run/bootstrap` and `run/update`, and
+CLI flags are parsed at the top of `run/install` and `run/update`, and
 stored as global variables that any sourced install step can inspect via
 helper predicates in `run/inc/fn/gui.sh`:
 
@@ -92,7 +96,7 @@ helper predicates in `run/inc/fn/gui.sh`:
 
 Defaults are conservative: with no flags, only CLI tooling is installed.
 
-`run/update` additionally sets `updating=1` (never set by `run/bootstrap`),
+`run/update` additionally sets `updating=1` (never set by `run/install`),
 exposed via `is_updating`. Install steps must guard against `run/update`
 performing package-manager work that's already covered, or a first-time
 install of a tool that isn't wanted:
@@ -121,7 +125,7 @@ install of a tool that isn't wanted:
 
 ## Rules
 
-- MUST keep every script idempotent. Running `./run/bootstrap` repeatedly
+- MUST keep every script idempotent. Running `./run/install` repeatedly
   must converge, not duplicate, work.
 
 - MUST call `print_step "…"` as the first non-comment line of every install
@@ -133,9 +137,9 @@ install of a tool that isn't wanted:
 
 - MUST source every new install script from `run_install_steps` (in
   `run/inc/fn/install-steps.sh`) in the correct group, sorted alphabetically
-  within that group, so it runs on both `./run/bootstrap` and `./run/update`.
+  within that group, so it runs on both `./run/install` and `./run/update`.
   First-time-only steps (system checks, base `util/*` installs) are the
-  exception and live inline in `run/bootstrap`.
+  exception and live inline in `run/install`.
 
 - MUST target Debian-based distros only. Do not add steps that assume other
   package managers besides APT.

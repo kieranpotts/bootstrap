@@ -7,7 +7,7 @@ license: CC0-1.0
 
 # Install step
 
-The conventions defined in this skill keep `./run/bootstrap` idempotent,
+The conventions defined in this skill keep `./run/install` idempotent,
 readable, and reproducible across the host machine and the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
 image.
@@ -29,7 +29,7 @@ A new or modified install script under `run/inc/<group>/<name>.sh`, wired
 into `run_install_steps` (in `run/inc/fn/install-steps.sh`) in the correct
 group, with a changelog entry under `[Unreleased]` in `CHANGELOG.md`. The
 script passes ShellCheck and smoke-tests cleanly on a clean target. Wiring
-it into `run_install_steps` makes it run on both `./run/bootstrap` (full
+it into `run_install_steps` makes it run on both `./run/install` (full
 provisioning) and `./run/update` (update passes).
 
 This task runs non-interactively to completion. It does not block for user
@@ -81,12 +81,12 @@ print an error message.
     Add a `step "${inc_path}/<group>/<name>.sh"` line to `run_install_steps`
     in `run/inc/fn/install-steps.sh`, in the correct group, keeping the lines
     within that group sorted alphabetically. `run_install_steps` is the shared
-    sequence that both `run/bootstrap` and `run/update` run, so a step added
+    sequence that both `run/install` and `run/update` run, so a step added
     here automatically runs on fresh bootstraps and on update passes.
 
     First-time-only steps (system compatibility checks in `sys/checks.sh`
     and base `util/*` installs) are the exception: they live inline in
-    `run/bootstrap` rather than in `run_install_steps`, so `run/update`
+    `run/install` rather than in `run_install_steps`, so `run/update`
     skips them.
 
 4.  Pin versions when reasonable.
@@ -106,12 +106,12 @@ print an error message.
 6.  Lint the script.
 
     Run `shellcheck` against the new or modified file (and
-    `run/bootstrap` if it was touched). Resolve any findings before
+    `run/install` if it was touched). Resolve any findings before
     committing.
 
 7.  Smoke-test the install.
 
-    On a clean target – or by re-running `./run/bootstrap` on an
+    On a clean target – or by re-running `./run/install` on an
     existing host – confirm the new step prints its `STEP N` banner,
     completes without prompts, and that the installed binary is on
     `PATH` and reports a sensible version.
@@ -120,7 +120,7 @@ print an error message.
 
 - Scripts must be idempotent.
 
-  `./run/bootstrap` and `./run/update` are both re-run to apply updates as
+  `./run/install` and `./run/update` are both re-run to apply updates as
   well as on first provisioning. Each step must converge on the same end
   state whether it runs against a fresh machine or one that has been
   bootstrapped many times before.
@@ -152,7 +152,7 @@ print an error message.
 
 - Guard optional steps with feature toggles.
 
-  CLI flags parsed by `run/bootstrap` and `run/update` are exposed as
+  CLI flags parsed by `run/install` and `run/update` are exposed as
   helper predicates in `run/inc/fn/gui.sh`. An install step that should
   only run under a given flag must short-circuit before its `print_step`
   call so the step number is not consumed:
@@ -171,7 +171,7 @@ print an error message.
     (`install_gui=1`).
 
   - `is_updating` – true when running under `run/update` rather than
-    `run/bootstrap` (`updating=1`, set only by `run/update`).
+    `run/install` (`updating=1`, set only by `run/update`).
 
 - Guard update runs against redundant or unwanted installs.
 
@@ -243,7 +243,7 @@ print an error message.
 
   `#!/bin/bash` shebang, two-space indent, lowercase snake-case for
   local variables, and `source` (already used throughout
-  `run/bootstrap`). These match the existing style and `.shellcheckrc`
+  `run/install`). These match the existing style and `.shellcheckrc`
   configuration.
 
 ## Examples
@@ -314,7 +314,7 @@ for the temp-dir pattern.
 
 ## Success criteria
 
-- The install script is idempotent — re-running `./run/bootstrap`
+- The install script is idempotent — re-running `./run/install`
   converges, not duplicates.
 
 - The script uses `superdo` instead of `sudo` directly.

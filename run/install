@@ -1,0 +1,150 @@
+#!/usr/bin/env bash
+
+#
+# Main entry point for the development environment bootstrapper.
+#
+# Usage: ./run/install [--gui]
+#
+#   --gui         Also install GUI applications (in addition to CLI tools).
+#   -h, --help    Show this help and exit.
+#
+# `./run/bootstrap` still exists as a deprecated wrapper around this script,
+# for machines/images pinned to older tags. Prefer `./run/install` directly.
+#
+
+# Strict mode for the entry-point script:
+#   -e            Exit on any unhandled command failure.
+#   -u            Error on references to unset variables.
+#   -o pipefail   A pipeline fails if any element fails (not just the last).
+#
+# Note: the per-step subshells inside `step()` (see `./run/inc/fn/steps.sh`)
+# intentionally use `set -e` only, not the full strict mode. That keeps
+# individual step files from breaking on unset-var references in the 50+
+# install scripts that pre-date the strict-mode convention.
+
+set -euo pipefail
+
+# Use this instead for debugging problems with the script.
+#set -euxo pipefail
+
+#
+# CLI flag parsing.
+#
+
+# Feature toggles:
+
+# Consumed by `is_gui_enabled` in `run/inc/fn/gui.sh`.
+# shellcheck disable=SC2034
+install_gui=0
+
+for arg in "$@"; do
+  case "${arg}" in
+    --gui)
+      # shellcheck disable=SC2034
+      install_gui=1
+      ;;
+    -h|--help)
+      sed -n '4,13p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: ${arg}" >&2
+      echo "Run \`./run/install --help\` to see available options." >&2
+      exit 1
+      ;;
+  esac
+done
+
+#
+# Global variables.
+#
+
+# Absolute path to this repository. This allows sourcing of files relative to
+# the repository root, and thus the bootstrap script can be run from any
+# working directory.
+
+repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
+
+# Includes path.
+inc_path="${repo_root}/run/inc"
+
+# Determine the bashrc file to use. If the user has a file called
+# `local.bashrc` in their home directory, use that instead of the
+# default `.bashrc` file.
+
+bashrc="${HOME}/.bashrc"
+if [[ -f "${HOME}/local.bashrc" ]]; then
+  # `bashrc` is used in sourced files.
+  # shellcheck disable=SC2034
+  bashrc="${HOME}/local.bashrc"
+else
+  touch "${HOME}/.bashrc"
+fi
+
+# Source ANSI code variables.
+. "${inc_path}/var/ansi-codes.sh"
+
+#
+# Utility functions.
+#
+
+. "${inc_path}/fn/bashrc-protect.sh"
+. "${inc_path}/fn/gh-release.sh"
+. "${inc_path}/fn/gui.sh"
+. "${inc_path}/fn/install-steps.sh"
+. "${inc_path}/fn/os.sh"
+. "${inc_path}/fn/statuses.sh"
+. "${inc_path}/fn/steps.sh"
+. "${inc_path}/fn/superdo.sh"
+
+#
+# Main script.
+#
+
+print_starting
+
+# Snapshot ~/.bashrc so third-party installers that bypass our `${bashrc}`
+# routing can be undone at the end of the bootstrap.
+bashrc_snapshot
+
+# Initial system compatibility checks. Sourced directly (not via `step()`)
+# so its `exit 1` on an unsupported OS aborts the entire bootstrap.
+. "${inc_path}/sys/checks.sh"
+
+# System utilities. Some of these, like curl and wget, are required for
+# the package repository setup scripts that follow. These base utilities are
+# first-time-only. `run/update` skips them and relies on the machine having
+# already been bootstrapped.
+step "${inc_path}/util/apt-transport-https.sh"
+step "${inc_path}/util/ca-certificates.sh"
+step "${inc_path}/util/curl.sh"
+step "${inc_path}/util/git.sh"
+step "${inc_path}/util/gnupg.sh"
+step "${inc_path}/util/htop.sh"
+step "${inc_path}/util/icoutils.sh"
+step "${inc_path}/util/inotify-tools.sh"
+step "${inc_path}/util/jq.sh"
+step "${inc_path}/util/lsb-release.sh"
+step "${inc_path}/util/make.sh"
+step "${inc_path}/util/ripgrep.sh"
+step "${inc_path}/util/software-properties-common.sh"
+step "${inc_path}/util/tar.sh"
+step "${inc_path}/util/unzip.sh"
+step "${inc_path}/util/wget.sh"
+
+# Shared install/update step sequence. This is the same sequence
+# `run/update` runs, so the two entry points stay in lockstep.
+run_install_steps
+
+# Restore ~/.bashrc to its starting state if a third-party
+# installer modified it. Any new lines are redirected
+# to ~/local.bashrc.
+bashrc_restore
+
+# Print outcomes.
+print_finished
+print_failures
+
+# Exit non-zero if any step failed, so that CI/wrappers
+# can detect failures.
+exit "${#FAILED_STEPS[@]}"
