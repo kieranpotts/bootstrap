@@ -22,9 +22,9 @@
 
 ## Per-tool prompts
 
-For every application and developer/ops/hardware tool it installs or updates
-(the `web/*`, `app/*`, `dev/*`, `ops/*`, and `phy/*` categories), the
-bootstrap asks for confirmation before running that step:
+For every application and runtime/developer/ops/hardware tool it installs or
+updates (the `web/*`, `app/*`, `exec/*`, `dev/*`, `ops/*`, and `phy/*`
+categories), the bootstrap asks for confirmation before running that step:
 
 ```
 Install/update LazyGit? (Y/n):
@@ -32,8 +32,11 @@ Install/update LazyGit? (Y/n):
 
 Pressing Enter, or answering anything other than `n`/`N`, runs the step;
 answering `n` skips it and moves on to the next tool. Lower-level bootstrap
-plumbing (base utilities, APT/package-repository setup, language runtimes)
-is not prompted and always runs.
+plumbing (base utilities, APT/package-repository setup) is not prompted and
+always runs, and neither are the "core" steps listed under Agent in
+[Tools](./tools.md) — including the Node.js and Python runtimes. The
+remaining language runtimes (Docker CE, OpenJDK, PHP, Rust) are prompted
+like any other tool.
 
 Pass `--yes`/`-y` to skip all of these prompts and assume yes, eg. for a
 fully unattended run:
@@ -48,6 +51,29 @@ fully unattended run:
 > to a log file (see [Logging output](#logging-output) below) does not by
 > itself suppress prompts, since stdin is untouched; pass `--yes` too if you
 > want a logged run to also be unattended.
+
+## Install profiles
+
+By default, `./run/install` provisions a full workstation: every step,
+subject to the per-tool prompts above and to `--gui`. Pass
+`--profile=agent` to install only the minimal "core" tool set instead —
+what a coding agent needs to work unattended in a headless container:
+
+```
+./run/install --profile=agent
+```
+
+Under this profile every prompted step is skipped outright — no prompt, no
+fallback to yes — so what remains is the core steps plus the always-on base
+utilities and APT/package-repository setup. See [Tools](./tools.md) for the
+per-program breakdown of what each profile installs.
+
+This is the profile used to build the
+[`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
+image. Passing `--gui` alongside it installs no GUI applications — every
+GUI-gated step is also a prompted step — though it does still register the
+GUI-only APT repositories. `./run/update` accepts the same flag, to update
+an agent container in place.
 
 ## Updating an existing machine
 
@@ -72,7 +98,7 @@ per-tool prompts described above:
 ```
 
 You may still need to run `./run/update` from time-to-time to get updates for
-components  that are installed directly from `.DEB` package downloads, and 
+components that are installed directly from `.DEB` package downloads, and
 other mechanisms that bypass the APT package manager.
 
 Run `./run/update --help` to print the usage banner.

@@ -37,6 +37,16 @@
 - fix: FFmpeg install no longer pulls in a MIDI soundfont
   (`--no-install-recommends`)
 - docs: add `docs/tools.md`, an Agent/CLI/GUI table of what installs where
+- fix: lint `run/install` and `run/update` in the ShellCheck workflow - the
+  `find` pattern only matched `*.sh` files and `run/bootstrap`
+- fix: `./run/update --help` no longer truncates its usage banner
+  mid-sentence
+- docs: document `--profile=agent` in `docs/installation.md`, and correct
+  the claim that language runtimes are never prompted
+- docs: correct `docs/considerations.md`, which claimed the bootstrap does
+  not install Docker
+- docs: bring the `install-step` skill back in line with the codebase
+  (`core_step`/agent profile, group names, shebang, required doc updates)
 
 ## [1.5.0] - 2026-07-24
 

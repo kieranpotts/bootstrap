@@ -1,13 +1,23 @@
 # Considerations
 
+## Installing Docker
+
+The bootstrap scripts install the native Docker Engine (Docker CE), via
+`run/inc/exec/docker.sh`. That step is prompted like any other tool, so it
+can be declined, and it is excluded from the agent profile — a container
+does not need a Docker Engine of its own.
+
+Docker Desktop is _not_ installed. On Linux it runs its own daemon in a VM
+and hijacks the active Docker CLI context, which conflicts with the native
+engine — see the [1.4.0](../CHANGELOG.md) release notes.
+
 ## Using Docker on Windows
 
-The bootstrap scripts do _not_ install Docker.
-
 If you use Windows Subsystem for Linux (WSL 2) for your local development
-environment, the recommended approach to using Docker in this environment is
-to install [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
-in the host environment, and to configure it to use WSL as the "back-end" in
+environment, the recommended approach is to decline the Docker CE step and
+instead install
+[Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/)
+in the host environment, configured to use WSL as the "back-end" in
 which to build and run the containers it manages.
 
 If WSL is not used as the Docker back-end, `docker` commands will not be

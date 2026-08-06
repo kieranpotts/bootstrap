@@ -20,9 +20,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ShellCheck is pre-installed on ubuntu-latest runners. Lint the entry
-      # point and every `.sh` file under `run/`. The project's `.shellcheckrc`
-      # is picked up automatically.
+      # ShellCheck is pre-installed on ubuntu-latest runners. Lint every `.sh`
+      # file under `run/`, plus the extensionless entry scripts (`run/install`,
+      # `run/update`, and the deprecated `run/bootstrap` wrapper). The
+      # project's `.shellcheckrc` is picked up automatically.
       #
       # `--severity=warning` is the strictest threshold the codebase currently
       # passes. The two remaining findings below that threshold are both
@@ -32,5 +33,6 @@ jobs:
       # therefore require suppressing them first.
       - name: Run ShellCheck
         run: |
-          find run -type f \( -name '*.sh' -o -name 'bootstrap' \) -print0 \
-            | xargs -0 shellcheck -x --severity=warning
+          find run -type f \
+            \( -name '*.sh' -o -name 'bootstrap' -o -name 'install' -o -name 'update' \) \
+            -print0 | xargs -0 shellcheck -x --severity=warning

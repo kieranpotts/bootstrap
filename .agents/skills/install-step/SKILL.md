@@ -27,10 +27,11 @@ the user with an error message.
 
 A new or modified install script under `run/inc/<group>/<name>.sh`, wired
 into `run_install_steps` (in `run/inc/fn/install-steps.sh`) in the correct
-group, with a changelog entry under `[Unreleased]` in `CHANGELOG.md`. The
-script passes ShellCheck and smoke-tests cleanly on a clean target. Wiring
-it into `run_install_steps` makes it run on both `./run/install` (full
-provisioning) and `./run/update` (update passes).
+group, with a changelog entry under `[Unreleased]` in `CHANGELOG.md` and
+matching rows in `docs/tools.md` and `docs/drift.md`. The script passes
+ShellCheck and smoke-tests cleanly on a clean target. Wiring it into
+`run_install_steps` makes it run on both `./run/install` (full provisioning)
+and `./run/update` (update passes).
 
 This task runs non-interactively to completion. It does not block for user
 input. If in doubt about any of the requirements of this task, stop and
@@ -46,11 +47,13 @@ print an error message.
 
     - `sys/`: System-level setup, upgrades, teardown.
     - `util/`: General command-line utilities (curl, wget, unzip, …).
-    - `run/`: Language runtimes and version managers.
+    - `pkg/`: Third-party APT repository registration only.
+    - `exec/`: Language runtimes and version managers.
+    - `web/`: Web browsers.
+    - `app/`: GUI/end-user applications.
     - `dev/`: Developer tooling (CLIs, TUIs, editors, linters).
     - `ops/`: Cloud and infrastructure CLIs.
     - `phy/`: Hardware-related tooling.
-    - `msg/`: Start/finish banners only.
 
     Use the program's canonical short name as the filename (eg. `gh.sh`,
     not `github-cli.sh`).
@@ -58,7 +61,7 @@ print an error message.
 2.  Create the install script from this template.
 
     ```bash
-    #!/bin/bash
+    #!/usr/bin/env bash
 
     #
     # Install <Program Name>.
@@ -67,7 +70,7 @@ print an error message.
     # <Upstream install docs>
     #
 
-    print_step "Install <Program Name>"
+    print_step "Installing <Program Name>."
 
     # Install commands here, using `superdo` instead of `sudo`.
     superdo apt-get install -y <package>
@@ -84,19 +87,44 @@ print an error message.
     `run/install` and `run/update` run, so a step added here automatically
     runs on fresh bootstraps and on update passes.
 
-    For the "one tool per script" groups — `web/`, `app/`, `dev/`, `ops/`,
-    `phy/` — wire it with `confirm_step`, not `step`, so the user gets a
-    per-tool Y/n prompt before it runs:
+    There are three call-site wrappers, and the choice between them _is_
+    the policy decision — it is not expressed inside the step file:
 
-    ```bash
-    confirm_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
-    ```
+    - `confirm_step` — the default for the "one tool per script" groups
+      (`web/`, `app/`, `exec/`, `dev/`, `ops/`, `phy/`). The user gets a
+      per-tool Y/n prompt, and the step is skipped outright under
+      `--profile=agent`:
 
-    The second argument is the human-readable name shown in the prompt
-    (`Install/update <Program Name>? (Y/n):`) — use the same name that
-    follows "Installing " in the script's own `print_step` message.
-    Lower-level plumbing (`sys/`, `util/`, `exec/`, `pkg/`) keeps using
-    plain `step`, unprompted.
+      ```bash
+      confirm_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
+      ```
+
+      The second argument is the human-readable name shown in the prompt
+      (`Install/update <Program Name>? (Y/n):`) — use the same name that
+      follows "Installing " in the script's own `print_step` message.
+
+    - `core_step` — for a step from those same groups that also belongs in
+      the agent profile: the minimal tooling a coding agent needs to work
+      unattended in a headless container. Always runs, unprompted, in
+      every profile:
+
+      ```bash
+      core_step "${inc_path}/<group>/<name>.sh"
+      ```
+
+      Use it only if the tool belongs in a minimal, unattended, headless
+      container — not merely because most workstations want it. Anything
+      needing a human at a terminal (TUIs, prompt cosmetics), a display,
+      or physical hardware is not core. When in doubt use `confirm_step`:
+      it is the safe default, and still installs unprompted on any
+      non-interactive run outside the agent profile (`docker build`, CI,
+      `--yes`).
+
+    - `step` — lower-level plumbing only (`sys/`, `util/`, `pkg/`).
+      Unprompted, in every profile.
+
+    Sort alphabetically by filename within the group regardless of which
+    wrapper the line uses — do not group by wrapper.
 
     First-time-only steps (system compatibility checks in `sys/checks.sh`
     and base `util/*` installs) are the exception: they live inline in
@@ -117,13 +145,28 @@ print an error message.
     `CHANGELOG.md` describing the change (eg. `- Install GitHub CLI
     (\`gh\`).`).
 
-6.  Lint the script.
+6.  Update the documentation tables.
 
-    Run `shellcheck` against the new or modified file (and
-    `run/install` if it was touched). Resolve any findings before
-    committing.
+    Both are manually-maintained summaries that fall out of sync silently,
+    so update them in the same change:
 
-7.  Smoke-test the install.
+    - `docs/tools.md`: add, remove, or amend the program's row in the
+      Agent/CLI/GUI table. Agent is ✅ only for a `core_step` call; GUI is
+      ✅ only for a step guarded by `is_gui_enabled`; CLI is ✅ for
+      everything else that runs by default. Keep the table sorted by
+      program name.
+
+    - `docs/drift.md`: add or remove the program's row, recording whether
+      the private `hacksltd` bootstrapper installs it too.
+
+7.  Lint the script.
+
+    Run `shellcheck -x --severity=warning` against the new or modified
+    file (and `run/install` or `run/update` if either was touched) — the
+    same threshold the ShellCheck workflow enforces. Resolve any findings
+    before committing.
+
+8.  Smoke-test the install.
 
     On a clean target – or by re-running `./run/install` on an
     existing host – confirm the new step prints its `STEP N` banner,
@@ -160,9 +203,10 @@ print an error message.
 - Announce each step with `print_step`.
 
   The first non-comment line of every install script must be
-  `print_step "Install …"` (or an equivalent verb). The helper prints
-  a numbered banner so the bootstrap run is self-narrating, and is the
-  contract that downstream scripts depend on for step numbering.
+  `print_step "Installing …."` (or an equivalent verb, ending in a full
+  stop). The helper prints a numbered banner so the bootstrap run is
+  self-narrating, and is the contract that downstream scripts depend on
+  for step numbering.
 
 - Guard optional steps with feature toggles.
 
@@ -175,7 +219,7 @@ print an error message.
   # GUI-only install. No-op unless `--gui` was passed.
   is_gui_enabled || return 0
 
-  print_step "Install <gui-thing>"
+  print_step "Installing <gui-thing>."
   # ...
   ```
 
@@ -190,6 +234,12 @@ print an error message.
   - `is_yes_enabled` – true when `--yes`/`-y` was passed (`assume_yes=1`).
     Consumed by `confirm_step` itself (see step 3, above); individual
     install scripts don't need to check it.
+
+  - `is_agent_profile` – true when `--profile=agent` was passed
+    (`profile="agent"`). Also consumed by `confirm_step` itself: profile
+    membership is decided at the call site by `core_step` vs
+    `confirm_step` (see step 3, above), so an install script must not
+    check this predicate itself.
 
 - Guard update runs against redundant or unwanted installs.
 
@@ -259,8 +309,8 @@ print an error message.
 
 - Follow the project's shell conventions.
 
-  `#!/bin/bash` shebang, two-space indent, lowercase snake-case for
-  local variables, and `source` (already used throughout
+  `#!/usr/bin/env bash` shebang, two-space indent, lowercase snake-case
+  for local variables, and `source` (already used throughout
   `run/install`). These match the existing style and `.shellcheckrc`
   configuration.
 
@@ -270,46 +320,54 @@ A minimal install step backed by an apt package — see
 [`run/inc/util/curl.sh`](../../run/inc/util/curl.sh):
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
-# Install Curl
+# Install Curl.
+#
+# Generally required for downloading files, including Debian packages.
 #
 
-print_step "Installing curl"
+print_step "Installing curl."
 
+print_info "Installing/updating curl via APT."
 superdo apt-get install -y curl
+
+curl --version
 ```
 
-An install step that adds a third-party apt source and pins the version
-— see [`run/inc/dev/gh.sh`](../../run/inc/dev/gh.sh):
+An install step backed by a third-party apt source — see
+[`run/inc/dev/gh.sh`](../../run/inc/dev/gh.sh). Registering the
+repository is a separate `pkg/*` step, so the install step itself stays a
+plain APT install that no-ops on update:
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 
 #
 # Install the GitHub CLI (`gh`).
+#
+# Depends on `pkg/github.sh` to set up package source in APT.
 #
 # https://github.com/cli/cli
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 #
 
-print_step "Install GitHub CLI"
+# No-op on `./run/update`. Package is kept current by `apt upgrade`.
+is_updating && return 0
 
-superdo mkdir -p -m 755 /etc/apt/keyrings
-wget -nv -O- https://cli.github.com/packages/githubcli-archive-keyring.gpg | superdo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
-superdo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+print_step "Installing GitHub CLI."
 
-superdo mkdir -p -m 755 /etc/apt/sources.list.d
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | superdo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-
+# Install the GitHub CLI.
 superdo apt-get update
-superdo apt-get install gh -y
+superdo apt-get install -y gh
+gh --version
 ```
 
-An install step that downloads a release tarball and pins the upstream
-version — see [`run/inc/dev/lazygit.sh`](../../run/inc/dev/lazygit.sh)
-for the temp-dir pattern.
+An install step that downloads a release tarball — see
+[`run/inc/dev/lazygit.sh`](../../run/inc/dev/lazygit.sh) for the temp-dir
+pattern, and for resolving the upstream version via the `gh_latest_tag`
+helper in `run/inc/fn/gh-release.sh`.
 
 ## Edge cases
 
@@ -324,8 +382,9 @@ for the temp-dir pattern.
   `run/inc/exec/node.sh` for the established pattern.
 
 - Removing a tool: Delete the install script, remove its `step` line
-  from `run_install_steps` in `run/inc/fn/install-steps.sh`, and add an
-  "[Unreleased]" changelog entry. Consider whether the bootstrap should
+  from `run_install_steps` in `run/inc/fn/install-steps.sh`, drop its rows
+  from `docs/tools.md` and `docs/drift.md`, and add an "[Unreleased]"
+  changelog entry. Consider whether the bootstrap should
   also remove an already-installed copy on existing machines
   (`apt-get remove …`) — usually yes, so the cleanup converges on the new
   desired state.
@@ -341,15 +400,16 @@ for the temp-dir pattern.
 
 - The script is wired into `run_install_steps` in `run/inc/fn/install-steps.sh`
   in the correct group, alphabetically sorted — via `confirm_step` (with a
-  display name) for the `web/`, `app/`, `dev/`, `ops/`, `phy/` groups, or
-  plain `step` for lower-level plumbing.
+  display name) or `core_step` for the `web/`, `app/`, `exec/`, `dev/`,
+  `ops/`, `phy/` groups, or plain `step` for lower-level plumbing.
 
 - The script guards against redundant or unwanted work on `./run/update`
   (`is_updating`, as above).
 
-- The script passes `shellcheck` with no findings.
+- The script passes `shellcheck -x --severity=warning` with no findings.
 
-- A changelog entry has been added under `[Unreleased]`.
+- A changelog entry has been added under `[Unreleased]`, and
+  `docs/tools.md` and `docs/drift.md` have matching rows.
 
 ## References
 
@@ -357,18 +417,18 @@ for the temp-dir pattern.
   builds on.
 
 - [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh): Source of `print_step`,
-  `step`, and `confirm_step`.
+  `step`, `core_step`, and `confirm_step`.
 
 - [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of `superdo`.
 
 - [`run/inc/fn/gui.sh`](../../run/inc/fn/gui.sh): Source of `is_gui_enabled`,
-  `is_updating`, and `is_yes_enabled`.
+  `is_updating`, `is_yes_enabled`, and `is_agent_profile`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh): The
   shared `run_install_steps` sequence that new steps are wired into.
 
 - [`docs/installation.md`](../../docs/installation.md): How the entry
-  script is invoked.
+  scripts are invoked, and the install profiles they support.
 
-- [`docs/considerations.md`](../../docs/considerations.md): Why Docker
-  is intentionally excluded.
+- [`docs/tools.md`](../../docs/tools.md): Which profile installs which
+  program — the table every new step must be added to.
