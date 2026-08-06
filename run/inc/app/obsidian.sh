@@ -11,13 +11,6 @@ is_gui_enabled || return 0
 
 print_step "Installing Obsidian."
 
-# Find the AMD64 .deb asset URL from the latest release, then extract the
-# version number from its filename.
-deb_url=$(gh_asset_url obsidianmd/obsidian-releases '_amd64\.deb$')
-latest_version=$(echo "${deb_url}" | grep -Po 'obsidian_\K[0-9]+\.[0-9]+\.[0-9]+')
-
-print_info "Latest available version of Obsidian is v${latest_version}."
-
 # Use dpkg to check the installed version. This is preferable to
 # using `obsidian --version` because dpkg is authoritative for anything
 # install via a .deb package.
@@ -25,6 +18,18 @@ installed_version=""
 if dpkg -s obsidian >/dev/null 2>&1; then
   installed_version=$(dpkg -s obsidian | grep -oP 'Version: \K[^ ]+')
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Find the AMD64 .deb asset URL from the latest release, then extract the
+# version number from its filename.
+deb_url=$(gh_asset_url obsidianmd/obsidian-releases '_amd64\.deb$')
+latest_version=$(echo "${deb_url}" | grep -Po 'obsidian_\K[0-9]+\.[0-9]+\.[0-9]+')
+
+print_info "Latest available version of Obsidian is v${latest_version}."
 
 # Skip the installation if the latest version is already installed.
 if [[ -z "${latest_version}" ]]; then

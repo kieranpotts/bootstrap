@@ -10,6 +10,17 @@ is_gui_enabled || return 0
 
 print_step "Installing Cursor GUI."
 
+# Discover the installed version of Cursor, if any.
+installed_version=""
+if dpkg -s cursor >/dev/null 2>&1; then
+  installed_version=$(dpkg -s cursor | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
+fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
 # Fetch the latest version and .deb download URL from the Cursor API.
 release_info_json=$(curl -s "https://cursor.com/api/download?platform=linux-x64&releaseTrack=stable")
 latest_version=$(echo "${release_info_json}" | jq -r '.version')
@@ -21,12 +32,6 @@ if [[ -z "${latest_version}" ]]; then
 fi
 
 print_info "Latest available version of Cursor is v${latest_version}."
-
-# Discover the installed version of Cursor, if any.
-installed_version=""
-if dpkg -s cursor >/dev/null 2>&1; then
-  installed_version=$(dpkg -s cursor | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
-fi
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Latest version of Cursor, v${latest_version}, is already installed. Skipping."

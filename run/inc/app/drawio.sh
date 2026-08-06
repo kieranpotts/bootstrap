@@ -8,17 +8,22 @@ is_gui_enabled || return 0
 
 print_step "Installing Draw.io."
 
+installed_version=""
+if command -v drawio >/dev/null 2>&1; then
+  installed_version=$(drawio --version | grep -oP '\K[0-9]+\.[0-9]+\.[0-9]+')
+fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
 # Find the AMD64 .deb asset URL from the latest release, then extract the
 # version number from its filename.
 deb_url=$(gh_asset_url jgraph/drawio-desktop 'amd64-[0-9]+\.[0-9]+\.[0-9]+\.deb$')
 latest_version=$(echo "${deb_url}" | grep -Po 'drawio-amd64-\K[0-9]+\.[0-9]+\.[0-9]+')
 
 print_info "Latest available version of Draw.io Desktop is v${latest_version}."
-
-installed_version=""
-if command -v drawio >/dev/null 2>&1; then
-  installed_version=$(drawio --version | grep -oP '\K[0-9]+\.[0-9]+\.[0-9]+')
-fi
 
 if [[ -z "${latest_version}" ]]; then
   print_error "Failed to retrieve the latest version of Draw.io Desktop. Skipping."

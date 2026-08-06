@@ -20,14 +20,20 @@
 
 print_step "Installing docker-credential-pass."
 
-# Get the latest version from the GitHub releases page (strip leading `v`).
-latest_version=$(gh_latest_tag docker/docker-credential-helpers | sed 's/^v//')
-
 # Check if the helper is already installed, and which version it is.
 installed_version=""
 if command -v docker-credential-pass >/dev/null 2>&1; then
   installed_version=$(docker-credential-pass version | grep -oP '\d+\.\d+\.\d+' | head -1)
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.  We can
+# also skip the CLI-plugin wiring, which makes sense only if the binary exists.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Get the latest version from the GitHub releases page (strip leading `v`).
+latest_version=$(gh_latest_tag docker/docker-credential-helpers | sed 's/^v//')
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "docker-credential-pass is already installed and at the latest version, v${installed_version}. Skipping."

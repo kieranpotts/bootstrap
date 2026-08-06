@@ -15,6 +15,11 @@ print_step "Installing Insomnia."
 # the installed version is current. We do the simple thing: install on a
 # fresh system; on subsequent runs, the user updates Insomnia in-app.
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! dpkg -s insomnia >/dev/null 2>&1; then
+  return 0
+fi
+
 if dpkg -s insomnia >/dev/null 2>&1; then
   print_info "Insomnia is already installed. Use the in-app updater to upgrade."
 

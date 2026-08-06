@@ -15,6 +15,19 @@ is_gui_enabled || return 0
 
 print_step "Installing Pied."
 
+# The extracted bundle embeds its own version number in a JSON asset - read
+# that back out to check whether Pied is installed, and if so, which version.
+installed_version=""
+version_file="/opt/pied/data/flutter_assets/version.json"
+if [[ -f "${version_file}" ]]; then
+  installed_version=$(jq -r '.version' "${version_file}")
+fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
 # Pied configures Speech Dispatcher to use Piper voices, so Speech Dispatcher
 # must be present for it to have anything to configure.
 superdo apt-get install -y speech-dispatcher
@@ -32,14 +45,6 @@ if [[ -z "${latest_version}" ]]; then
 else
 
   print_info "Latest available version of Pied is v${latest_version}."
-
-  # The extracted bundle embeds its own version number in a JSON asset -
-  # read that back out to check whether an update is needed.
-  installed_version=""
-  version_file="/opt/pied/data/flutter_assets/version.json"
-  if [[ -f "${version_file}" ]]; then
-    installed_version=$(jq -r '.version' "${version_file}")
-  fi
 
   if [[ "${installed_version}" == "${latest_version}" ]]; then
     print_info "Latest version of Pied, v${latest_version}, is already installed. Skipping."

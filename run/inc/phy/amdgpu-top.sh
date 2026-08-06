@@ -9,6 +9,11 @@
 
 print_step "Installing amdgpu_top."
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! dpkg -s amdgpu-top >/dev/null 2>&1; then
+  return 0
+fi
+
 # Get the latest version from the GitHub releases page (strip leading `v`).
 latest_version=$(gh_latest_tag Umio-Yasuno/amdgpu_top | sed 's/^v//')
 

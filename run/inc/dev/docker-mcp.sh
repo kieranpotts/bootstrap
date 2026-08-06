@@ -13,16 +13,21 @@
 
 print_step "Installing Docker MCP Gateway."
 
-# Every release of `docker/mcp-gateway` is flagged as a pre-release, so the
-# `/releases/latest` endpoint used by `gh_latest_tag` 404s. Read the most
-# recent tag from the full releases list instead (strip the leading `v`).
-latest_version=$(curl -s "https://api.github.com/repos/docker/mcp-gateway/releases" | grep -Po '"tag_name": "\K[^"]*' | head -1 | sed 's/^v//')
-
 # Check if the plugin is already installed, and which version it is.
 installed_version=""
 if docker mcp --version >/dev/null 2>&1; then
   installed_version=$(docker mcp --version | grep -oP '\d+\.\d+\.\d+')
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Every release of `docker/mcp-gateway` is flagged as a pre-release, so the
+# `/releases/latest` endpoint used by `gh_latest_tag` 404s. Read the most
+# recent tag from the full releases list instead (strip the leading `v`).
+latest_version=$(curl -s "https://api.github.com/repos/docker/mcp-gateway/releases" | grep -Po '"tag_name": "\K[^"]*' | head -1 | sed 's/^v//')
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Docker MCP Gateway is already installed and at the latest version, v${installed_version}. Skipping."

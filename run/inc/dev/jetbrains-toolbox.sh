@@ -30,6 +30,11 @@ is_toolbox_installed() {
   fi
 }
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! is_toolbox_installed; then
+  return 0
+fi
+
 if is_toolbox_installed; then
   print_info "JetBrains Toolbox is already installed. Skipping."
 else

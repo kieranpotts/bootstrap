@@ -10,16 +10,21 @@
 
 print_step "Installing Delta (git-delta)."
 
-# Target Delta version we want to install (Delta's tags have no leading `v`).
-latest_version=$(gh_latest_tag dandavison/delta)
-
-print_info "Latest available version of Delta is v${latest_version}."
-
 # Discover the installed version of Delta, if it exists.
 installed_version=""
 if dpkg -s git-delta >/dev/null 2>&1; then
   installed_version=$(dpkg -s git-delta | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Target Delta version we want to install (Delta's tags have no leading `v`).
+latest_version=$(gh_latest_tag dandavison/delta)
+
+print_info "Latest available version of Delta is v${latest_version}."
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Latest version of Delta, v${latest_version}, is already installed. Skipping."

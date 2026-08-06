@@ -14,6 +14,11 @@ print_step "Installing Proton Mail."
 # just check if a binary already exists for it. `which` returns a non-zero
 # exit code when the given command is not found. Suppress error output.
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! which proton-mail >/dev/null 2>&1; then
+  return 0
+fi
+
 if which proton-mail >/dev/null 2>&1; then
   print_info "Proton Mail is already installed. Skipping."
 else

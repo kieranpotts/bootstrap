@@ -11,6 +11,11 @@ is_gui_enabled || return 0
 
 print_step "Installing Proton VPN."
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! dpkg -s proton-vpn-gnome-desktop >/dev/null 2>&1; then
+  return 0
+fi
+
 if dpkg -s proton-vpn-gnome-desktop >/dev/null 2>&1; then
   print_info "Proton VPN is already installed. Skipping."
 else

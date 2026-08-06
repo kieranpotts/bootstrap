@@ -2,7 +2,8 @@
 
 ## [Unreleased]
 
-- feature: add `./run/update` for updating an already-provisioned
+- feature: add `./run/update` for updating an already-provisioned machine
+- refactor: `./run/update` skips installation of tools that already exist
 - feature: install amdgpu_top
 - feature: install orca screen reader
 - feature: install pied (UI for piper)

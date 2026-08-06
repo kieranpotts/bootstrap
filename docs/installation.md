@@ -25,6 +25,8 @@ first-time-only phases (system compatibility checks and base utility installs)
 and instead refreshes APT repositories, upgrades installed packages, and
 re-runs every per-tool install step. Each step is idempotent, so tools that
 are already current are left untouched and outdated ones are upgraded.
+`./run/update` never installs a tool that isn't already present — it only
+refreshes what's already there.
 
 ```
 ./run/update

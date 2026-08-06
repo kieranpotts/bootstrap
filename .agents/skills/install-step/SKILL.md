@@ -170,6 +170,41 @@ print an error message.
   - `is_gui_enabled` – true when `--gui` was passed
     (`install_gui=1`).
 
+  - `is_updating` – true when running under `run/update` rather than
+    `run/bootstrap` (`updating=1`, set only by `run/update`).
+
+- Guard update runs against redundant or unwanted installs.
+
+  `is_updating` (see above) must also be used to keep `run/update` from
+  redoing work `apt upgrade` already covers, or installing a tool for the
+  first time:
+
+  - A step that only calls `apt-get install`, with no extra config, must
+    no-op entirely on update, since `sys/upgrade.sh` already keeps the package
+    current:
+
+    ```bash
+    # No-op on `./run/update`. Package is kept current by `apt upgrade`.
+    is_updating && return 0
+
+    print_step "Install <apt-thing>"
+    # ...
+    ```
+
+  - A step using a non-APT mechanism (npm, curl, GitHub releases, pipx,
+    etc.) must never perform a first install on update — only upgrade a
+    tool that's already present:
+
+    ```bash
+    print_step "Install <thing>"
+
+    # No-op on `./run/update`. Don't install new tools when updating.
+    if is_updating && ! command -v <thing> >/dev/null 2>&1; then
+      return 0
+    fi
+    # ...
+    ```
+
 - One tool per file.
 
   Do not bundle unrelated installs into a single script. If a tool
@@ -289,6 +324,9 @@ for the temp-dir pattern.
 - The script is wired into `run_install_steps` in `run/inc/fn/install-steps.sh`
   in the correct group, alphabetically sorted.
 
+- The script guards against redundant or unwanted work on `./run/update`
+  (`is_updating`, as above).
+
 - The script passes `shellcheck` with no findings.
 
 - A changelog entry has been added under `[Unreleased]`.
@@ -302,6 +340,9 @@ for the temp-dir pattern.
   and `step`.
 
 - [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of `superdo`.
+
+- [`run/inc/fn/gui.sh`](../../run/inc/fn/gui.sh): Source of `is_gui_enabled`
+  and `is_updating`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh): The
   shared `run_install_steps` sequence that new steps are wired into.

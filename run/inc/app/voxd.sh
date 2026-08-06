@@ -10,13 +10,6 @@ is_gui_enabled || return 0
 
 print_step "Installing VOXD."
 
-# Find the AMD64 .deb asset URL from the latest release, then extract the
-# version number from its filename.
-deb_url=$(gh_asset_url jakovius/voxd '_amd64\.deb$')
-latest_version=$(echo "${deb_url}" | grep -Po 'voxd_\K[0-9]+\.[0-9]+\.[0-9]+-[0-9]+')
-
-print_info "Latest available version of VOXD is v${latest_version}."
-
 # Use dpkg to check the installed version. This is preferable to
 # using `voxd --version` because dpkg is authoritative for anything
 # installed via a .deb package.
@@ -24,6 +17,18 @@ installed_version=""
 if dpkg -s voxd >/dev/null 2>&1; then
   installed_version=$(dpkg -s voxd | grep -oP 'Version: \K[^ ]+')
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Find the AMD64 .deb asset URL from the latest release, then extract the
+# version number from its filename.
+deb_url=$(gh_asset_url jakovius/voxd '_amd64\.deb$')
+latest_version=$(echo "${deb_url}" | grep -Po 'voxd_\K[0-9]+\.[0-9]+\.[0-9]+-[0-9]+')
+
+print_info "Latest available version of VOXD is v${latest_version}."
 
 # Skip the installation if the latest version is already installed.
 if [[ -z "${latest_version}" ]]; then

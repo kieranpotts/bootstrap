@@ -11,6 +11,19 @@ is_gui_enabled || return 0
 
 print_step "Installing LM Studio."
 
+# Discover the installed version of LM Studio, if any. The installed binary
+# is `lm-studio` (hyphenated), and the dpkg package name matches. Use dpkg
+# rather than the binary because it's authoritative for apt-installed packages.
+installed_version=""
+if dpkg -s lm-studio >/dev/null 2>&1; then
+  installed_version=$(dpkg -s lm-studio | grep -oP 'Version: \K\d+\.\d+\.\d+')
+fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
 # Get the latest version by following the redirect from the canonical AppImage
 # download URL. The redirect target encodes the version in its path, e.g.:
 # https://installers.lmstudio.ai/linux/x64/0.4.11-1/LM-Studio-0.4.11-1-x64.AppImage
@@ -25,14 +38,6 @@ if [[ -z "${latest_version}" ]]; then
 fi
 
 print_info "Latest available version of LM Studio is v${latest_version}."
-
-# Discover the installed version of LM Studio, if any. The installed binary
-# is `lm-studio` (hyphenated), and the dpkg package name matches. Use dpkg
-# rather than the binary because it's authoritative for apt-installed packages.
-installed_version=""
-if dpkg -s lm-studio >/dev/null 2>&1; then
-  installed_version=$(dpkg -s lm-studio | grep -oP 'Version: \K\d+\.\d+\.\d+')
-fi
 
 # Compare on the 3-part semver only — the dpkg build suffix uses `+N` while
 # the upstream URL uses `-N`, so the suffixes can't be compared directly.

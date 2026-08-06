@@ -82,15 +82,42 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Feature toggles
 
-CLI flags are parsed at the top of `run/bootstrap` and stored as global
-variables that any sourced install step can inspect via helpers in
-`run/inc/utils.sh`:
+CLI flags are parsed at the top of `run/bootstrap` and `run/update`, and
+stored as global variables that any sourced install step can inspect via
+helper predicates in `run/inc/fn/gui.sh`:
 
 - **`--gui`** sets `install_gui=1`. Install steps that should only run with
   this flag must guard themselves with `is_gui_enabled || return 0`
   immediately before their `print_step` call.
 
 Defaults are conservative: with no flags, only CLI tooling is installed.
+
+`run/update` additionally sets `updating=1` (never set by `run/bootstrap`),
+exposed via `is_updating`. Install steps must guard against `run/update`
+performing package-manager work that's already covered, or a first-time
+install of a tool that isn't wanted:
+
+- Steps that only call `apt-get install`, with no extra config, must no-op
+  entirely on update — the package is already kept current by the blanket
+  `apt upgrade` in `sys/upgrade.sh`:
+
+  ```bash
+  is_updating && return 0
+  print_step "Installing <apt-thing>"
+  ...
+  ```
+
+- Steps using a non-APT install mechanism (npm, curl, GitHub releases, pipx,
+  etc.) must never perform a first install on update — only upgrade a tool
+  that's already present:
+
+  ```bash
+  print_step "Installing <thing>"
+  if is_updating && ! command -v <thing> >/dev/null 2>&1; then
+    return 0
+  fi
+  ...
+  ```
 
 ## Rules
 

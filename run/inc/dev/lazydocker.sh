@@ -9,14 +9,19 @@
 
 print_step "Installing LazyDocker."
 
-# Get the latest version from the GitHub releases page (strip leading `v`).
-latest_version=$(gh_latest_tag jesseduffield/lazydocker | sed 's/^v//')
-
 # Check if LazyDocker is already installed, and which version it is.
 installed_version=""
 if command -v lazydocker >/dev/null 2>&1; then
   installed_version=$(lazydocker --version | grep "Version:" | awk '{print $2}')
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Get the latest version from the GitHub releases page (strip leading `v`).
+latest_version=$(gh_latest_tag jesseduffield/lazydocker | sed 's/^v//')
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "LazyDocker is already installed and at the latest version, v${installed_version}. Skipping."

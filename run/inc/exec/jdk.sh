@@ -17,15 +17,20 @@ if [[ -s "${HOME}/.jabba/jabba.sh" ]]; then
   . "${HOME}/.jabba/jabba.sh"
 fi
 
-# Target Jabba version we want to install (Jabba's tags have no leading `v`).
-latest_version=$(gh_latest_tag shyiko/jabba)
-print_info "Latest available version of Jabba is v${latest_version}."
-
 # Discover the installed version of Jabba, if it exists.
 installed_version=""
 if command -v jabba >/dev/null 2>&1; then
   installed_version=$(jabba --version)
 fi
+
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && [[ -z "${installed_version}" ]]; then
+  return 0
+fi
+
+# Target Jabba version we want to install (Jabba's tags have no leading `v`).
+latest_version=$(gh_latest_tag shyiko/jabba)
+print_info "Latest available version of Jabba is v${latest_version}."
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Jabba v${latest_version} is already installed. Skipping."

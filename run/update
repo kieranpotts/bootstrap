@@ -11,9 +11,12 @@
 # `./run/update` is the lighter-weight companion to `./run/bootstrap`. It
 # assumes the target machine has already been bootstrapped, and skips the
 # first-time-only phases (system compatibility checks and base `util/*`
-# installs). It refreshes APT repositories, upgrades installed packages, and
-# re-runs every per-tool install step — each of which is idempotent, so
-# already-current tools are left as-is and outdated ones are upgraded.
+# installs). It refreshes APT repositories and upgrades installed packages
+# (`apt upgrade`), then re-runs every per-tool install step — each of which
+# is idempotent, so already-current tools are left as-is and outdated ones
+# are upgraded. Steps whose package is already covered by `apt upgrade`
+# no-op, and steps using a non-APT install mechanism only upgrade a tool
+# that is already installed — `./run/update` never performs a first install.
 #
 # To provision a machine from scratch, run `./run/bootstrap` instead.
 #
@@ -28,6 +31,11 @@ set -euo pipefail
 # Consumed by `is_gui_enabled` in `run/inc/fn/gui.sh`.
 # shellcheck disable=SC2034
 install_gui=0
+
+# Consumed by `is_updating` in `run/inc/fn/gui.sh`. Never set by `run/bootstrap`,
+# so install steps default to first-time-install behaviour.
+# shellcheck disable=SC2034
+updating=1
 
 for arg in "$@"; do
   case "${arg}" in

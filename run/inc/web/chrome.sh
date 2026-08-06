@@ -17,6 +17,11 @@ is_gui_enabled || return 0
 
 print_step "Installing Google Chrome."
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && ! dpkg -s google-chrome-stable >/dev/null 2>&1; then
+  return 0
+fi
+
 # Check if Google Chrome is already installed. We don't need to check for a
 # specific version, as we assume it will be auto-updating itself.
 if dpkg -s google-chrome-stable >/dev/null 2>&1; then

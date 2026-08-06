@@ -14,6 +14,10 @@
 # is expected to be prioritized as a package source.
 #
 
+# No-op on `./run/update`. Package is kept current by `apt upgrade`.
+# The group/service setup is one-time, can be skipped on `./run/update`.
+is_updating && return 0
+
 print_step "Installing Docker Community Edition."
 
 print_info "Installing/updating Docker CE via APT."

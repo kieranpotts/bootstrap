@@ -15,6 +15,11 @@ print_step "Installing Postman."
 # current, so on a fresh system we install; thereafter Postman's built-in
 # updater (Settings → Update) keeps it current.
 
+# No-op on `./run/update`. Don't install new tools when updating.
+if is_updating && { [[ ! -d "/opt/Postman" ]] || [[ ! -x "/opt/Postman/Postman" ]]; }; then
+  return 0
+fi
+
 # Check if Postman is already installed.
 if [[ -d "/opt/Postman" ]] && [[ -x "/opt/Postman/Postman" ]]; then
   print_info "Postman is already installed. Use Postman's in-app updater (Settings → Update) to upgrade."
