@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install FFmpeg
 - feature: install dive
 - feature: install editorconfig-checker
 - feature: install lynx
