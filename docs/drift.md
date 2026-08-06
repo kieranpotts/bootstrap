@@ -24,15 +24,19 @@ installs, for convenient quick-reference.
 | `cursor-gui`                 |     ✅      |     ✅     |
 | `deja-dup`                   |     ✅      |     ✅     |
 | `delta`                      |     ✅      |     ✅     |
+| `dive`                       |     ✅      |     —      |
 | `docker`                     |     ✅      |     ✅     |
 | `docker-credential-pass`     |     ✅      |     ✅     |
 | `docker-mcp`                 |     ✅      |     ✅     |
 | `drawio`                     |     ✅      |     ✅     |
 | `dropbox`                    |     ✅      |     ✅     |
 | `edge`                       |     ✅      |     ✅     |
+| `editorconfig-checker`       |     ✅      |     —      |
+| `ffmpeg`                     |     ✅      |     —      |
 | `firefox`                    |     ✅      |     ✅     |
 | `frame0`                     |     ✅      |     ✅     |
 | `gh`                         |     ✅      |     ✅     |
+| `gh-dash`                    |     ✅      |     —      |
 | `ghostty`                    |     ✅      |     ✅     |
 | `git`                        |     ✅      |     ✅     |
 | `git-lfs`                    |     ✅      |     ✅     |
@@ -41,6 +45,7 @@ installs, for convenient quick-reference.
 | `htop`                       |     ✅      |     ✅     |
 | `icoutils`                   |     ✅      |     ✅     |
 | `inotify-tools`              |     ✅      |     ✅     |
+| `inshellisense`              |     ✅      |     —      |
 | `insomnia`                   |     ✅      |     ✅     |
 | `jdk`                        |     ✅      |     ✅     |
 | `jetbrains-toolbox`          |     ✅      |     ✅     |
@@ -52,6 +57,7 @@ installs, for convenient quick-reference.
 | `litellm`                    |     ✅      |     ✅     |
 | `lmstudio`                   |     ✅      |     ✅     |
 | `lsb-release`                |     ✅      |     ✅     |
+| `lynx`                       |     ✅      |     —      |
 | `make`                       |     ✅      |     ✅     |
 | `maven`                      |     ✅      |     ✅     |
 | `mozilla-vpn`                |     ✅      |     ✅     |
