@@ -3,9 +3,10 @@
 #
 # Update an already-provisioned development environment.
 #
-# Usage: ./run/update [--gui]
+# Usage: ./run/update [--gui] [--yes]
 #
 #   --gui         Also update GUI applications.
+#   -y, --yes     Assume yes to all per-tool install/update prompts.
 #   -h, --help    Show this help and exit.
 #
 # `./run/update` is the lighter-weight companion to `./run/install`. It
@@ -37,14 +38,22 @@ install_gui=0
 # shellcheck disable=SC2034
 updating=1
 
+# Consumed by `is_yes_enabled` in `run/inc/fn/gui.sh`.
+# shellcheck disable=SC2034
+assume_yes=0
+
 for arg in "$@"; do
   case "${arg}" in
     --gui)
       # shellcheck disable=SC2034
       install_gui=1
       ;;
+    -y|--yes)
+      # shellcheck disable=SC2034
+      assume_yes=1
+      ;;
     -h|--help)
-      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,19p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)

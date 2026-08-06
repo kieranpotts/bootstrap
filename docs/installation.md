@@ -20,6 +20,35 @@
 > **Note:** `./run/install` was previously named `./run/bootstrap`. The old
 > name still works as a deprecated wrapper, but prefer `./run/install`.
 
+## Per-tool prompts
+
+For every application and developer/ops/hardware tool it installs or updates
+(the `web/*`, `app/*`, `dev/*`, `ops/*`, and `phy/*` categories), the
+bootstrap asks for confirmation before running that step:
+
+```
+Install/update LazyGit? (Y/n):
+```
+
+Pressing Enter, or answering anything other than `n`/`N`, runs the step;
+answering `n` skips it and moves on to the next tool. Lower-level bootstrap
+plumbing (base utilities, APT/package-repository setup, language runtimes)
+is not prompted and always runs.
+
+Pass `--yes`/`-y` to skip all of these prompts and assume yes, eg. for a
+fully unattended run:
+
+```
+./run/install --yes
+```
+
+> **Note:** Prompts are also skipped automatically — and every step
+> proceeds as if answered yes — whenever there's no terminal attached to
+> stdin (eg. inside a `docker build` layer, or a CI job). Piping *output*
+> to a log file (see [Logging output](#logging-output) below) does not by
+> itself suppress prompts, since stdin is untouched; pass `--yes` too if you
+> want a logged run to also be unattended.
+
 ## Updating an existing machine
 
 Once a machine has been bootstrapped, keep it up to date with `./run/update`.
@@ -35,10 +64,11 @@ refreshes what's already there.
 ./run/update
 ```
 
-Pass `--gui` to also update GUI applications:
+Pass `--gui` to also update GUI applications, and `--yes` to skip the
+per-tool prompts described above:
 
 ```
-./run/update --gui
+./run/update --gui --yes
 ```
 
 You may still need to run `./run/update` from time-to-time to get updates for

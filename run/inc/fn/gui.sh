@@ -51,3 +51,18 @@ is_gui_enabled() {
 is_updating() {
   [[ "${updating:-0}" -eq 1 ]]
 }
+
+# is_yes_enabled - Test whether prompts are pre-answered "yes" for the
+# current run.
+#
+# Reads the `assume_yes` flag set by `run/install` or `run/update` when
+# parsing CLI args (`--yes`/`-y`). Used by `confirm_step` (see
+# `run/inc/fn/steps.sh`) to skip its per-tool confirmation prompt and run the
+# step unconditionally.
+#
+# Returns:
+#   0 if `--yes`/`-y` was passed, 1 otherwise.
+#
+is_yes_enabled() {
+  [[ "${assume_yes:-0}" -eq 1 ]]
+}

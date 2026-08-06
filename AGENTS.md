@@ -40,10 +40,10 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   kept for machines/images pinned to older tags. New references MUST use
   `run/install` directly.
 
-- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, `superdo`,
-  `is_gui_enabled`, status printers, banners) and `install-steps.sh`, which
-  defines `run_install_steps` — the shared install/update step sequence that
-  both entry scripts run.
+- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`,
+  `confirm_step`, `superdo`, `is_gui_enabled`, status printers, banners) and
+  `install-steps.sh`, which defines `run_install_steps` — the shared
+  install/update step sequence that both entry scripts run.
 
 - **`run/inc/var/`**: Shared variables (ANSI codes).
 
@@ -74,11 +74,16 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`./run/install --gui`** to additionally install GUI applications.
 
+- **`./run/install --yes`** (or **`-y`**) to skip the per-tool
+  install/update prompts and assume yes to all of them.
+
 - **`./run/install --help`** to print the usage banner.
 
 - **`./run/update`** to update an already-provisioned machine (CLI tools only).
 
 - **`./run/update --gui`** to also update GUI applications.
+
+- **`./run/update --yes`** (or **`-y`**) to skip the per-tool prompts.
 
 - **`./run/update --help`** to print the usage banner.
 
@@ -94,7 +99,16 @@ helper predicates in `run/inc/fn/gui.sh`:
   this flag must guard themselves with `is_gui_enabled || return 0`
   immediately before their `print_step` call.
 
-Defaults are conservative: with no flags, only CLI tooling is installed.
+- **`--yes`/`-y`** sets `assume_yes=1`, exposed via `is_yes_enabled`.
+  Consumed by `confirm_step` (see `run/inc/fn/steps.sh`), which wraps
+  `step` with a per-tool `Install/update <name>? (Y/n):` prompt for the
+  `web/*`, `app/*`, `dev/*`, `ops/*`, and `phy/*` groups in
+  `run_install_steps`. The prompt defaults to yes and is skipped
+  entirely — the step always runs — when `--yes` was passed or stdin
+  is not a terminal (piped output, `docker build`, CI).
+
+Defaults are conservative: with no flags, only CLI tooling is installed
+(with a confirmation prompt per tool).
 
 `run/update` additionally sets `updating=1` (never set by `run/install`),
 exposed via `is_updating`. Install steps must guard against `run/update`

@@ -82,6 +82,44 @@ step() {
   fi
 }
 
+# confirm_step - Prompt for confirmation, then run a step via `step()`.
+#
+# Used for "one tool per script" steps (the app/*, dev/*, ops/*, phy/*, and
+# web/* categories in `run/inc/fn/install-steps.sh`) so the user can skip an
+# individual application or tool without editing the script. Declining skips
+# the step entirely: the underlying file is never sourced, its own
+# `print_step` banner never prints, and the skip does not count as a failure
+# in `FAILED_STEPS`.
+#
+# The prompt defaults to yes — pressing Enter, or any reply other than
+# `n`/`N`, runs the step. The prompt itself is skipped, and the step always
+# runs, when there is nothing to usefully prompt:
+#
+#   - `--yes`/`-y` was passed (`is_yes_enabled`).
+#   - stdin is not a terminal (piped output, `docker build`, CI) — mirrors
+#     the no-TTY fallback in `sys/checks.sh`, so unattended/logged runs
+#     (eg. `./run/install > install.log 2>&1`) still install everything.
+#
+# Arguments:
+#   $1 - Absolute path to the step file to source.
+#   $2 - Human-readable name of the application/tool, for the prompt text.
+#
+confirm_step() {
+  local file="$1"
+  local name="$2"
+
+  if ! is_yes_enabled && [[ -t 0 ]]; then
+    read -r -p "Install/update ${name}? (Y/n): " -n 1 -r
+    echo
+    if [[ "${REPLY}" =~ ^[Nn]$ ]]; then
+      print_info "Skipping ${name}."
+      return 0
+    fi
+  fi
+
+  step "${file}"
+}
+
 # print_step - Print a message announcing the start of a new step.
 #
 # Arguments:

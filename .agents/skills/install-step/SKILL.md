@@ -78,11 +78,25 @@ print an error message.
 
 3.  Wire the script into the step sequence.
 
-    Add a `step "${inc_path}/<group>/<name>.sh"` line to `run_install_steps`
-    in `run/inc/fn/install-steps.sh`, in the correct group, keeping the lines
-    within that group sorted alphabetically. `run_install_steps` is the shared
-    sequence that both `run/install` and `run/update` run, so a step added
-    here automatically runs on fresh bootstraps and on update passes.
+    Add a line to `run_install_steps` in `run/inc/fn/install-steps.sh`, in
+    the correct group, keeping the lines within that group sorted
+    alphabetically. `run_install_steps` is the shared sequence that both
+    `run/install` and `run/update` run, so a step added here automatically
+    runs on fresh bootstraps and on update passes.
+
+    For the "one tool per script" groups — `web/`, `app/`, `dev/`, `ops/`,
+    `phy/` — wire it with `confirm_step`, not `step`, so the user gets a
+    per-tool Y/n prompt before it runs:
+
+    ```bash
+    confirm_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
+    ```
+
+    The second argument is the human-readable name shown in the prompt
+    (`Install/update <Program Name>? (Y/n):`) — use the same name that
+    follows "Installing " in the script's own `print_step` message.
+    Lower-level plumbing (`sys/`, `util/`, `exec/`, `pkg/`) keeps using
+    plain `step`, unprompted.
 
     First-time-only steps (system compatibility checks in `sys/checks.sh`
     and base `util/*` installs) are the exception: they live inline in
@@ -172,6 +186,10 @@ print an error message.
 
   - `is_updating` – true when running under `run/update` rather than
     `run/install` (`updating=1`, set only by `run/update`).
+
+  - `is_yes_enabled` – true when `--yes`/`-y` was passed (`assume_yes=1`).
+    Consumed by `confirm_step` itself (see step 3, above); individual
+    install scripts don't need to check it.
 
 - Guard update runs against redundant or unwanted installs.
 
@@ -322,7 +340,9 @@ for the temp-dir pattern.
 - The first non-comment line is a `print_step` call.
 
 - The script is wired into `run_install_steps` in `run/inc/fn/install-steps.sh`
-  in the correct group, alphabetically sorted.
+  in the correct group, alphabetically sorted — via `confirm_step` (with a
+  display name) for the `web/`, `app/`, `dev/`, `ops/`, `phy/` groups, or
+  plain `step` for lower-level plumbing.
 
 - The script guards against redundant or unwanted work on `./run/update`
   (`is_updating`, as above).
@@ -336,13 +356,13 @@ for the temp-dir pattern.
 - [`./AGENTS.md`](../../AGENTS.md): Project-level rules this skill
   builds on.
 
-- [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh): Source of `print_step`
-  and `step`.
+- [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh): Source of `print_step`,
+  `step`, and `confirm_step`.
 
 - [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of `superdo`.
 
-- [`run/inc/fn/gui.sh`](../../run/inc/fn/gui.sh): Source of `is_gui_enabled`
-  and `is_updating`.
+- [`run/inc/fn/gui.sh`](../../run/inc/fn/gui.sh): Source of `is_gui_enabled`,
+  `is_updating`, and `is_yes_enabled`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh): The
   shared `run_install_steps` sequence that new steps are wired into.

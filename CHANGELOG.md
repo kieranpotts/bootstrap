@@ -16,6 +16,8 @@
 - feature: install codespell
 - feature: enable oh-my-posh auto-updates
 - feature: install lazynpm
+- feature: prompt for confirmation before each app/dev/ops/phy/web install or update
+- feature: add `--yes`/`-y` to skip all prompts
 
 ## [1.5.0] - 2026-07-24
 
