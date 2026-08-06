@@ -48,6 +48,7 @@ installs, for convenient quick-reference.
 | `keepassxc`                  |     ✅      |     ✅     |
 | `lazydocker`                 |     ✅      |     ✅     |
 | `lazygit`                    |     ✅      |     ✅     |
+| `lazynpm`                    |     ✅      |     —      |
 | `litellm`                    |     ✅      |     ✅     |
 | `lmstudio`                   |     ✅      |     ✅     |
 | `lsb-release`                |     ✅      |     ✅     |

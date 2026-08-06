@@ -15,6 +15,7 @@
 - feature: install Docker MCP Gateway (`docker mcp`)
 - feature: install codespell
 - feature: enable oh-my-posh auto-updates
+- feature: install lazynpm
 
 ## [1.5.0] - 2026-07-24
 

@@ -101,6 +101,7 @@ run_install_steps() {
   step "${inc_path}/dev/jetbrains-toolbox.sh"
   step "${inc_path}/dev/lazydocker.sh"
   step "${inc_path}/dev/lazygit.sh"
+  step "${inc_path}/dev/lazynpm.sh"
   step "${inc_path}/dev/lmstudio.sh"
   step "${inc_path}/dev/maven.sh"
   step "${inc_path}/dev/neovim.sh"
