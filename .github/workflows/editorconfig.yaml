@@ -1,0 +1,44 @@
+#
+# Validate every tracked file against `.editorconfig`.
+#
+
+name: EditorConfig
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  check-editorconfig:
+    name: Check EditorConfig compliance
+    runs-on: ubuntu-latest
+
+    # Pinned so a new upstream release cannot turn this job red on its own.
+    # Bump deliberately: https://github.com/editorconfig-checker/editorconfig-checker/releases
+    env:
+      EC_VERSION: 3.8.0
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Upstream ships a prebuilt binary per OS/arch - no apt package or
+      # `.deb` - so install it the same way `run/inc/dev/editorconfig-checker.sh`
+      # does, and under the same short `ec` name.
+      - name: Install editorconfig-checker
+        run: |
+          curl -Lo /tmp/ec.tar.gz \
+            "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v${EC_VERSION}/ec-linux-amd64.tar.gz"
+          tar xf /tmp/ec.tar.gz -C /tmp bin/ec-linux-amd64
+          sudo install /tmp/bin/ec-linux-amd64 /usr/local/bin/ec
+
+      # `.editorconfig-checker.json` disables the IndentSize check only. The
+      # rest (trailing whitespace, final newline, line endings, charset,
+      # indent style) is enforced. IndentSize would otherwise reject the
+      # three-space continuation indents that Markdown ordered lists require,
+      # which are correct Markdown and not an `.editorconfig` violation.
+      - name: Run editorconfig-checker
+        run: ec

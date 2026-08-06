@@ -1,0 +1,32 @@
+#
+# Check for common misspellings in tracked files.
+#
+
+name: Codespell
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  check-spelling:
+    name: Check spelling
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # `pipx` is pre-installed on ubuntu-latest runners, and is how
+      # `run/inc/dev/codespell.sh` installs codespell locally too.
+      - name: Install codespell
+        run: pipx install codespell
+
+      # Codespell only reports words it is confident are misspellings, so a
+      # finding is worth fixing rather than suppressing. If a false positive
+      # does turn up, add it to an ignore list rather than dropping the check.
+      - name: Run codespell
+        run: codespell --skip='./.git'
