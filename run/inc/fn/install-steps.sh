@@ -17,28 +17,33 @@
 #   - Hardware tooling (`phy/*`)
 #   - `.bashrc` configuration and cleanup (`sys/bashrc.sh`, `sys/teardown.sh`)
 #
-# The web/app/dev/ops/phy categories are "one tool per script", so each of
-# those runs via `confirm_step` rather than `step` directly — the user gets
-# a per-tool Y/n prompt (see `run/inc/fn/steps.sh`) and can skip individual
-# applications/tools without editing this file. Every other category
-# (apt/pkg/sys setup) always runs unprompted, since those steps are
-# bootstrap plumbing rather than a discrete tool the user might opt out of.
+# This file is the single source of truth for *what each profile installs*.
+# Every step is classified here, at the call site, rather than by a guard
+# inside the step file - so the answer to "what is actually in my image?"
+# fits on one screen, instead of being scattered across ninety files:
 #
-# A handful of steps that would otherwise be `confirm_step` calls run via
-# `core_step` instead: tooling useful to a coding agent working unattended
-# in a headless container, as well as on a full workstation. `core_step`
-# always runs, unprompted, in every profile. Passing `--profile=agent` (see
-# `is_agent_profile`) skips every `confirm_step` outright, so the resulting
-# install is exactly the `core_step` set plus the always-on plumbing above.
-# See `docs/tools.md` for the full breakdown of what installs where.
+#   agent_step    Runs in every profile. The minimal tooling a coding agent
+#                 needs to work unattended in a headless container.
+#   tui_step      Runs in `tui` (the default) and `gui`. Needs a human, but
+#                 no display.
+#   gui_step      Runs in `gui` only. Needs a display.
+#   step          Runs in every profile, unconditionally. Reserved for the
+#                 sys/* plumbing that has to run before anything else.
+#
+# A second, independent rule governs prompting: a call that passes a display
+# name is a discrete tool, and the user is asked before it runs; a call
+# without one is plumbing, and runs unannounced. That is why the `pkg/*`
+# registries are silent while the tools they serve are not. See
+# `profile_step` in `run/inc/fn/steps.sh`, and `docs/tools.md` for the table
+# this file produces.
 #
 
 # run_install_steps - Run the shared install/update step sequence.
 #
 # Requires the caller to have already sourced the helper functions in
-# `run/inc/fn/*.sh` (notably `step`, `confirm_step`, and `print_step`) and
-# set `inc_path`. Each step runs via `step()` in an isolated subshell, so a
-# single failure is logged and does not abort the run.
+# `run/inc/fn/*.sh` (notably `step`, the `*_step` profile wrappers, and
+# `print_step`) and set `inc_path`. Each step runs via `step()` in an isolated
+# subshell, so a single failure is logged and does not abort the run.
 #
 # shellcheck disable=SC2154 # `inc_path` is set by the caller.
 run_install_steps() {
@@ -46,116 +51,118 @@ run_install_steps() {
   # APT setup.
   step "${inc_path}/sys/apt.sh"
 
-  # Add package repositories.
-  step "${inc_path}/pkg/bruno.sh"
+  # Add package repositories. Those serving nothing but GUI applications are
+  # `gui_step`s: registering a repository the run can never install from only
+  # slows down `apt update` and leaves a key on the machine for nothing.
+  gui_step "${inc_path}/pkg/bruno.sh"
   step "${inc_path}/pkg/docker.sh"
-  step "${inc_path}/pkg/ghostty.sh"
+  gui_step "${inc_path}/pkg/ghostty.sh"
   step "${inc_path}/pkg/git-lfs.sh"
   step "${inc_path}/pkg/github.sh"
   step "${inc_path}/pkg/hashicorp.sh"
-  step "${inc_path}/pkg/keepassxc.sh"
-  step "${inc_path}/pkg/microsoft.sh"
-  step "${inc_path}/pkg/mozilla.sh"
-  step "${inc_path}/pkg/sourcegit.sh"
-  step "${inc_path}/pkg/vscodium.sh"
-  step "${inc_path}/pkg/warp.sh"
+  gui_step "${inc_path}/pkg/keepassxc.sh"
+  gui_step "${inc_path}/pkg/microsoft.sh"
+  gui_step "${inc_path}/pkg/mozilla.sh"
+  gui_step "${inc_path}/pkg/sourcegit.sh"
+  gui_step "${inc_path}/pkg/vscodium.sh"
+  gui_step "${inc_path}/pkg/warp.sh"
 
   # Refresh package lists with the new repositories, then upgrade everything
   # (base system + anything newly available via the added repos).
   step "${inc_path}/sys/update.sh"
   step "${inc_path}/sys/upgrade.sh"
 
-  # Runtime (execution) environments. Node and Python are core - most agent
-  # CLIs are npm-installed, and a lot of tooling is Python. The others are
-  # workstation-only: not every machine (or agent container) needs a JVM,
-  # PHP, Rust, or a full Docker Engine of its own.
-  confirm_step "${inc_path}/exec/docker.sh" "Docker CE"
-  confirm_step "${inc_path}/exec/jdk.sh" "OpenJDK (via Jabba)"
-  core_step "${inc_path}/exec/node.sh"
-  confirm_step "${inc_path}/exec/php.sh" "PHP (via phpenv)"
-  core_step "${inc_path}/exec/python.sh"
-  confirm_step "${inc_path}/exec/rust.sh" "Rust (via Rustup)"
+  # Runtime (execution) environments. Node and Python are in every profile -
+  # most agent CLIs are npm-installed, and a lot of tooling is Python. The
+  # others need a human to have asked for them: not every machine (or agent
+  # container) needs a JVM, PHP, Rust, or a full Docker Engine of its own.
+  tui_step "${inc_path}/exec/docker.sh" "Docker CE"
+  tui_step "${inc_path}/exec/jdk.sh" "OpenJDK (via Jabba)"
+  agent_step "${inc_path}/exec/node.sh"
+  tui_step "${inc_path}/exec/php.sh" "PHP (via phpenv)"
+  agent_step "${inc_path}/exec/python.sh"
+  tui_step "${inc_path}/exec/rust.sh" "Rust (via Rustup)"
 
   # Web browsers.
-  confirm_step "${inc_path}/web/chrome.sh" "Google Chrome"
-  confirm_step "${inc_path}/web/edge.sh" "Microsoft Edge"
-  confirm_step "${inc_path}/web/firefox.sh" "Firefox"
+  gui_step "${inc_path}/web/chrome.sh" "Google Chrome"
+  gui_step "${inc_path}/web/edge.sh" "Microsoft Edge"
+  gui_step "${inc_path}/web/firefox.sh" "Firefox"
 
   # Applications.
-  confirm_step "${inc_path}/app/deja-dup.sh" "Déjà Dup Backups"
-  confirm_step "${inc_path}/app/drawio.sh" "Draw.io"
-  confirm_step "${inc_path}/app/dropbox.sh" "Dropbox"
-  confirm_step "${inc_path}/app/keepassxc.sh" "KeePassXC"
-  confirm_step "${inc_path}/app/mozilla-vpn.sh" "Mozilla VPN"
-  confirm_step "${inc_path}/app/obsidian.sh" "Obsidian"
-  confirm_step "${inc_path}/app/open-webui.sh" "Open WebUI"
-  confirm_step "${inc_path}/app/orca.sh" "Orca"
-  confirm_step "${inc_path}/app/pass.sh" "pass"
-  confirm_step "${inc_path}/app/pied.sh" "Pied"
-  confirm_step "${inc_path}/app/proton-mail.sh" "Proton Mail"
-  confirm_step "${inc_path}/app/proton-vpn.sh" "Proton VPN"
-  confirm_step "${inc_path}/app/voxd.sh" "VOXD"
-  confirm_step "${inc_path}/app/xpdf-reader.sh" "XPDF Reader"
+  gui_step "${inc_path}/app/deja-dup.sh" "Déjà Dup Backups"
+  gui_step "${inc_path}/app/drawio.sh" "Draw.io"
+  gui_step "${inc_path}/app/dropbox.sh" "Dropbox"
+  gui_step "${inc_path}/app/keepassxc.sh" "KeePassXC"
+  gui_step "${inc_path}/app/mozilla-vpn.sh" "Mozilla VPN"
+  gui_step "${inc_path}/app/obsidian.sh" "Obsidian"
+  gui_step "${inc_path}/app/open-webui.sh" "Open WebUI"
+  gui_step "${inc_path}/app/orca.sh" "Orca"
+  tui_step "${inc_path}/app/pass.sh" "pass"
+  gui_step "${inc_path}/app/pied.sh" "Pied"
+  gui_step "${inc_path}/app/proton-mail.sh" "Proton Mail"
+  gui_step "${inc_path}/app/proton-vpn.sh" "Proton VPN"
+  gui_step "${inc_path}/app/voxd.sh" "VOXD"
+  tui_step "${inc_path}/app/xpdf-reader.sh" "XPDF Reader"
 
   # Dev tools.
-  confirm_step "${inc_path}/dev/aider.sh" "Aider"
-  confirm_step "${inc_path}/dev/bruno.sh" "Bruno"
-  confirm_step "${inc_path}/dev/claude.sh" "Claude Code"
-  confirm_step "${inc_path}/dev/cline.sh" "Cline Kanban"
-  core_step "${inc_path}/dev/codespell.sh"
-  confirm_step "${inc_path}/dev/continue.sh" "Continue CLI"
-  confirm_step "${inc_path}/dev/copilot.sh" "Copilot CLI"
-  confirm_step "${inc_path}/dev/ctop.sh" "ctop"
-  confirm_step "${inc_path}/dev/cursor-cli.sh" "Cursor CLI"
-  confirm_step "${inc_path}/dev/cursor-gui.sh" "Cursor GUI"
-  core_step "${inc_path}/dev/delta.sh"
-  confirm_step "${inc_path}/dev/dive.sh" "Dive"
-  confirm_step "${inc_path}/dev/docker-credential-pass.sh" "docker-credential-pass"
-  confirm_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
-  core_step "${inc_path}/dev/editorconfig-checker.sh"
-  confirm_step "${inc_path}/dev/ffmpeg.sh" "FFmpeg"
-  confirm_step "${inc_path}/dev/frame0.sh" "Frame0"
-  core_step "${inc_path}/dev/gh.sh"
-  confirm_step "${inc_path}/dev/gh-dash.sh" "gh-dash"
-  confirm_step "${inc_path}/dev/ghostty.sh" "Ghostty"
-  core_step "${inc_path}/dev/git-lfs.sh"
-  confirm_step "${inc_path}/dev/hermes-agent.sh" "Hermes Agent"
-  confirm_step "${inc_path}/dev/inshellisense.sh" "inshellisense"
-  confirm_step "${inc_path}/dev/insomnia.sh" "Insomnia"
-  confirm_step "${inc_path}/dev/jetbrains-toolbox.sh" "JetBrains Toolbox"
-  confirm_step "${inc_path}/dev/lazydocker.sh" "LazyDocker"
-  confirm_step "${inc_path}/dev/lazygit.sh" "LazyGit"
-  confirm_step "${inc_path}/dev/lazynpm.sh" "LazyNpm"
-  confirm_step "${inc_path}/dev/lmstudio.sh" "LM Studio"
-  confirm_step "${inc_path}/dev/lynx.sh" "Lynx"
-  confirm_step "${inc_path}/dev/maven.sh" "Maven"
-  confirm_step "${inc_path}/dev/neovim.sh" "Neovim"
-  confirm_step "${inc_path}/dev/oh-my-posh.sh" "Oh-My-Posh"
-  confirm_step "${inc_path}/dev/ollama.sh" "Ollama"
-  confirm_step "${inc_path}/dev/openclaw.sh" "OpenClaw"
-  confirm_step "${inc_path}/dev/opencode.sh" "OpenCode"
-  confirm_step "${inc_path}/dev/pi.sh" "Pi Coding Agent"
-  confirm_step "${inc_path}/dev/postman.sh" "Postman"
-  core_step "${inc_path}/dev/pre-commit.sh"
-  confirm_step "${inc_path}/dev/qwen-code.sh" "Qwen Code"
-  core_step "${inc_path}/dev/shellcheck.sh"
-  core_step "${inc_path}/dev/skills-ref.sh"
-  confirm_step "${inc_path}/dev/sourcegit.sh" "SourceGit"
-  core_step "${inc_path}/dev/tmux.sh"
-  confirm_step "${inc_path}/dev/vscode.sh" "Visual Studio Code"
-  confirm_step "${inc_path}/dev/vscode-insiders.sh" "Visual Studio Code Insiders"
-  confirm_step "${inc_path}/dev/vscodium.sh" "VS Codium"
-  confirm_step "${inc_path}/dev/warp.sh" "Warp"
-  confirm_step "${inc_path}/dev/zed.sh" "Zed"
+  tui_step "${inc_path}/dev/aider.sh" "Aider"
+  gui_step "${inc_path}/dev/bruno.sh" "Bruno"
+  tui_step "${inc_path}/dev/claude.sh" "Claude Code"
+  tui_step "${inc_path}/dev/cline.sh" "Cline Kanban"
+  agent_step "${inc_path}/dev/codespell.sh"
+  tui_step "${inc_path}/dev/continue.sh" "Continue CLI"
+  tui_step "${inc_path}/dev/copilot.sh" "Copilot CLI"
+  tui_step "${inc_path}/dev/ctop.sh" "ctop"
+  tui_step "${inc_path}/dev/cursor-cli.sh" "Cursor CLI"
+  gui_step "${inc_path}/dev/cursor-gui.sh" "Cursor GUI"
+  agent_step "${inc_path}/dev/delta.sh"
+  tui_step "${inc_path}/dev/dive.sh" "Dive"
+  tui_step "${inc_path}/dev/docker-credential-pass.sh" "docker-credential-pass"
+  tui_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
+  agent_step "${inc_path}/dev/editorconfig-checker.sh"
+  tui_step "${inc_path}/dev/ffmpeg.sh" "FFmpeg"
+  gui_step "${inc_path}/dev/frame0.sh" "Frame0"
+  agent_step "${inc_path}/dev/gh.sh"
+  tui_step "${inc_path}/dev/gh-dash.sh" "gh-dash"
+  gui_step "${inc_path}/dev/ghostty.sh" "Ghostty"
+  agent_step "${inc_path}/dev/git-lfs.sh"
+  tui_step "${inc_path}/dev/hermes-agent.sh" "Hermes Agent"
+  tui_step "${inc_path}/dev/inshellisense.sh" "inshellisense"
+  gui_step "${inc_path}/dev/insomnia.sh" "Insomnia"
+  gui_step "${inc_path}/dev/jetbrains-toolbox.sh" "JetBrains Toolbox"
+  tui_step "${inc_path}/dev/lazydocker.sh" "LazyDocker"
+  tui_step "${inc_path}/dev/lazygit.sh" "LazyGit"
+  tui_step "${inc_path}/dev/lazynpm.sh" "LazyNpm"
+  gui_step "${inc_path}/dev/lmstudio.sh" "LM Studio"
+  tui_step "${inc_path}/dev/lynx.sh" "Lynx"
+  tui_step "${inc_path}/dev/maven.sh" "Maven"
+  tui_step "${inc_path}/dev/neovim.sh" "Neovim"
+  tui_step "${inc_path}/dev/oh-my-posh.sh" "Oh-My-Posh"
+  tui_step "${inc_path}/dev/ollama.sh" "Ollama"
+  tui_step "${inc_path}/dev/openclaw.sh" "OpenClaw"
+  tui_step "${inc_path}/dev/opencode.sh" "OpenCode"
+  tui_step "${inc_path}/dev/pi.sh" "Pi Coding Agent"
+  gui_step "${inc_path}/dev/postman.sh" "Postman"
+  agent_step "${inc_path}/dev/pre-commit.sh"
+  tui_step "${inc_path}/dev/qwen-code.sh" "Qwen Code"
+  agent_step "${inc_path}/dev/shellcheck.sh"
+  agent_step "${inc_path}/dev/skills-ref.sh"
+  gui_step "${inc_path}/dev/sourcegit.sh" "SourceGit"
+  agent_step "${inc_path}/dev/tmux.sh"
+  gui_step "${inc_path}/dev/vscode.sh" "Visual Studio Code"
+  gui_step "${inc_path}/dev/vscode-insiders.sh" "Visual Studio Code Insiders"
+  gui_step "${inc_path}/dev/vscodium.sh" "VS Codium"
+  gui_step "${inc_path}/dev/warp.sh" "Warp"
+  gui_step "${inc_path}/dev/zed.sh" "Zed"
 
   # Ops tools.
-  confirm_step "${inc_path}/ops/aws.sh" "AWS CLI"
-  confirm_step "${inc_path}/ops/litellm.sh" "LiteLLM"
-  confirm_step "${inc_path}/ops/terraform.sh" "Terraform"
+  tui_step "${inc_path}/ops/aws.sh" "AWS CLI"
+  tui_step "${inc_path}/ops/litellm.sh" "LiteLLM"
+  tui_step "${inc_path}/ops/terraform.sh" "Terraform"
 
   # Hardware utilities.
-  confirm_step "${inc_path}/phy/amdgpu-top.sh" "amdgpu_top"
-  confirm_step "${inc_path}/phy/rocm.sh" "ROCm utilities"
+  tui_step "${inc_path}/phy/amdgpu-top.sh" "amdgpu_top"
+  tui_step "${inc_path}/phy/rocm.sh" "ROCm utilities"
 
   # Tidy up.
   step "${inc_path}/sys/bashrc.sh"

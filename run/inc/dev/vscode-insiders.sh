@@ -7,8 +7,6 @@
 # https://github.com/microsoft/vscode/
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Visual Studio Code Insiders."
 
 # No-op on `./run/update`. Don't install new tools when updating.

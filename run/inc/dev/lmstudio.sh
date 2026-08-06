@@ -7,8 +7,6 @@
 # https://lmstudio.ai/
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing LM Studio."
 
 # Discover the installed version of LM Studio, if any. The installed binary

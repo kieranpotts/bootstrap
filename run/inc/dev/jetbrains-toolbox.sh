@@ -10,8 +10,6 @@
 # https://www.jetbrains.com/help/idea/installation-guide.html#toolbox
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing JetBrains Toolbox."
 
 # Configuration.

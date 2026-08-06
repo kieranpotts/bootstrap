@@ -13,8 +13,6 @@
 # https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-google-chrome-for-linux
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Google Chrome."
 
 # No-op on `./run/update`. Don't install new tools when updating.

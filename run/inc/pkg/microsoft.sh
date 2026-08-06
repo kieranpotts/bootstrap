@@ -7,11 +7,6 @@
 # https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions
 #
 
-# Everything served by these registries is a GUI app (web/edge.sh and
-# dev/vscode.sh, both installed only when --gui is passed), so there is no
-# point adding them without GUI installs.
-is_gui_enabled || return 0
-
 print_step "Adding Microsoft's official package registry."
 
 if [[ -f /usr/share/keyrings/microsoft.gpg ]] \

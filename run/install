@@ -3,18 +3,20 @@
 #
 # Main entry point for the development environment bootstrapper.
 #
-# Usage: ./run/install [--gui] [--yes] [--profile=agent]
+# Usage: ./run/install [--profile=agent|tui|gui] [--yes]
 #
-#   --gui             Also install GUI applications (in addition to CLI tools).
+#   --profile=agent   The minimal tooling a coding agent needs to work
+#                     unattended in a headless container.
+#   --profile=tui     Everything in `agent`, plus the tools that need a human
+#                     at a terminal but no display. The default.
+#   --profile=gui     Everything in `tui`, plus applications, browsers, and
+#                     editors that need a display.
 #   -y, --yes         Assume yes to all per-tool install/update prompts.
-#   --profile=agent   Install only the "core" step set - the minimal tooling
-#                     a coding agent needs in a headless container. Skips
-#                     every web/app/dev/ops/phy tool that would otherwise
-#                     run via a per-tool prompt. See docs/tools.md.
 #   -h, --help        Show this help and exit.
 #
-# `./run/bootstrap` still exists as a deprecated wrapper around this script,
-# for machines/images pinned to older tags. Prefer `./run/install` directly.
+# The profiles are cumulative, and `docs/tools.md` lists what each one
+# installs. `./run/bootstrap` still exists as a deprecated wrapper around this
+# script, for machines/images pinned to older tags. Prefer `./run/install`.
 #
 
 # Strict mode for the entry-point script:
@@ -38,35 +40,32 @@ set -euo pipefail
 
 # Feature toggles:
 
-# Consumed by `is_gui_enabled` in `run/inc/fn/gui.sh`.
-# shellcheck disable=SC2034
-install_gui=0
-
-# Consumed by `is_yes_enabled` in `run/inc/fn/gui.sh`.
+# Consumed by `is_yes_enabled` in `run/inc/fn/profile.sh`.
 # shellcheck disable=SC2034
 assume_yes=0
 
-# Consumed by `is_agent_profile` in `run/inc/fn/gui.sh`. Empty string means
-# the default "workstation" profile (every step runs, subject to --gui/--yes).
+# Consumed by the profile predicates in `run/inc/fn/profile.sh`, and through
+# them by the `*_step` wrappers in `run/inc/fn/steps.sh`. Defaults to `tui`:
+# a human at a terminal, with no display.
 # shellcheck disable=SC2034
-profile=""
+profile="tui"
 
 for arg in "$@"; do
   case "${arg}" in
-    --gui)
-      # shellcheck disable=SC2034
-      install_gui=1
-      ;;
     -y|--yes)
       # shellcheck disable=SC2034
       assume_yes=1
       ;;
-    --profile=agent)
+    --profile=agent|--profile=tui|--profile=gui)
       # shellcheck disable=SC2034
-      profile="agent"
+      profile="${arg#--profile=}"
+      ;;
+    --gui)
+      echo "\`--gui\` has been replaced by \`--profile=gui\`." >&2
+      exit 1
       ;;
     -h|--help)
-      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,19p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)
@@ -112,9 +111,9 @@ fi
 
 . "${inc_path}/fn/bashrc-protect.sh"
 . "${inc_path}/fn/gh-release.sh"
-. "${inc_path}/fn/gui.sh"
 . "${inc_path}/fn/install-steps.sh"
 . "${inc_path}/fn/os.sh"
+. "${inc_path}/fn/profile.sh"
 . "${inc_path}/fn/statuses.sh"
 . "${inc_path}/fn/steps.sh"
 . "${inc_path}/fn/superdo.sh"

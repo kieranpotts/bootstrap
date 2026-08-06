@@ -7,8 +7,6 @@
 # https://help.dropbox.com/installs/linux-commands
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Dropbox."
 
 # Configuration.

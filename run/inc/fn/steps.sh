@@ -57,7 +57,7 @@ EOF
 #     bootstrap — the failure is logged and the next step runs.
 #
 # Functions and variables defined in the parent shell (print_*, superdo,
-# is_gui_enabled, ${bashrc}, ${inc_path}, etc.) are inherited automatically.
+# is_updating, ${bashrc}, ${inc_path}, etc.) are inherited automatically.
 # State changes made inside the step (variable mutations, `cd`) do NOT
 # propagate back to the parent — by design.
 #
@@ -82,64 +82,51 @@ step() {
   fi
 }
 
-# core_step - Run a step that belongs in every profile, including "agent".
+# profile_step - Run a step if the current profile includes it, prompting
+# first if the step is a discrete tool the user might want to skip.
 #
-# A thin wrapper around `step()`, used at the call site in
-# `run/inc/fn/install-steps.sh` to mark a step as core: useful to a coding
-# agent working unattended inside a minimal container, as well as on a full
-# workstation. Core steps always run, unprompted, in both profiles.
+# The shared implementation behind `agent_step`, `tui_step`, and `gui_step`.
+# Two independent rules apply, and both are decided here rather than inside
+# the step file:
 #
-# This exists as a distinct name (rather than calling `step` directly) so
-# that "what's in the agent profile" is answered by grep'ing for
-# `core_step` calls in one file, instead of being scattered across guards
-# inside dozens of step files. See `docs/tools.md` for the resulting table.
+#   - Profile. The step runs only when the requested profile is at least the
+#     one this call site requires (see `profile_at_least`). Filtering is
+#     silent: a step left out of the profile prints nothing, because
+#     `docs/tools.md` already documents what each profile contains.
 #
-# Arguments:
-#   $1 - Absolute path to the step file to source.
+#   - Prompt. A step called *with* a display name is a discrete tool, and the
+#     user is asked before it runs. A step called *without* one is bootstrap
+#     plumbing (APT setup, package registries) and runs unannounced. The
+#     prompt defaults to yes: pressing Enter, or any reply other than `n`/`N`,
+#     runs the step.
 #
-core_step() {
-  step "$1"
-}
-
-# confirm_step - Prompt for confirmation, then run a step via `step()`.
+# Declining a prompt skips the step entirely: the file is never sourced, its
+# own `print_step` banner never prints, and the skip is not recorded as a
+# failure in `FAILED_STEPS`.
 #
-# Used for "one tool per script" steps (the app/*, dev/*, ops/*, phy/*, and
-# web/* categories in `run/inc/fn/install-steps.sh`) so the user can skip an
-# individual application or tool without editing the script. Declining skips
-# the step entirely: the underlying file is never sourced, its own
-# `print_step` banner never prints, and the skip does not count as a failure
-# in `FAILED_STEPS`.
-#
-# Under the "agent" profile (`--profile=agent`, see `is_agent_profile`),
-# every `confirm_step` is skipped outright — no prompt, no fallback to
-# yes/no defaults. The agent profile installs only `core_step` steps (plus
-# the always-on `sys/*`/`util/*`/`pkg/*` plumbing); confirm_step exists for
-# exactly the tools a workstation user might want but a headless agent
-# container has no use for.
-#
-# Otherwise, the prompt defaults to yes — pressing Enter, or any reply other
-# than `n`/`N`, runs the step. The prompt itself is skipped, and the step
-# always runs, when there is nothing to usefully prompt:
+# The prompt itself is skipped - and the step runs - when there is nothing to
+# usefully prompt:
 #
 #   - `--yes`/`-y` was passed (`is_yes_enabled`).
 #   - stdin is not a terminal (piped output, `docker build`, CI) — mirrors
 #     the no-TTY fallback in `sys/checks.sh`, so unattended/logged runs
-#     (eg. `./run/install > install.log 2>&1`) still install everything.
+#     (eg. `./run/install > install.log 2>&1`) still install everything in
+#     the requested profile.
 #
 # Arguments:
-#   $1 - Absolute path to the step file to source.
-#   $2 - Human-readable name of the application/tool, for the prompt text.
+#   $1 - Minimum profile this step belongs to (`agent`, `tui`, or `gui`).
+#   $2 - Absolute path to the step file to source.
+#   $3 - Optional human-readable name of the tool, for the prompt text.
+#        Omit for plumbing that should never prompt.
 #
-confirm_step() {
-  local file="$1"
-  local name="$2"
+profile_step() {
+  local required="$1"
+  local file="$2"
+  local name="${3:-}"
 
-  if is_agent_profile; then
-    print_info "Skipping ${name} (not part of the agent profile)."
-    return 0
-  fi
+  profile_at_least "${required}" || return 0
 
-  if ! is_yes_enabled && [[ -t 0 ]]; then
+  if [[ -n "${name}" ]] && ! is_yes_enabled && [[ -t 0 ]]; then
     read -r -p "Install/update ${name}? (Y/n): " -n 1 -r
     echo
     if [[ "${REPLY}" =~ ^[Nn]$ ]]; then
@@ -149,6 +136,48 @@ confirm_step() {
   fi
 
   step "${file}"
+}
+
+# agent_step - Run a step in every profile, including `agent`.
+#
+# The minimal tooling a coding agent needs to work unattended in a headless
+# container, and which a human workstation wants too. Called without a display
+# name, so it never prompts: these are the tools the bootstrap considers
+# non-negotiable.
+#
+# Arguments:
+#   $1 - Absolute path to the step file to source.
+#   $2 - Optional display name. Rarely wanted; passing one makes a core tool
+#        skippable at the prompt.
+#
+agent_step() {
+  profile_step "agent" "$1" "${2:-}"
+}
+
+# tui_step - Run a step in the `tui` and `gui` profiles.
+#
+# Tools that need a human present but no display. The default profile, and the
+# right home for anything that is not clearly core to a headless container.
+#
+# Arguments:
+#   $1 - Absolute path to the step file to source.
+#   $2 - Optional display name, for the prompt. Omit for plumbing.
+#
+tui_step() {
+  profile_step "tui" "$1" "${2:-}"
+}
+
+# gui_step - Run a step in the `gui` profile only.
+#
+# Applications, browsers, and editors that need a display, plus the package
+# registries that serve nothing else.
+#
+# Arguments:
+#   $1 - Absolute path to the step file to source.
+#   $2 - Optional display name, for the prompt. Omit for plumbing.
+#
+gui_step() {
+  profile_step "gui" "$1" "${2:-}"
 }
 
 # print_step - Print a message announcing the start of a new step.

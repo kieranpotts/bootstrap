@@ -6,8 +6,6 @@
 # https://zed.dev/docs/installation
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Zed."
 
 # No-op on `./run/update`. Don't install new tools when updating.

@@ -4,8 +4,6 @@
 # Install Frame0.
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Frame0."
 
 # Check installed version (if any).

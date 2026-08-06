@@ -7,8 +7,6 @@
 # https://protonvpn.com/support/linux-cli
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Proton VPN."
 
 # No-op on `./run/update`. Don't install new tools when updating.

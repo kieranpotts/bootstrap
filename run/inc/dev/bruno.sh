@@ -6,8 +6,6 @@
 # https://www.usebruno.com/
 #
 
-is_gui_enabled || return 0
-
 # No-op on `./run/update`. Package is kept current by `apt upgrade`.
 is_updating && return 0
 

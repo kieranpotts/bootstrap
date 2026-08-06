@@ -6,8 +6,6 @@
 # https://github.com/jakovius/voxd
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing VOXD."
 
 # Use dpkg to check the installed version. This is preferable to

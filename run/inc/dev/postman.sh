@@ -6,8 +6,6 @@
 # https://learning.postman.com/docs/getting-started/installation/installation-and-updates
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Postman."
 
 # Postman ships as a tarball with no version in the download URL, and no

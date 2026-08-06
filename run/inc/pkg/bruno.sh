@@ -6,10 +6,6 @@
 # https://docs.usebruno.com/get-started/bruno-basics/download#linux
 #
 
-# Bruno is a GUI app (installed by dev/bruno.sh only when --gui is passed), so
-# there is no point adding its registry without GUI installs.
-is_gui_enabled || return 0
-
 print_step "Adding Bruno's official package registry."
 
 if [[ -f /etc/apt/keyrings/bruno.gpg ]] && [[ -f /etc/apt/sources.list.d/bruno.list ]]; then

@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+- feature: replace `--gui` with a single `--profile=agent|tui|gui` flag,
+  defaulting to `tui` - BREAKING. The three profiles are cumulative, and
+  `--gui` now exits with an error pointing at `--profile=gui`. What each
+  profile installs is unchanged from the previous flag combinations:
+  `--profile=tui` matches the old flagless run, `--profile=gui` the old
+  `--gui` run.
+- refactor: declare profile membership at the call site, via `agent_step`,
+  `tui_step`, and `gui_step` in `run/inc/fn/install-steps.sh`, replacing
+  `core_step`/`confirm_step` and removing the `is_gui_enabled` guard from 37
+  install steps. Install steps no longer branch on the profile at all
+- refactor: rename `run/inc/fn/gui.sh` to `run/inc/fn/profile.sh`, and
+  replace `is_gui_enabled` with `profile_at_least`
+- refactor: prompting is now decided by whether a call site passes a display
+  name, independently of the profile. Steps outside the selected profile are
+  skipped silently
 - feature: install FFmpeg
 - feature: install dive
 - feature: install editorconfig-checker
@@ -25,23 +40,22 @@
 - feature: install Docker MCP Gateway (`docker mcp`)
 - feature: install codespell
 - fix: use `superdo` (not `sudo` directly) for ROCm and Microsoft Edge installs
-- feature: add `--profile=agent` to `./run/install`/`./run/update`, and a
-  `core_step` install-step tier, for a minimal tool set suited to a coding
+- feature: add the `agent` profile, a minimal tool set suited to a coding
   agent in a headless container - see `docs/tools.md`
-- feature: install Node.js and Python via the agent profile (`core_step`)
-- refactor: install Docker CE, OpenJDK, PHP, and Rust via `confirm_step`
-  instead of unconditionally, so they're skippable and excluded from the
-  agent profile
-- refactor: recategorize Open WebUI as a GUI app (`run/inc/app/`, gated by
-  `--gui`), not a CLI dev tool
+- feature: install Node.js and Python in every profile, including `agent`
+- refactor: install Docker CE, OpenJDK, PHP, and Rust via a prompt instead
+  of unconditionally, so they're skippable and excluded from the `agent`
+  profile
+- refactor: recategorize Open WebUI as a GUI app (`run/inc/app/`, in the
+  `gui` profile), not a CLI dev tool
 - fix: FFmpeg install no longer pulls in a MIDI soundfont
   (`--no-install-recommends`)
-- docs: add `docs/tools.md`, an Agent/CLI/GUI table of what installs where
+- docs: add `docs/tools.md`, an Agent/TUI/GUI table of what installs where
 - fix: lint `run/install` and `run/update` in the ShellCheck workflow - the
   `find` pattern only matched `*.sh` files and `run/bootstrap`
 - fix: `./run/update --help` no longer truncates its usage banner
   mid-sentence
-- docs: document `--profile=agent` in `docs/installation.md`, and correct
+- docs: document the install profiles in `docs/installation.md`, and correct
   the claim that language runtimes are never prompted
 - docs: correct `docs/considerations.md`, which claimed the bootstrap does
   not install Docker

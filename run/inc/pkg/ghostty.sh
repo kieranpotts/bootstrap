@@ -7,10 +7,6 @@
 # https://github.com/mkasberg/ghostty-ubuntu
 #
 
-# Ghostty is a GUI app (installed by dev/ghostty.sh only when --gui is passed), so
-# there is no point adding its registry without GUI installs.
-is_gui_enabled || return 0
-
 print_step "Adding community Ubuntu package registry for Ghostty."
 
 # The registry is an Ubuntu PPA, which only resolves on the Ubuntu family. Skip on

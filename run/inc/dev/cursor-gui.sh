@@ -6,8 +6,6 @@
 # https://cursor.com/download
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Cursor GUI."
 
 # Discover the installed version of Cursor, if any.

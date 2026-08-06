@@ -13,8 +13,6 @@
 # interface, not something scripts or agents drive directly.
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Open WebUI."
 
 # Open WebUI runs as a long-lived container, which requires a running Docker

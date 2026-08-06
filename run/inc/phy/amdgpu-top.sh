@@ -38,8 +38,9 @@ else
     print_info "Installing/updating amdgpu_top from .deb package."
 
     # The "without_gui" build is the plain terminal-UI tool, with no GTK/egui
-    # dependencies - this is a hardware monitoring CLI, not a desktop app, so
-    # it installs regardless of `--gui` (see `run/inc/phy/rocm.sh`).
+    # dependencies - this is a hardware monitoring TUI, not a desktop app,
+    # which is why the step sits in the `tui` profile (see
+    # `run/inc/fn/install-steps.sh`).
     deb_url=$(gh_asset_url Umio-Yasuno/amdgpu_top 'amdgpu-top_without_gui_.*_amd64\.deb$')
 
     if [[ -z "${deb_url}" ]]; then

@@ -6,8 +6,6 @@
 # https://developer.konghq.com/insomnia/
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Insomnia."
 
 # Insomnia's update URL is opaque (the redirect target doesn't expose a

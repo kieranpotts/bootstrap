@@ -87,41 +87,48 @@ print an error message.
     `run/install` and `run/update` run, so a step added here automatically
     runs on fresh bootstraps and on update passes.
 
-    There are three call-site wrappers, and the choice between them _is_
-    the policy decision — it is not expressed inside the step file:
+    The wrapper you call it with declares which profile the step belongs
+    to. That choice _is_ the policy decision, and it is made here — never
+    inside the step file. The profiles are cumulative
+    (`agent` ⊆ `tui` ⊆ `gui`):
 
-    - `confirm_step` — the default for the "one tool per script" groups
-      (`web/`, `app/`, `exec/`, `dev/`, `ops/`, `phy/`). The user gets a
-      per-tool Y/n prompt, and the step is skipped outright under
-      `--profile=agent`:
+    - `tui_step` — the default. Tools that need a human at a terminal, but
+      no display. Installed by a bare `./run/install`:
 
       ```bash
-      confirm_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
+      tui_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
       ```
 
       The second argument is the human-readable name shown in the prompt
       (`Install/update <Program Name>? (Y/n):`) — use the same name that
       follows "Installing " in the script's own `print_step` message.
 
-    - `core_step` — for a step from those same groups that also belongs in
-      the agent profile: the minimal tooling a coding agent needs to work
-      unattended in a headless container. Always runs, unprompted, in
-      every profile:
+    - `gui_step` — tools that need a display: applications, browsers,
+      editors. Installed only by `./run/install --profile=gui`. Same
+      arguments as `tui_step`.
+
+    - `agent_step` — tools that belong in a minimal, unattended, headless
+      container, and that the bootstrap therefore treats as
+      non-negotiable. Called *without* a display name, so it never
+      prompts:
 
       ```bash
-      core_step "${inc_path}/<group>/<name>.sh"
+      agent_step "${inc_path}/<group>/<name>.sh"
       ```
 
-      Use it only if the tool belongs in a minimal, unattended, headless
-      container — not merely because most workstations want it. Anything
-      needing a human at a terminal (TUIs, prompt cosmetics), a display,
-      or physical hardware is not core. When in doubt use `confirm_step`:
-      it is the safe default, and still installs unprompted on any
-      non-interactive run outside the agent profile (`docker build`, CI,
-      `--yes`).
+      Use it only if a coding agent genuinely needs the tool with no human
+      present — not merely because most workstations want it. Anything
+      needing a human at a terminal (TUIs, prompt cosmetics), a display, or
+      physical hardware is not an agent tool. When in doubt use `tui_step`.
 
-    - `step` — lower-level plumbing only (`sys/`, `util/`, `pkg/`).
-      Unprompted, in every profile.
+    - `step` — reserved for the `sys/*` plumbing that must run in every
+      profile before anything else. Not for tools.
+
+    Passing a display name is what makes a step prompt, independently of
+    the profile. `pkg/*` registry steps are therefore called without one:
+    they are plumbing, and run unannounced. Use `gui_step` for a registry
+    whose packages are all `gui_step`s, so the other profiles do not
+    register a repository they can never install from.
 
     Sort alphabetically by filename within the group regardless of which
     wrapper the line uses — do not group by wrapper.
@@ -158,10 +165,10 @@ print an error message.
     so update them in the same change:
 
     - `docs/tools.md`: add, remove, or amend the program's row in the
-      Agent/CLI/GUI table. Agent is ✅ only for a `core_step` call; GUI is
-      ✅ only for a step guarded by `is_gui_enabled`; CLI is ✅ for
-      everything else that runs by default. Keep the table sorted by
-      program name.
+      Agent/TUI/GUI table. The columns are cumulative, so a ✅ in one
+      profile implies a ✅ in every profile to its right: `agent_step` is
+      ✅ in all three, `tui_step` in TUI and GUI, `gui_step` in GUI only.
+      Keep the table sorted by program name.
 
     - `docs/drift.md`: add or remove the program's row, recording whether
       the private `hacksltd` bootstrapper installs it too.
@@ -215,38 +222,28 @@ print an error message.
   self-narrating, and is the contract that downstream scripts depend on
   for step numbering.
 
-- Guard optional steps with feature toggles.
+- Never branch on the profile inside an install step.
 
-  CLI flags parsed by `run/install` and `run/update` are exposed as
-  helper predicates in `run/inc/fn/gui.sh`. An install step that should
-  only run under a given flag must short-circuit before its `print_step`
-  call so the step number is not consumed:
+  Profile membership is declared at the call site (step 3, above). An
+  install step that is not in a profile is simply not called with that
+  profile's wrapper — it does not check, and must not check, which profile
+  is running. The predicates in `run/inc/fn/profile.sh` exist for the
+  wrappers, not for step files:
 
   ```bash
-  # GUI-only install. No-op unless `--gui` was passed.
-  is_gui_enabled || return 0
+  # ❌ No. This is what the call site is for.
+  is_agent_profile && return 0
 
-  print_step "Installing <gui-thing>."
-  # ...
+  # ✅ Yes. Nothing about the profile appears in the step file at all.
+  print_step "Installing <thing>."
   ```
 
-  Available helpers:
-
-  - `is_gui_enabled` – true when `--gui` was passed
-    (`install_gui=1`).
-
-  - `is_updating` – true when running under `run/update` rather than
-    `run/install` (`updating=1`, set only by `run/update`).
-
-  - `is_yes_enabled` – true when `--yes`/`-y` was passed (`assume_yes=1`).
-    Consumed by `confirm_step` itself (see step 3, above); individual
-    install scripts don't need to check it.
-
-  - `is_agent_profile` – true when `--profile=agent` was passed
-    (`profile="agent"`). Also consumed by `confirm_step` itself: profile
-    membership is decided at the call site by `core_step` vs
-    `confirm_step` (see step 3, above), so an install script must not
-    check this predicate itself.
+  The one predicate an install step does legitimately use is
+  `is_updating` (below). `is_yes_enabled` and `profile_at_least` are
+  consumed by the step wrappers themselves. `is_agent_profile` exists for
+  the rare step that must know it is provisioning a headless container —
+  eg. to skip a check that can only pass on real hardware — and is not a
+  substitute for classifying the step correctly at the call site.
 
 - Guard update runs against redundant or unwanted installs.
 
@@ -406,9 +403,12 @@ helper in `run/inc/fn/gh-release.sh`.
 - The first non-comment line is a `print_step` call.
 
 - The script is wired into `run_install_steps` in `run/inc/fn/install-steps.sh`
-  in the correct group, alphabetically sorted — via `confirm_step` (with a
-  display name) or `core_step` for the `web/`, `app/`, `exec/`, `dev/`,
-  `ops/`, `phy/` groups, or plain `step` for lower-level plumbing.
+  in the correct group, alphabetically sorted, via the wrapper for the
+  profile it belongs to — `agent_step`, `tui_step`, or `gui_step` — with a
+  display name unless it is plumbing.
+
+- The script contains no reference to the profile. Membership lives at the
+  call site only.
 
 - The script guards against redundant or unwanted work on `./run/update`
   (`is_updating`, as above).
@@ -424,12 +424,14 @@ helper in `run/inc/fn/gh-release.sh`.
   builds on.
 
 - [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh): Source of `print_step`,
-  `step`, `core_step`, and `confirm_step`.
+  `step`, `profile_step`, and the `agent_step`/`tui_step`/`gui_step`
+  wrappers.
 
 - [`run/inc/fn/superdo.sh`](../../run/inc/fn/superdo.sh): Source of `superdo`.
 
-- [`run/inc/fn/gui.sh`](../../run/inc/fn/gui.sh): Source of `is_gui_enabled`,
-  `is_updating`, `is_yes_enabled`, and `is_agent_profile`.
+- [`run/inc/fn/profile.sh`](../../run/inc/fn/profile.sh): Source of
+  `profile_at_least`, `is_agent_profile`, `is_updating`, and
+  `is_yes_enabled`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh): The
   shared `run_install_steps` sequence that new steps are wired into.

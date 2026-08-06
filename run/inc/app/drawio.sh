@@ -4,8 +4,6 @@
 # Install Draw.io.
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Draw.io."
 
 installed_version=""

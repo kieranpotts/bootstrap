@@ -6,8 +6,6 @@
 # https://proton.me/support/mail-desktop-app
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Proton Mail."
 
 # Proton Mail does not appear to have versioned releases, so we will

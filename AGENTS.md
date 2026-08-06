@@ -40,11 +40,11 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   kept for machines/images pinned to older tags. New references MUST use
   `run/install` directly.
 
-- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`,
-  `core_step`, `confirm_step`, `superdo`, `is_gui_enabled`,
-  `is_agent_profile`, status printers, banners) and `install-steps.sh`,
-  which defines `run_install_steps` — the shared install/update step
-  sequence that both entry scripts run.
+- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, the
+  `agent_step`/`tui_step`/`gui_step` profile wrappers, `superdo`, status
+  printers, banners), `profile.sh` (the profile predicates and runtime
+  toggles), and `install-steps.sh`, which defines `run_install_steps` — the
+  shared install/update step sequence that both entry scripts run.
 
 - **`run/inc/var/`**: Shared variables (ANSI codes).
 
@@ -72,27 +72,20 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Tools
 
-- **`./run/install`** to provision a target machine from scratch (CLI tools
-  only).
+- **`./run/install`** to provision a target machine from scratch, in the
+  default `tui` profile.
 
-- **`./run/install --gui`** to additionally install GUI applications.
+- **`./run/install --profile=agent`** for the minimal tooling a coding agent
+  needs in a headless container, or **`--profile=gui`** for the full
+  workstation install. See `docs/tools.md`.
 
 - **`./run/install --yes`** (or **`-y`**) to skip the per-tool
   install/update prompts and assume yes to all of them.
 
-- **`./run/install --profile=agent`** to install only the `core_step` set —
-  the minimal tooling a coding agent needs in a headless container. See
-  `docs/tools.md`.
-
 - **`./run/install --help`** to print the usage banner.
 
-- **`./run/update`** to update an already-provisioned machine (CLI tools only).
-
-- **`./run/update --gui`** to also update GUI applications.
-
-- **`./run/update --yes`** (or **`-y`**) to skip the per-tool prompts.
-
-- **`./run/update --profile=agent`** to update only the `core_step` set.
+- **`./run/update`** to update an already-provisioned machine. Takes the same
+  `--profile` and `--yes` flags, with the same default.
 
 - **`./run/update --help`** to print the usage banner.
 
@@ -107,36 +100,45 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
   All three run in CI on every push — see `.github/workflows/`.
 
-## Feature toggles
+## Install profiles
 
-CLI flags are parsed at the top of `run/install` and `run/update`, and
-stored as global variables that any sourced install step can inspect via
-helper predicates in `run/inc/fn/gui.sh`:
+`--profile` is the only axis controlling *what* gets installed. It answers
+"who is driving this machine?", and the three answers are cumulative —
+`agent` ⊆ `tui` ⊆ `gui`:
 
-- **`--gui`** sets `install_gui=1`. Install steps that should only run with
-  this flag must guard themselves with `is_gui_enabled || return 0`
-  immediately before their `print_step` call.
+- **`agent`** — nobody. A headless container running coding agents, eg.
+  `docker-devcontainer`. No human to prompt, no display.
+- **`tui`** — a human at a terminal, with no display. **The default.**
+- **`gui`** — a human at a desktop. The full workstation install.
 
-- **`--yes`/`-y`** sets `assume_yes=1`, exposed via `is_yes_enabled`.
-  Consumed by `confirm_step` (see `run/inc/fn/steps.sh`), which wraps
-  `step` with a per-tool `Install/update <name>? (Y/n):` prompt for the
-  `web/*`, `app/*`, `dev/*`, `ops/*`, and `phy/*` groups in
-  `run_install_steps`. The prompt defaults to yes and is skipped
-  entirely — the step always runs — when `--yes` was passed or stdin
-  is not a terminal (piped output, `docker build`, CI).
+`tui` names the *environment*, not the shape of the tools: that profile holds
+plenty of non-interactive CLIs (`aws`, `ffmpeg`, `terraform`) alongside actual
+terminal UIs.
 
-- **`--profile=agent`** sets `profile="agent"`, exposed via
-  `is_agent_profile`. Consumed by `confirm_step`, which skips its step
-  outright (no prompt, no fallback) whenever the agent profile is active.
-  The resulting install is exactly the `core_step` set, plus the always-on
-  `sys/*`/`util/*`/`pkg/*` plumbing. Intended for headless containers (eg.
-  `docker-devcontainer`) where there is no human to prompt and no display.
-  Any other `--profile=<value>` is rejected as an unknown argument.
+Profile membership is declared **at the call site** in
+`run/inc/fn/install-steps.sh`, via `agent_step`, `tui_step`, or `gui_step` —
+never by a guard inside a step file. That keeps "what does this profile
+install?" answerable by reading one file, and it is why `run/inc/fn/steps.sh`
+has three wrappers rather than one. `docs/tools.md` is the rendered summary.
 
-Defaults are conservative: with no flags, only CLI tooling is installed
-(with a confirmation prompt per tool).
+A second, independent rule governs prompting: a call that passes a display
+name is a discrete tool and prompts before running; a call without one is
+plumbing and runs unannounced. The prompt defaults to yes, and is skipped
+entirely — the step still runs — when `--yes`/`-y` was passed
+(`is_yes_enabled`) or stdin is not a terminal (piped output, `docker build`,
+CI). Steps outside the selected profile are skipped silently, without a
+prompt.
 
-`run/update` additionally sets `updating=1` (never set by `run/install`),
+The predicates behind all of this live in `run/inc/fn/profile.sh`:
+`profile_at_least` (used by the wrappers), `is_agent_profile`,
+`is_yes_enabled`, and `is_updating`. An unrecognised `--profile=<value>` is
+rejected at parse time. There is no `--gui` flag; it was replaced by
+`--profile=gui`, and passing it now exits with an error pointing at the
+replacement.
+
+## Update runs
+
+`run/update` sets `updating=1` (never set by `run/install`),
 exposed via `is_updating`. Install steps must guard against `run/update`
 performing package-manager work that's already covered, or a first-time
 install of a tool that isn't wanted:
@@ -180,21 +182,23 @@ install of a tool that isn't wanted:
   within that group, so it runs on both `./run/install` and `./run/update`.
   First-time-only steps (system checks, base `util/*` installs) are the
   exception and live inline in `run/install`. Alphabetical order is by
-  filename regardless of whether the call uses `core_step` or
-  `confirm_step` — do not group by step type.
+  filename regardless of which wrapper the call uses — do not group by
+  profile.
 
-- MUST call a `web/*`, `app/*`, `dev/*`, `ops/*`, or `phy/*` step via
-  `core_step` only if it belongs in a minimal, unattended, headless coding
-  agent container — not merely "something most workstations want". When in
-  doubt, use `confirm_step`: it is the safe default, and still installs
-  unprompted on any non-interactive `./run/install` run outside the agent
-  profile (`docker build`, CI, `--yes`). Update `docs/tools.md` to match
-  whichever you choose.
+- MUST declare profile membership at the call site, never inside a step
+  file. An install step MUST NOT branch on the profile: if it does not
+  belong in a profile, it is simply not called with that profile's wrapper.
 
-- MUST guard a `pkg/*` registry step with `is_gui_enabled || return 0` when
-  every package that registry serves is installed by a GUI-gated step.
-  Registering a repository the run can never install from only slows down
-  `apt update` and adds a key to the machine (or image) for nothing.
+- MUST use `agent_step` only for a step that belongs in a minimal,
+  unattended, headless coding agent container — not merely "something most
+  workstations want". `tui_step` is the safe default. Use `gui_step` when
+  the tool needs a display. Update `docs/tools.md` to match whichever you
+  choose.
+
+- MUST call a `pkg/*` registry via `gui_step` when every package that
+  registry serves is itself a `gui_step`. Registering a repository the run
+  can never install from only slows down `apt update` and adds a key to the
+  machine (or image) for nothing.
 
 - MUST target Debian-based distros only. Do not add steps that assume other
   package managers besides APT.
@@ -226,9 +230,9 @@ install of a tool that isn't wanted:
   doesn't fall out of sync.
 
 - SHOULD update `docs/tools.md` when adding, removing, or reclassifying an
-  install step (`step`/`core_step`/`confirm_step`, or adding/removing an
-  `is_gui_enabled` guard), so the Agent/CLI/GUI table stays a trustworthy
-  summary of `run_install_steps`.
+  install step (moving it between `agent_step`, `tui_step`, and `gui_step`),
+  so the Agent/TUI/GUI table stays a trustworthy summary of
+  `run_install_steps`.
 
 ## Skills
 

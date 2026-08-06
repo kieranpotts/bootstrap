@@ -11,8 +11,6 @@
 # https://github.com/OHF-Voice/piper1-gpl
 #
 
-is_gui_enabled || return 0
-
 print_step "Installing Pied."
 
 # The extracted bundle embeds its own version number in a JSON asset - read
