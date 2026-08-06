@@ -75,6 +75,7 @@ installs, for convenient quick-reference.
 | `qwen-code`                  |     ✅      |     ✅     |
 | `ripgrep`                    |     ✅      |     ✅     |
 | `rocm`                       |     ✅      |     —      |
+| `rust`                       |     ✅      |     —      |
 | `shellcheck`                 |     ✅      |     ✅     |
 | `skills-ref`                 |     ✅      |     ✅     |
 | `software-properties-common` |     ✅      |     ✅     |
