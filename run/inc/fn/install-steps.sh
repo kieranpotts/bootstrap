@@ -112,6 +112,7 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/lazygit.sh" "LazyGit"
   confirm_step "${inc_path}/dev/lazynpm.sh" "LazyNpm"
   confirm_step "${inc_path}/dev/lmstudio.sh" "LM Studio"
+  confirm_step "${inc_path}/dev/lynx.sh" "Lynx"
   confirm_step "${inc_path}/dev/maven.sh" "Maven"
   confirm_step "${inc_path}/dev/neovim.sh" "Neovim"
   confirm_step "${inc_path}/dev/oh-my-posh.sh" "Oh-My-Posh"

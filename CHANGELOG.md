@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install lynx
 - feature: install gh-dash
 - feature: install inshellisense
 - feature: install lazynpm
