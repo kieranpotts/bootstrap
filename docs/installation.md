@@ -41,6 +41,10 @@ Pass `--gui` to also update GUI applications:
 ./run/update --gui
 ```
 
+You may still need to run `./run/update` from time-to-time to get updates for
+components  that are installed directly from `.DEB` package downloads, and 
+other mechanisms that bypass the APT package manager.
+
 Run `./run/update --help` to print the usage banner.
 
 > **Note:** `./run/update` assumes the machine has already been provisioned
