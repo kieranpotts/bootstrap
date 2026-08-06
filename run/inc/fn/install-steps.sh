@@ -99,6 +99,7 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/delta.sh" "Delta (git-delta)"
   confirm_step "${inc_path}/dev/docker-credential-pass.sh" "docker-credential-pass"
   confirm_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
+  confirm_step "${inc_path}/dev/editorconfig-checker.sh" "editorconfig-checker"
   confirm_step "${inc_path}/dev/frame0.sh" "Frame0"
   confirm_step "${inc_path}/dev/gh.sh" "GitHub CLI"
   confirm_step "${inc_path}/dev/gh-dash.sh" "gh-dash"
