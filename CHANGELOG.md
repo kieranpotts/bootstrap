@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install gh-dash
 - feature: install inshellisense
 - feature: install lazynpm
 - feature: prompt for confirmation before each app/dev/ops/phy/web install or update

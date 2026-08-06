@@ -101,6 +101,7 @@ run_install_steps() {
   confirm_step "${inc_path}/dev/docker-mcp.sh" "Docker MCP Gateway"
   confirm_step "${inc_path}/dev/frame0.sh" "Frame0"
   confirm_step "${inc_path}/dev/gh.sh" "GitHub CLI"
+  confirm_step "${inc_path}/dev/gh-dash.sh" "gh-dash"
   confirm_step "${inc_path}/dev/ghostty.sh" "Ghostty"
   confirm_step "${inc_path}/dev/git-lfs.sh" "Git LFS"
   confirm_step "${inc_path}/dev/hermes-agent.sh" "Hermes Agent"
