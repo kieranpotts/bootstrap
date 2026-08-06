@@ -10,4 +10,4 @@ is_updating && return 0
 print_step "Installing ROCm utilities."
 
 # ROCm System Management Interface.
-sudo apt-get install rocm-smi -y
+superdo apt-get install rocm-smi -y

@@ -14,4 +14,4 @@ is_updating && return 0
 print_step "Installing Microsoft Edge."
 
 print_info "Installing Microsoft Edge (stable channel) via APT."
-sudo apt-get install -y microsoft-edge-stable
+superdo apt-get install -y microsoft-edge-stable
