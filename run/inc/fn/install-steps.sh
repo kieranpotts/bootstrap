@@ -56,6 +56,7 @@ run_install_steps() {
   step "${inc_path}/exec/node.sh"
   step "${inc_path}/exec/php.sh"
   step "${inc_path}/exec/python.sh"
+  step "${inc_path}/exec/rust.sh"
 
   # Web browsers.
   step "${inc_path}/web/chrome.sh"

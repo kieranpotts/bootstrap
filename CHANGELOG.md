@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- feature: install Rust and Cargo via Rustup
 - refactor: rename `./run/bootstrap` to `./run/install`; `./run/bootstrap` remains as a deprecated wrapper
 - feature: add `./run/update` for updating an already-provisioned machine
 - refactor: `./run/update` skips installation of tools that already exist
