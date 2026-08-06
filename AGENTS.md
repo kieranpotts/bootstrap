@@ -65,7 +65,9 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`run/inc/phy/`**: Hardware-related tooling (eg. ROCm).
 
-- **`docs/`**: Installation, requirements, releasing, and considerations.
+- **`docs/`**: Installation, requirements, releasing, considerations, drift
+  (vs. the private `hacksltd` bootstrapper), and architecture decision
+  records (`docs/adr/`).
 
 ## Tools
 
@@ -170,13 +172,17 @@ install of a tool that isn't wanted:
 - SHOULD add an "[Unreleased]" entry to `CHANGELOG.md` when adding,
   removing, or materially changing an install step.
 
+- SHOULD add a row to `docs/drift.md` when adding or removing an install
+  step, so the comparison against the private `hacksltd` bootstrapper
+  doesn't fall out of sync.
+
 ## Skills
 
 The following skills, scoped to this project, are installed in the
-`./agents/skills/` directory:
+`.agents/skills/` directory:
 
-- [**`./agents/skills/apt/SKILL.md`**](./skills/apt/SKILL.md):
+- [**`.agents/skills/apt/SKILL.md`**](./.agents/skills/apt/SKILL.md):
   Use the APT package manager correctly in bootstrap scripts.
 
-- [**`./agents/skills/install-step/SKILL.md`**](./skills/install-step/SKILL.md):
+- [**`.agents/skills/install-step/SKILL.md`**](./.agents/skills/install-step/SKILL.md):
   Add or modify an install step in the bootstrap scripts.
