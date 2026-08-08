@@ -186,8 +186,16 @@ install of a tool that isn't wanted:
   profile.
 
 - MUST declare profile membership at the call site, never inside a step
-  file. An install step MUST NOT branch on the profile: if it does not
-  belong in a profile, it is simply not called with that profile's wrapper.
+  file. An install step MUST NOT branch on the profile to decide whether it
+  runs at all: if it does not belong in a profile, it is simply not called
+  with that profile's wrapper.
+
+  A step MAY still call `is_agent_profile` to adjust its own behavior once
+  it is already running — eg. skipping a check that can only pass on real
+  hardware, inside a step shared across every profile via `agent_step`.
+  This is the rare exception, not membership by another name: the step
+  still runs in every profile either way, only what it does once running
+  changes.
 
 - MUST use `agent_step` only for a step that belongs in a minimal,
   unattended, headless coding agent container — not merely "something most
