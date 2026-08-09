@@ -17,11 +17,6 @@ if dpkg -s lm-studio >/dev/null 2>&1; then
   installed_version=$(dpkg -s lm-studio | grep -oP 'Version: \K\d+\.\d+\.\d+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Get the latest version by following the redirect from the canonical AppImage
 # download URL. The redirect target encodes the version in its path, e.g.:
 # https://installers.lmstudio.ai/linux/x64/0.4.11-1/LM-Studio-0.4.11-1-x64.AppImage

@@ -9,9 +9,6 @@
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing GitHub CLI."
 
 # Install the GitHub CLI.

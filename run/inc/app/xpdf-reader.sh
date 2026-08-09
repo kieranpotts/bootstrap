@@ -10,9 +10,6 @@
 # https://www.xpdfreader.com/support.html
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing XPDF Reader."
 
 if command -v xpdf >/dev/null 2>&1; then

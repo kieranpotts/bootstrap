@@ -32,11 +32,6 @@ fi
 
 export PATH="${HOME}/.local/bin:${PATH}"
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! command -v skills-ref >/dev/null 2>&1; then
-  return 0
-fi
-
 print_info "Installing/updating skills-ref via pipx."
 pipx install --force \
   "git+https://github.com/agentskills/agentskills.git#subdirectory=skills-ref"

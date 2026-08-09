@@ -16,11 +16,6 @@ print_step "Installing Rust via Rustup."
 # can find `cargo` and `rustc`.
 export PATH="${HOME}/.cargo/bin:${PATH}"
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! command -v rustup >/dev/null 2>&1; then
-  return 0
-fi
-
 if command -v rustup >/dev/null 2>&1; then
   print_info "Rustup is already installed. Updating the toolchain."
   rustup update

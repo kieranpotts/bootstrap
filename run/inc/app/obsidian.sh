@@ -17,11 +17,6 @@ if dpkg -s obsidian >/dev/null 2>&1; then
   installed_version=$(dpkg -s obsidian | grep -oP 'Version: \K[^ ]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Find the AMD64 .deb asset URL from the latest release, then extract the
 # version number from its filename.
 deb_url=$(gh_asset_url obsidianmd/obsidian-releases '_amd64\.deb$')

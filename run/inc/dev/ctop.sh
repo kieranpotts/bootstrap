@@ -14,11 +14,6 @@ if command -v ctop >/dev/null 2>&1; then
   installed_version=$(ctop -v | grep -oP '\d+\.\d+\.\d+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Get the latest version from the GitHub releases page (strip leading `v`).
 latest_version=$(gh_latest_tag bcicen/ctop | sed 's/^v//')
 

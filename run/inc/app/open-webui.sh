@@ -28,11 +28,6 @@ fi
 image="ghcr.io/open-webui/open-webui:main"
 container="open-webui"
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! superdo docker ps -a --format '{{.Names}}' | grep -qx "${container}"; then
-  return 0
-fi
-
 print_info "Pulling the latest Open WebUI image (${image})."
 superdo docker pull "${image}"
 

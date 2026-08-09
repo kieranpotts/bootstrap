@@ -23,11 +23,6 @@ if command -v jabba >/dev/null 2>&1; then
   installed_version=$(jabba --version)
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Target Jabba version we want to install (Jabba's tags have no leading `v`).
 latest_version=$(gh_latest_tag shyiko/jabba)
 print_info "Latest available version of Jabba is v${latest_version}."

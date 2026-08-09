@@ -8,9 +8,6 @@
 # https://www.passwordstore.org/
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing pass."
 
 print_info "Installing/updating pass via APT."

@@ -9,10 +9,6 @@
 # https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-# The bashrc completion is one-time, can be skipped on `./run/update`.
-is_updating && return 0
-
 print_step "Installing Terraform."
 
 print_info "Installing/updating Terraform via APT."

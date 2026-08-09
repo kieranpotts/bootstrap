@@ -16,11 +16,6 @@ if dpkg -s git-delta >/dev/null 2>&1; then
   installed_version=$(dpkg -s git-delta | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Target Delta version we want to install (Delta's tags have no leading `v`).
 latest_version=$(gh_latest_tag dandavison/delta)
 

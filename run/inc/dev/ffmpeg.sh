@@ -7,9 +7,6 @@
 # https://ffmpeg.org/
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing FFmpeg."
 
 print_info "Installing/updating FFmpeg via APT."

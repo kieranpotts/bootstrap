@@ -11,11 +11,6 @@
 
 print_step "Installing gh-dash."
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! gh extension list | grep -q "dlvhdr/gh-dash"; then
-  return 0
-fi
-
 print_info "Installing/updating gh-dash as a gh CLI extension."
 if gh extension list | grep -q "dlvhdr/gh-dash"; then
   gh extension upgrade dlvhdr/gh-dash

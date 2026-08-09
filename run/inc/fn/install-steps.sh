@@ -3,9 +3,7 @@
 #
 # Shared install step sequence.
 #
-# Sourced by both `run/install` (full provisioning from scratch) and
-# `run/update` (update an already-provisioned machine). Defines
-# `run_install_steps`, which does:
+# Sourced by `run/install`. Defines `run_install_steps`, which does:
 #
 #   - APT setup and third-party repository registration (`sys/apt.sh`, `pkg/*`)
 #   - System update and upgrade (`sys/update.sh`, `sys/upgrade.sh`)
@@ -38,7 +36,7 @@
 # this file produces.
 #
 
-# run_install_steps - Run the shared install/update step sequence.
+# run_install_steps - Run the shared install step sequence.
 #
 # Requires the caller to have already sourced the helper functions in
 # `run/inc/fn/*.sh` (notably `step`, the `*_step` profile wrappers, and

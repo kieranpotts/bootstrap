@@ -23,11 +23,6 @@ is_dropbox_installed() {
   fi
 }
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! is_dropbox_installed; then
-  return 0
-fi
-
 if is_dropbox_installed; then
   print_info "Dropbox is already installed. Skipping."
 else

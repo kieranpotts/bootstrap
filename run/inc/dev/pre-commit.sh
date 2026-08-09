@@ -14,11 +14,6 @@ print_step "Installing pre-commit."
 # end.
 export PATH="${HOME}/.local/bin:${PATH}"
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! command -v pre-commit >/dev/null 2>&1; then
-  return 0
-fi
-
 print_info "Installing/updating pre-commit via pipx."
 pipx install pre-commit
 

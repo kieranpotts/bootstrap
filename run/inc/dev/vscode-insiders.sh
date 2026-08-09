@@ -9,11 +9,6 @@
 
 print_step "Installing Visual Studio Code Insiders."
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! dpkg -s code-insiders >/dev/null 2>&1; then
-  return 0
-fi
-
 # VS Code Insiders is installed from the latest available Debian package,
 # downloaded directly from Microsoft's update servers. The download URL always
 # resolves to the latest build, so this script will replace whatever version

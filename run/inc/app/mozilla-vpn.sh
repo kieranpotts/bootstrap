@@ -17,9 +17,6 @@
 # servers.
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing Mozilla VPN."
 
 print_info "Installing/updating Mozilla VPN via APT."

@@ -19,11 +19,6 @@ if docker mcp --version >/dev/null 2>&1; then
   installed_version=$(docker mcp --version | grep -oP '\d+\.\d+\.\d+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Every release of `docker/mcp-gateway` is flagged as a pre-release, so the
 # `/releases/latest` endpoint used by `gh_latest_tag` 404s. Read the most
 # recent tag from the full releases list instead (strip the leading `v`).

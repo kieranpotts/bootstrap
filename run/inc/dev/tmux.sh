@@ -6,10 +6,6 @@
 # https://github.com/tmux/tmux
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-# The TPM setup is one-time, can be skipped on `./run/update`.
-is_updating && return 0
-
 print_step "Installing tmux."
 
 print_info "Installing/updating tmux via APT."

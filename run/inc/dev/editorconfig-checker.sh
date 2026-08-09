@@ -15,11 +15,6 @@ if command -v ec >/dev/null 2>&1; then
   installed_version=$(ec -version | sed 's/^v//')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Get the latest version from the GitHub releases page (strip leading `v`).
 latest_version=$(gh_latest_tag editorconfig-checker/editorconfig-checker | sed 's/^v//')
 

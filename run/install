@@ -138,9 +138,7 @@ npmrc_protect
 . "${inc_path}/sys/checks.sh"
 
 # System utilities. Some of these, like curl and wget, are required for
-# the package repository setup scripts that follow. These base utilities are
-# first-time-only. `run/update` skips them and relies on the machine having
-# already been bootstrapped.
+# the package repository setup scripts that follow.
 step "${inc_path}/util/apt-transport-https.sh"
 step "${inc_path}/util/ca-certificates.sh"
 step "${inc_path}/util/curl.sh"
@@ -158,8 +156,7 @@ step "${inc_path}/util/tar.sh"
 step "${inc_path}/util/unzip.sh"
 step "${inc_path}/util/wget.sh"
 
-# Shared install/update step sequence. This is the same sequence
-# `run/update` runs, so the two entry points stay in lockstep.
+# Shared install step sequence.
 run_install_steps
 
 # Restore ~/.bashrc to its starting state if a third-party

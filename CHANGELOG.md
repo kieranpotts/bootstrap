@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- behavior: remove `./run/update`. `./run/install` is idempotent and now
+  the only entry point - re-run it to pick up updates on an
+  already-provisioned machine. Drops the `updating`/`is_updating` guard and
+  every per-step branch that used it, so every run performs the full
+  install sequence rather than skipping first-time-only work.
 - fix: `step()` now explicitly turns `-u`/`pipefail` back off inside the
   per-step subshell, matching the documented intent that steps run under
   `set -e` only. Bash subshells inherit every option from the parent, so the

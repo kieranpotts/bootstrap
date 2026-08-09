@@ -10,9 +10,6 @@
 # https://wiki.gnome.org/Projects/Orca
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-is_updating && return 0
-
 print_step "Installing Orca."
 
 # Orca is packaged directly for Debian/Ubuntu, and its own dependencies pull

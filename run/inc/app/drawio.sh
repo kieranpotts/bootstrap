@@ -11,11 +11,6 @@ if command -v drawio >/dev/null 2>&1; then
   installed_version=$(drawio --version | grep -oP '\K[0-9]+\.[0-9]+\.[0-9]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Find the AMD64 .deb asset URL from the latest release, then extract the
 # version number from its filename.
 deb_url=$(gh_asset_url jgraph/drawio-desktop 'amd64-[0-9]+\.[0-9]+\.[0-9]+\.deb$')

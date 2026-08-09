@@ -85,39 +85,27 @@ non-negotiable.
 > `terraform`) alongside the terminal UIs it is named for. What its members
 > have in common is that a human wants them and a display is not required.
 
-`./run/update` takes the same `--profile` flag, with the same default, so a
-machine can be updated at the level it was provisioned at.
-
 ## Updating an existing machine
 
-Once a machine has been bootstrapped, keep it up to date with `./run/update`.
-This is the lighter-weight companion to `./run/install`. It skips the
-first-time-only phases (system compatibility checks and base utility installs)
-and instead refreshes APT repositories, upgrades installed packages, and
-re-runs every per-tool install step. Each step is idempotent, so tools that
-are already current are left untouched and outdated ones are upgraded.
-`./run/update` never installs a tool that isn't already present — it only
-refreshes what's already there.
+`./run/install` is idempotent, so keeping a machine up to date is just
+re-running it: it refreshes APT repositories, upgrades installed packages,
+and re-runs every per-tool install step. Tools that are already current are
+left untouched and outdated ones are upgraded.
 
 ```
-./run/update
+./run/install
 ```
 
 Pass `--profile=gui` to also update GUI applications, and `--yes` to skip the
 per-tool prompts described above:
 
 ```
-./run/update --profile=gui --yes
+./run/install --profile=gui --yes
 ```
 
-You may still need to run `./run/update` from time-to-time to get updates for
-components that are installed directly from `.DEB` package downloads, and
-other mechanisms that bypass the APT package manager.
-
-Run `./run/update --help` to print the usage banner.
-
-> **Note:** `./run/update` assumes the machine has already been provisioned
-> with `./run/install`. On a fresh machine, run `./run/install` first.
+You may still need to re-run `./run/install` from time-to-time to get
+updates for components that are installed directly from `.DEB` package
+downloads, and other mechanisms that bypass the APT package manager.
 
 ## Logging output
 

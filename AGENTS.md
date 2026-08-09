@@ -28,13 +28,8 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Project structure
 
-- **`run/install`**: Entry script for full provisioning from scratch.
-  Sources every install step in order.
-
-- **`run/update`**: Entry script for updating an already-provisioned machine.
-  Runs the shared step sequence (see `run/inc/fn/install-steps.sh`) but skips
-  the first-time-only phases that `run/install` runs (system compatibility
-  checks and base `util/*` installs).
+- **`run/install`**: Entry script for provisioning a machine from scratch,
+  or re-running to pick up updates. Sources every install step in order.
 
 - **`run/bootstrap`**: DEPRECATED. A thin wrapper that execs `run/install`,
   kept for machines/images pinned to older tags. New references MUST use
@@ -44,7 +39,7 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   `agent_step`/`tui_step`/`gui_step` profile wrappers, `superdo`, status
   printers, banners), `profile.sh` (the profile predicates and runtime
   toggles), and `install-steps.sh`, which defines `run_install_steps` — the
-  shared install/update step sequence that both entry scripts run.
+  shared install step sequence.
 
 - **`run/inc/var/`**: Shared variables (ANSI codes).
 
@@ -84,12 +79,7 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`./run/install --help`** to print the usage banner.
 
-- **`./run/update`** to update an already-provisioned machine. Takes the same
-  `--profile` and `--yes` flags, with the same default.
-
-- **`./run/update --help`** to print the usage banner.
-
-- **`shellcheck -x --severity=warning run/**/*.sh run/install run/update`**
+- **`shellcheck -x --severity=warning run/**/*.sh run/install`**
   to lint shell scripts, at the same threshold CI enforces.
 
 - **`ec`** (editorconfig-checker) to validate files against `.editorconfig`.
@@ -130,40 +120,10 @@ CI). Steps outside the selected profile are skipped silently, without a
 prompt.
 
 The predicates behind all of this live in `run/inc/fn/profile.sh`:
-`profile_at_least` (used by the wrappers), `is_agent_profile`,
-`is_yes_enabled`, and `is_updating`. An unrecognised `--profile=<value>` is
-rejected at parse time. There is no `--gui` flag; it was replaced by
-`--profile=gui`, and passing it now exits with an error pointing at the
-replacement.
-
-## Update runs
-
-`run/update` sets `updating=1` (never set by `run/install`),
-exposed via `is_updating`. Install steps must guard against `run/update`
-performing package-manager work that's already covered, or a first-time
-install of a tool that isn't wanted:
-
-- Steps that only call `apt-get install`, with no extra config, must no-op
-  entirely on update — the package is already kept current by the blanket
-  `apt upgrade` in `sys/upgrade.sh`:
-
-  ```bash
-  is_updating && return 0
-  print_step "Installing <apt-thing>"
-  ...
-  ```
-
-- Steps using a non-APT install mechanism (npm, curl, GitHub releases, pipx,
-  etc.) must never perform a first install on update — only upgrade a tool
-  that's already present:
-
-  ```bash
-  print_step "Installing <thing>"
-  if is_updating && ! command -v <thing> >/dev/null 2>&1; then
-    return 0
-  fi
-  ...
-  ```
+`profile_at_least` (used by the wrappers), `is_agent_profile`, and
+`is_yes_enabled`. An unrecognised `--profile=<value>` is rejected at parse
+time. There is no `--gui` flag; it was replaced by `--profile=gui`, and
+passing it now exits with an error pointing at the replacement.
 
 ## Rules
 
@@ -179,11 +139,10 @@ install of a tool that isn't wanted:
 
 - MUST source every new install script from `run_install_steps` (in
   `run/inc/fn/install-steps.sh`) in the correct group, sorted alphabetically
-  within that group, so it runs on both `./run/install` and `./run/update`.
-  First-time-only steps (system checks, base `util/*` installs) are the
-  exception and live inline in `run/install`. Alphabetical order is by
-  filename regardless of which wrapper the call uses — do not group by
-  profile.
+  within that group. First-time-only steps (system checks, base `util/*`
+  installs) are the exception and live inline in `run/install`. Alphabetical
+  order is by filename regardless of which wrapper the call uses — do not
+  group by profile.
 
 - MUST declare profile membership at the call site, never inside a step
   file. An install step MUST NOT branch on the profile to decide whether it

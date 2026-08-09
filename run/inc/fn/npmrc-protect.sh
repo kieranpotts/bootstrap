@@ -19,8 +19,8 @@
 
 # npmrc_protect - Remove any `prefix`/`globalconfig` line from ~/.npmrc.
 #
-# Called once, early in `run/install`/`run/update`, before any step that
-# might source `nvm.sh`.
+# Called once, early in `run/install`, before any step that might source
+# `nvm.sh`.
 #
 npmrc_protect() {
   if [[ ! -f "${HOME}/.npmrc" ]]; then

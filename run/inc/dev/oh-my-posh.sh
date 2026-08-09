@@ -8,11 +8,6 @@
 
 print_step "Installing Oh-My-Posh."
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! command -v oh-my-posh >/dev/null 2>&1; then
-  return 0
-fi
-
 # By default, the oh-my-posh binary will be installed in /home/<user>/bin.
 # This script will install it in /usr/local/bin instead - it's the same
 # location as lazygit.

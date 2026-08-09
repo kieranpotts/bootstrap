@@ -14,11 +14,6 @@ if dpkg -s cursor >/dev/null 2>&1; then
   installed_version=$(dpkg -s cursor | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Fetch the latest version and .deb download URL from the Cursor API.
 release_info_json=$(curl -s "https://cursor.com/api/download?platform=linux-x64&releaseTrack=stable")
 latest_version=$(echo "${release_info_json}" | jq -r '.version')

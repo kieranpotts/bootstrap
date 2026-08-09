@@ -12,11 +12,6 @@ if dpkg -s frame0 >/dev/null 2>&1; then
   installed_version=$(dpkg -s frame0 | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Discover the latest version from Frame0's downloads page. The .deb filename
 # on the page embeds the version, eg. `frame0_1.6.0_amd64.deb`.
 latest_version=$(curl -s https://frame0.app/download | grep -oP 'frame0_\K[0-9]+\.[0-9]+\.[0-9]+(?=_amd64\.deb)' | head -1)

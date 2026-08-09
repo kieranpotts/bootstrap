@@ -14,11 +14,6 @@
 
 print_step "Installing Qwen Code."
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && ! command -v qwen >/dev/null 2>&1; then
-  return 0
-fi
-
 # The installer has no flag to suppress its post-install auto-launch (`exec qwen`),
 # so we strip that line from the script before running it. Hacky 🙁
 

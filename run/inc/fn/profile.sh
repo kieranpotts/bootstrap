@@ -2,7 +2,7 @@
 
 #
 # The install profile, and the other runtime toggles set by `run/install`
-# and `run/update` when parsing CLI arguments.
+# when parsing CLI arguments.
 #
 # The profile answers "who is driving this machine?":
 #
@@ -27,8 +27,8 @@
 #
 # Used by `profile_at_least` to compare the requested profile against the one
 # a step requires. An unrecognised name ranks below every real profile, so it
-# satisfies nothing - `run/install` and `run/update` reject unknown profiles at
-# parse time, so this is a backstop, not the primary validation.
+# satisfies nothing - `run/install` rejects unknown profiles at parse time,
+# so this is a backstop, not the primary validation.
 #
 # Arguments:
 #   $1 - Profile name.
@@ -47,8 +47,8 @@ profile_rank() {
 
 # profile_at_least - Test whether the current profile includes the given one.
 #
-# Reads the `profile` variable set by `run/install` or `run/update`, defaulting
-# to `tui` to match those scripts.
+# Reads the `profile` variable set by `run/install`, defaulting to `tui` to
+# match that script.
 #
 # Arguments:
 #   $1 - Minimum profile required, eg. `tui`.
@@ -78,41 +78,11 @@ is_agent_profile() {
   [[ "${profile:-tui}" == "agent" ]]
 }
 
-# is_updating - Test whether the current run is an update pass (`run/update`)
-# rather than a first-time bootstrap (`run/install`).
-#
-# Reads the `updating` flag, set only by `run/update`. Use this from any
-# install step that must not perform a first-time install on an update pass:
-#
-#   - Pure-APT steps with no extra config, already kept current by the
-#     blanket `apt upgrade` in `sys/upgrade.sh`, should no-op entirely:
-#
-#       is_updating && return 0
-#       print_step "Installing <apt-thing>."
-#       ...
-#
-#   - Steps using a non-APT install mechanism (npm, curl, GitHub releases,
-#     etc.) should only upgrade a tool that is already installed, never
-#     install it for the first time:
-#
-#       print_step "Installing <thing>."
-#       if is_updating && ! command -v <thing> >/dev/null 2>&1; then
-#         return 0
-#       fi
-#       ...
-#
-# Returns:
-#   0 if running under `run/update`, 1 otherwise (including `run/install`).
-#
-is_updating() {
-  [[ "${updating:-0}" -eq 1 ]]
-}
-
 # is_yes_enabled - Test whether prompts are pre-answered "yes" for the
 # current run.
 #
-# Reads the `assume_yes` flag set by `run/install` or `run/update` when
-# parsing CLI args (`--yes`/`-y`). Consumed by the step wrappers in
+# Reads the `assume_yes` flag set by `run/install` when parsing CLI args
+# (`--yes`/`-y`). Consumed by the step wrappers in
 # `run/inc/fn/steps.sh` to skip their per-tool confirmation prompt and run the
 # step unconditionally. Individual install steps don't need to check it.
 #

@@ -21,11 +21,6 @@ if [[ -f "${version_file}" ]]; then
   installed_version=$(jq -r '.version' "${version_file}")
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Pied configures Speech Dispatcher to use Piper voices, so Speech Dispatcher
 # must be present for it to have anything to configure.
 superdo apt-get install -y speech-dispatcher

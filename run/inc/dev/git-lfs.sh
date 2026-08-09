@@ -7,10 +7,6 @@
 # package registry to APT's sources.
 #
 
-# No-op on `./run/update`. Package is kept current by `apt upgrade`.
-# `git lfs install` is one-time and can be skipped on `./run/update`.
-is_updating && return 0
-
 print_step "Installing Git LFS."
 
 print_info "Installing/updating Git LFS via APT."

@@ -17,11 +17,6 @@ if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
   . "${HOME}/.nvm/nvm.sh"
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && { [[ ! -d "${HOME}/.nvm" ]] || [[ ! -s "${HOME}/.nvm/nvm.sh" ]]; }; then
-  return 0
-fi
-
 # Target NVM version we want to install (strip leading `v` from the tag).
 latest_version=$(gh_latest_tag nvm-sh/nvm | sed 's/^v//')
 print_info "Latest available version of NVM is v${latest_version}."

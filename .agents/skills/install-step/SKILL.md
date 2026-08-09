@@ -17,8 +17,8 @@ license: CC0-1.0
 # Install step
 
 Add, change, or remove one tool in the bootstrap provisioning run, keeping
-`./run/install` and `./run/update` idempotent, readable, and reproducible
-across a host machine and the
+`./run/install` idempotent, readable, and reproducible across a host machine
+and the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
 image. Do not modify the shared helpers under `run/inc/fn/`, beyond the one
 line that wires a step into `run_install_steps`.
@@ -62,12 +62,8 @@ user with an error message.
 - The step file MUST contain no reference to the install profile. Profile
   membership is readable from the call site alone.
 
-- The step MUST guard against redundant or unwanted work on `./run/update`,
-  using `is_updating`.
-
 - `shellcheck -x --severity=warning` MUST report no findings against the
-  step file, and against `run/install` or `run/update` if either was
-  touched.
+  step file, and against `run/install` if it was touched.
 
 - `CHANGELOG.md` SHOULD carry a new bullet under `## [Unreleased]`, and
   `docs/tools.md` and `docs/drift.md` SHOULD each carry a matching row.
@@ -123,8 +119,8 @@ user with an error message.
 
     Add one line to `run_install_steps` in `run/inc/fn/install-steps.sh`,
     in the correct group. `run_install_steps` is the shared sequence that
-    both `run/install` and `run/update` run, so a step added here runs on
-    fresh bootstraps and on update passes alike.
+    `run/install` runs on both a fresh bootstrap and a re-run against an
+    already-provisioned machine.
 
     The wrapper you call it with declares the profile the step belongs to.
     That choice is the policy decision, and it MUST be made here, never
@@ -202,8 +198,8 @@ user with an error message.
 7.  Lint the script.
 
     Run ShellCheck against the new or modified file, and against
-    `run/install` or `run/update` if either was touched, at the same
-    threshold the CI workflow enforces:
+    `run/install` if it was touched, at the same threshold the CI workflow
+    enforces:
 
     ```sh
     shellcheck -x --severity=warning run/inc/<group>/<name>.sh
@@ -223,10 +219,10 @@ user with an error message.
 
 - Each step MUST be idempotent.
 
-  `./run/install` and `./run/update` are both re-run to apply updates, not
-  only on first provisioning. Each step MUST converge on the same end state
-  whether it runs against a fresh machine or one bootstrapped many times
-  before. Prefer package-manager installs and guarded mutations
+  `./run/install` is re-run to apply updates, not only on first
+  provisioning. Each step MUST converge on the same end state whether it
+  runs against a fresh machine or one bootstrapped many times before.
+  Prefer package-manager installs and guarded mutations
   (`grep -q … || echo … >> …`) over blind appends.
 
 - You MUST use `superdo` rather than `sudo` directly.
@@ -266,34 +262,7 @@ user with an error message.
   ```
 
   `profile_at_least` and `is_yes_enabled` are consumed by the wrappers, not
-  by step files. `is_updating` is the one predicate a step legitimately
-  uses.
-
-- A step MUST guard against redundant or unwanted work on `./run/update`.
-
-  A step that only calls `apt-get install`, with no extra configuration,
-  MUST no-op entirely on update, since `sys/upgrade.sh` already keeps the
-  package current:
-
-  ```bash
-  # No-op on `./run/update`. Package is kept current by `apt upgrade`.
-  is_updating && return 0
-
-  print_step "Installing <apt-thing>."
-  ```
-
-  A step using a non-APT mechanism (npm, curl, GitHub releases, pipx) MUST
-  NOT perform a first install on update. It may only upgrade a tool already
-  present:
-
-  ```bash
-  print_step "Installing <thing>."
-
-  # No-op on `./run/update`. Don't install new tools when updating.
-  if is_updating && ! command -v <thing> >/dev/null 2>&1; then
-    return 0
-  fi
-  ```
+  by step files.
 
 - Each file MUST install exactly one tool.
 
@@ -361,9 +330,9 @@ user with an error message.
 - The step must run only on first provisioning.
 
   System compatibility checks (`sys/checks.sh`) and the base `util/*`
-  installs live inline in `run/install` rather than in `run_install_steps`,
-  so `run/update` skips them. Add to that inline sequence only for genuine
-  first-run plumbing.
+  installs live inline in `run/install`, ahead of `run_install_steps`,
+  rather than as steps in the shared sequence. Add to that inline sequence
+  only for genuine first-run plumbing.
 
 ## Examples
 
@@ -390,7 +359,7 @@ user with an error message.
 - A step backed by a third-party APT source — see
   [`run/inc/dev/gh.sh`](../../run/inc/dev/gh.sh). Registering the
   repository is a separate `pkg/*` step, so the install step itself stays
-  a plain APT install that no-ops on update:
+  a plain APT install:
 
   ```bash
   #!/usr/bin/env bash
@@ -403,9 +372,6 @@ user with an error message.
   # https://github.com/cli/cli
   # https://github.com/cli/cli/blob/trunk/docs/install_linux.md
   #
-
-  # No-op on `./run/update`. Package is kept current by `apt upgrade`.
-  is_updating && return 0
 
   print_step "Installing GitHub CLI."
 
@@ -431,7 +397,7 @@ user with an error message.
 
 - [`run/inc/fn/profile.sh`](../../run/inc/fn/profile.sh) \
   Read when you need the exact semantics of `profile_at_least`,
-  `is_agent_profile`, `is_updating`, or `is_yes_enabled`.
+  `is_agent_profile`, or `is_yes_enabled`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh) \
   Read before wiring a step in, to find the group and the alphabetical

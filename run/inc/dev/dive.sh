@@ -14,11 +14,6 @@ if dpkg -s dive >/dev/null 2>&1; then
   installed_version=$(dpkg -s dive | grep -oP 'Version: \K[0-9]+\.[0-9]+\.[0-9]+')
 fi
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ -z "${installed_version}" ]]; then
-  return 0
-fi
-
 # Target Dive version we want to install (Dive's tags have a leading `v`).
 latest_version=$(gh_latest_tag wagoodman/dive | sed 's/^v//')
 

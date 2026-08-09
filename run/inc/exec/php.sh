@@ -15,11 +15,6 @@
 
 print_step "Installing PHP via phpenv."
 
-# No-op on `./run/update`. Don't install new tools when updating.
-if is_updating && [[ ! -d "${HOME}/.phpenv" ]]; then
-  return 0
-fi
-
 # Remember the current working directory,
 # so we can change back here later.
 cwd=$(pwd)
