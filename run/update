@@ -106,6 +106,7 @@ fi
 . "${inc_path}/fn/bashrc-protect.sh"
 . "${inc_path}/fn/gh-release.sh"
 . "${inc_path}/fn/install-steps.sh"
+. "${inc_path}/fn/npmrc-protect.sh"
 . "${inc_path}/fn/os.sh"
 . "${inc_path}/fn/profile.sh"
 . "${inc_path}/fn/statuses.sh"
@@ -130,6 +131,10 @@ print_updating
 # Snapshot ~/.bashrc so third-party installers that bypass our `${bashrc}`
 # routing can be undone at the end of the run.
 bashrc_snapshot
+
+# Strip any ~/.npmrc settings incompatible with NVM, before any step below
+# gets a chance to source `nvm.sh` and be broken by them.
+npmrc_protect
 
 # Shared install/update step sequence (same as `run/install` runs after its
 # first-time-only phases): APT setup + repository registration, system update

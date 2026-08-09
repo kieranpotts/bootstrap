@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- behavior: add guard to protect against injection of `.npmrc` settings that
+  are incompatible with `nvm`.
 - feature: replace `--gui` with a single `--profile=agent|tui|gui` flag,
   defaulting to `tui` - BREAKING. The three profiles are cumulative, and
   `--gui` now exits with an error pointing at `--profile=gui`. What each
