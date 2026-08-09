@@ -19,7 +19,7 @@ print_info() {
 #   $1 - Message to print.
 #
 print_success() {
-  printf '%b%b[SUCCESS]%b %s\n' "${BOLD}" "${GREEN}" "${RESET}" "$1"
+  printf '%b%b✅%b %s\n' "${BOLD}" "${GREEN}" "${RESET}" "$1"
 }
 
 # print_warning - Print a warning message.
