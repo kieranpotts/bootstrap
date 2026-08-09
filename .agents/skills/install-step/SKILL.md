@@ -131,20 +131,15 @@ user with an error message.
       display. Installed by a bare `./run/install`:
 
       ```bash
-      tui_step "${inc_path}/<group>/<name>.sh" "<Program Name>"
+      tui_step "${inc_path}/<group>/<name>.sh"
       ```
-
-      The second argument is the human-readable name shown in the prompt
-      (`Install/update <Program Name>? (Y/n):`). Use the same name that
-      follows "Installing " in the script's own `print_step` message.
 
     - `gui_step` — tools needing a display: applications, browsers,
       graphical editors. Installed only by `./run/install --profile=gui`.
       Same arguments as `tui_step`.
 
     - `agent_step` — tools belonging in a minimal, unattended, headless
-      container, which the bootstrap therefore treats as non-negotiable.
-      Called without a display name, so it never prompts:
+      container, which the bootstrap therefore treats as non-negotiable:
 
       ```bash
       agent_step "${inc_path}/<group>/<name>.sh"
@@ -158,10 +153,6 @@ user with an error message.
 
     - `step` — reserved for the `sys/*` plumbing that MUST run in every
       profile before anything else. Not for tools.
-
-    Passing a display name is what makes a step prompt, independently of
-    the profile. `pkg/*` registry steps MUST therefore be called without
-    one: they are plumbing, and run unannounced.
 
     Sort alphabetically by filename within the group regardless of which
     wrapper the line uses. Do not group by wrapper.
@@ -210,10 +201,10 @@ user with an error message.
 8.  Smoke-test the install.
 
     On a clean target, or by re-running `./run/install` on an existing
-    host, confirm the step prints its `STEP N` banner, completes with no
-    prompts, and leaves the installed binary on `PATH` reporting a sensible
-    version. Where no clean target is available, say so in your summary
-    rather than claiming the step was tested.
+    host, confirm the step prints its `STEP N` banner, completes
+    unattended, and leaves the installed binary on `PATH` reporting a
+    sensible version. Where no clean target is available, say so in your
+    summary rather than claiming the step was tested.
 
 ## Rules
 
@@ -261,8 +252,7 @@ user with an error message.
   print_step "Installing <thing>."
   ```
 
-  `profile_at_least` and `is_yes_enabled` are consumed by the wrappers, not
-  by step files.
+  `profile_at_least` is consumed by the wrappers, not by step files.
 
 - Each file MUST install exactly one tool.
 
@@ -313,11 +303,10 @@ user with an error message.
 
 - The tool needs a third-party APT repository.
 
-  Register the repository in its own `pkg/*` step, called without a
-  display name, and keep the install itself a plain APT step. Where every
-  package that registry serves is a `gui_step`, call the registry with
-  `gui_step` too, so the other profiles do not register a repository they
-  can never install from.
+  Register the repository in its own `pkg/*` step, and keep the install
+  itself a plain APT step. Where every package that registry serves is a
+  `gui_step`, call the registry with `gui_step` too, so the other profiles
+  do not register a repository they can never install from.
 
 - The tool is being removed.
 
@@ -396,8 +385,8 @@ user with an error message.
   `agent_step`/`tui_step`/`gui_step` wrappers.
 
 - [`run/inc/fn/profile.sh`](../../run/inc/fn/profile.sh) \
-  Read when you need the exact semantics of `profile_at_least`,
-  `is_agent_profile`, or `is_yes_enabled`.
+  Read when you need the exact semantics of `profile_at_least` or
+  `is_agent_profile`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh) \
   Read before wiring a step in, to find the group and the alphabetical

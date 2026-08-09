@@ -20,41 +20,6 @@
 > **Note:** `./run/install` was previously named `./run/bootstrap`. The old
 > name still works as a deprecated wrapper, but prefer `./run/install`.
 
-## Per-tool prompts
-
-For every application and runtime/developer/ops/hardware tool it installs or
-updates (the `web/*`, `app/*`, `exec/*`, `dev/*`, `ops/*`, and `phy/*`
-categories), the bootstrap asks for confirmation before running that step:
-
-```
-Install/update LazyGit? (Y/n):
-```
-
-Pressing Enter, or answering anything other than `n`/`N`, runs the step;
-answering `n` skips it and moves on to the next tool. Two kinds of step are
-never prompted: lower-level plumbing (base utilities, APT and
-package-repository setup), and the Agent-profile tools listed in
-[Tools](./tools.md) — including the Node.js and Python runtimes. The
-remaining language runtimes (Docker CE, OpenJDK, PHP, Rust) are prompted like
-any other tool.
-
-You are only ever prompted for tools the selected profile actually installs.
-Anything outside it is skipped silently.
-
-Pass `--yes`/`-y` to skip all of these prompts and assume yes, eg. for a
-fully unattended run:
-
-```
-./run/install --yes
-```
-
-> **Note:** Prompts are also skipped automatically — and every step
-> proceeds as if answered yes — whenever there's no terminal attached to
-> stdin (eg. inside a `docker build` layer, or a CI job). Piping *output*
-> to a log file (see [Logging output](#logging-output) below) does not by
-> itself suppress prompts, since stdin is untouched; pass `--yes` too if you
-> want a logged run to also be unattended.
-
 ## Install profiles
 
 `--profile` selects how much gets installed. It answers the question "who is
@@ -76,9 +41,8 @@ contains the one before it:
 See [Tools](./tools.md) for the per-program breakdown of what each profile
 installs. `agent` is the profile used to build the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
-image; it installs nothing that assumes a human or a display, and never
-prompts, since every step it contains is one the bootstrap treats as
-non-negotiable.
+image; it installs nothing that assumes a human or a display. Every run is
+unattended: no profile prompts before installing a step.
 
 > **Note:** the `tui` name describes the *environment*, not the shape of the
 > tools. That profile holds plenty of non-interactive CLIs (`aws`, `ffmpeg`,
@@ -96,11 +60,10 @@ left untouched and outdated ones are upgraded.
 ./run/install
 ```
 
-Pass `--profile=gui` to also update GUI applications, and `--yes` to skip the
-per-tool prompts described above:
+Pass `--profile=gui` to also update GUI applications:
 
 ```
-./run/install --profile=gui --yes
+./run/install --profile=gui
 ```
 
 You may still need to re-run `./run/install` from time-to-time to get

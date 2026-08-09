@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- behavior: remove the per-tool install/update prompts and the `--yes`/`-y`
+  flag. Every step now runs unattended regardless of profile. Drops
+  `is_yes_enabled` and the `assume_yes` flag, and the now-unused
+  display-name argument to `agent_step`/`tui_step`/`gui_step` and every
+  call site in `run_install_steps`.
 - behavior: remove `./run/update`. `./run/install` is idempotent and now
   the only entry point - re-run it to pick up updates on an
   already-provisioned machine. Drops the `updating`/`is_updating` guard and

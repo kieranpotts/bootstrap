@@ -74,9 +74,6 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   needs in a headless container, or **`--profile=gui`** for the full
   workstation install. See `docs/tools.md`.
 
-- **`./run/install --yes`** (or **`-y`**) to skip the per-tool
-  install/update prompts and assume yes to all of them.
-
 - **`./run/install --help`** to print the usage banner.
 
 - **`shellcheck -x --severity=warning run/**/*.sh run/install`**
@@ -110,20 +107,14 @@ Profile membership is declared **at the call site** in
 never by a guard inside a step file. That keeps "what does this profile
 install?" answerable by reading one file, and it is why `run/inc/fn/steps.sh`
 has three wrappers rather than one. `docs/tools.md` is the rendered summary.
-
-A second, independent rule governs prompting: a call that passes a display
-name is a discrete tool and prompts before running; a call without one is
-plumbing and runs unannounced. The prompt defaults to yes, and is skipped
-entirely — the step still runs — when `--yes`/`-y` was passed
-(`is_yes_enabled`) or stdin is not a terminal (piped output, `docker build`,
-CI). Steps outside the selected profile are skipped silently, without a
-prompt.
+Steps outside the selected profile are skipped silently; every step inside
+it runs unattended, with no per-tool prompt.
 
 The predicates behind all of this live in `run/inc/fn/profile.sh`:
-`profile_at_least` (used by the wrappers), `is_agent_profile`, and
-`is_yes_enabled`. An unrecognised `--profile=<value>` is rejected at parse
-time. There is no `--gui` flag; it was replaced by `--profile=gui`, and
-passing it now exits with an error pointing at the replacement.
+`profile_at_least` (used by the wrappers) and `is_agent_profile`. An
+unrecognised `--profile=<value>` is rejected at parse time. There is no
+`--gui` flag; it was replaced by `--profile=gui`, and passing it now exits
+with an error pointing at the replacement.
 
 ## Rules
 

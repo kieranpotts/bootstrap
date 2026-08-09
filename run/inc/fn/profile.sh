@@ -77,18 +77,3 @@ profile_at_least() {
 is_agent_profile() {
   [[ "${profile:-tui}" == "agent" ]]
 }
-
-# is_yes_enabled - Test whether prompts are pre-answered "yes" for the
-# current run.
-#
-# Reads the `assume_yes` flag set by `run/install` when parsing CLI args
-# (`--yes`/`-y`). Consumed by the step wrappers in
-# `run/inc/fn/steps.sh` to skip their per-tool confirmation prompt and run the
-# step unconditionally. Individual install steps don't need to check it.
-#
-# Returns:
-#   0 if `--yes`/`-y` was passed, 1 otherwise.
-#
-is_yes_enabled() {
-  [[ "${assume_yes:-0}" -eq 1 ]]
-}

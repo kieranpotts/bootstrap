@@ -3,7 +3,7 @@
 #
 # Main entry point for the development environment bootstrapper.
 #
-# Usage: ./run/install [--profile=agent|tui|gui] [--yes]
+# Usage: ./run/install [--profile=agent|tui|gui]
 #
 #   --profile=agent   The minimal tooling a coding agent needs to work
 #                     unattended in a headless container.
@@ -11,7 +11,6 @@
 #                     at a terminal but no display. The default.
 #   --profile=gui     Everything in `tui`, plus applications, browsers, and
 #                     editors that need a display.
-#   -y, --yes         Assume yes to all per-tool install/update prompts.
 #   -h, --help        Show this help and exit.
 #
 # The profiles are cumulative, and `docs/tools.md` lists what each one
@@ -40,10 +39,6 @@ set -euo pipefail
 
 # Feature toggles:
 
-# Consumed by `is_yes_enabled` in `run/inc/fn/profile.sh`.
-# shellcheck disable=SC2034
-assume_yes=0
-
 # Consumed by the profile predicates in `run/inc/fn/profile.sh`, and through
 # them by the `*_step` wrappers in `run/inc/fn/steps.sh`. Defaults to `tui`:
 # a human at a terminal, with no display.
@@ -52,10 +47,6 @@ profile="tui"
 
 for arg in "$@"; do
   case "${arg}" in
-    -y|--yes)
-      # shellcheck disable=SC2034
-      assume_yes=1
-      ;;
     --profile=agent|--profile=tui|--profile=gui)
       # shellcheck disable=SC2034
       profile="${arg#--profile=}"
@@ -65,7 +56,7 @@ for arg in "$@"; do
       exit 1
       ;;
     -h|--help)
-      sed -n '4,19p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)

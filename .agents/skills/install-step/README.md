@@ -20,9 +20,8 @@ input, so the skill can be used in away-from-keyboard workflows. Where the
 requirements cannot be determined, the agent stops with an error rather than
 asking.
 
-Note that the *bootstrap run itself* prompts per tool unless `--yes` is
-passed or stdin is not a terminal. That is a property of the scripts, not of
-this skill.
+The *bootstrap run itself* is also non-interactive: every step runs
+unattended, with no per-tool prompt.
 
 ## How to invoke
 
