@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- fix: `./run/install --profile=<value>` now errors on an empty or invalid
+  value with a dedicated message, rather than falling through to the
+  generic "Unknown argument" case. `--profile=tui` is also now accepted
+  explicitly, matching `agent` and `gui`, even though it remains the
+  default.
 - behavior: remove the per-tool install/update prompts and the `--yes`/`-y`
   flag. Every step now runs unattended regardless of profile. Drops
   `is_yes_enabled` and the `assume_yes` flag, and the now-unused

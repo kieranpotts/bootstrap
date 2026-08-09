@@ -26,15 +26,15 @@
 driving this machine?", and the three answers are cumulative — each profile
 contains the one before it:
 
-| Profile | Flag                    | For                                             |
-|---------|-------------------------|-------------------------------------------------|
-| `agent` | `--profile=agent`       | Nobody. A headless container running agents.    |
-| `tui`   | *(the default)*         | A human at a terminal, with no display.         |
-| `gui`   | `--profile=gui`         | A human at a desktop. The full workstation.     |
+| Profile | Flag                 | For                                             |
+|---------|----------------------|-------------------------------------------------|
+| `agent` | `--profile=agent`    | Nobody. A headless container running agents.    |
+| `tui`   | (`--profile=tui`)    | A human at a terminal, with no display.         |
+| `gui`   | `--profile=gui`      | A human at a desktop. The full workstation.     |
 
 ```
 ./run/install --profile=agent
-./run/install
+./run/install (--profile=tui)
 ./run/install --profile=gui
 ```
 
