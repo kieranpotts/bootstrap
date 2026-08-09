@@ -19,8 +19,12 @@
 
 # npmrc_protect - Remove any `prefix`/`globalconfig` line from ~/.npmrc.
 #
-# Called once, early in `run/install`, before any step that might source
-# `nvm.sh`.
+# Called by `step()` (see `run/inc/fn/steps.sh`) immediately before every
+# single step, not just once at the start of the run. A one-time call isn't
+# enough: several of the npm-based CLI installers run mid-sequence (Claude
+# Code, Cline, Copilot, Continue, etc.) can reintroduce the setting the same
+# way `bashrc_protect` guards against them clobbering ~/.bashrc, so the
+# check has to run again before each step, not just before the first one.
 #
 npmrc_protect() {
   if [[ ! -f "${HOME}/.npmrc" ]]; then

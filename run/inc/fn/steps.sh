@@ -50,6 +50,12 @@ EOF
 #     reference variables third-party tools never bothered to default) kills
 #     the step, contrary to the documented intent in `run/install`.
 #
+# Also re-runs `npmrc_protect` (see `run/inc/fn/npmrc-protect.sh`) before
+# every step, not just once at the start of the run — some npm-based CLI
+# installers reintroduce the `~/.npmrc` setting it guards against midway
+# through the step sequence, so the guard has to be re-checked before each
+# step, not just before the first one.
+#
 # Functions and variables defined in the parent shell (print_*, superdo,
 # ${bashrc}, ${inc_path}, etc.) are inherited automatically.
 # State changes made inside the step (variable mutations, `cd`) do NOT
@@ -60,6 +66,8 @@ EOF
 #
 step() {
   local file="$1"
+
+  npmrc_protect
 
   # Disable errexit in the parent while the subshell runs, so a non-zero
   # exit from the subshell does not abort the bootstrap.

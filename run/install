@@ -129,10 +129,6 @@ print_starting
 # routing can be undone at the end of the bootstrap.
 bashrc_snapshot
 
-# Strip any ~/.npmrc settings incompatible with NVM, before any step below
-# gets a chance to source `nvm.sh` and be broken by them.
-npmrc_protect
-
 # Initial system compatibility checks. Sourced directly (not via `step()`)
 # so its `exit 1` on an unsupported OS aborts the entire bootstrap.
 . "${inc_path}/sys/checks.sh"
