@@ -10,5 +10,4 @@
 # software stacks here: https://github.com/github/gitignore
 #
 
-bootstrap.log
-bootstrap-*.log
+*.log
