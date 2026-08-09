@@ -127,8 +127,9 @@ user with an error message.
     inside the step file. The profiles are cumulative
     (`cli` ⊆ `tui` ⊆ `gui`):
 
-    - `tui_step` — the default. Tools needing a human at a terminal but no
-      display. Installed by a bare `./run/install`:
+    - `tui_step` — the safe default choice when unsure. Tools needing a
+      human at a terminal but no display. Installed by
+      `./run/install --profile=tui`:
 
       ```bash
       tui_step "${inc_path}/<group>/<name>.sh"

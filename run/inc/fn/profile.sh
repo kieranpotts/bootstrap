@@ -7,8 +7,11 @@
 # The profile answers "who is driving this machine?":
 #
 #   cli     Nobody. A headless container running coding agents.
-#   tui     A human at a terminal, with no display. The default.
+#   tui     A human at a terminal, with no display.
 #   gui     A human at a desktop.
+#
+# There is no default: `run/install` requires `--profile`, prompting for it
+# interactively when omitted at a terminal, and erroring otherwise.
 #
 # The profiles are cumulative - cli ⊆ tui ⊆ gui - so `gui` installs
 # everything and `cli` installs the least. Note that the name describes the
@@ -47,8 +50,11 @@ profile_rank() {
 
 # profile_at_least - Test whether the current profile includes the given one.
 #
-# Reads the `profile` variable set by `run/install`, defaulting to `tui` to
-# match that script.
+# Reads the `profile` variable set by `run/install`, which always holds a
+# valid profile by the time any step runs - `run/install` requires one,
+# resolving it via `--profile`, an interactive prompt, or an error before it
+# sources this file's callers. The `:-tui` fallback below is a defensive
+# backstop only, not a real default.
 #
 # Arguments:
 #   $1 - Minimum profile required, eg. `tui`.

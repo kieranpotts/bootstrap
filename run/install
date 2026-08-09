@@ -8,10 +8,15 @@
 #   --profile=cli     The minimal tooling a coding agent needs to work
 #                     unattended in a headless container.
 #   --profile=tui     Everything in `cli`, plus the tools that need a human
-#                     at a terminal but no display. The default.
+#                     at a terminal but no display.
 #   --profile=gui     Everything in `tui`, plus applications, browsers, and
 #                     editors that need a display.
 #   -h, --help        Show this help and exit.
+#
+# There is no default profile. Omitting `--profile` prompts for one at a
+# terminal; in a non-interactive run (no TTY - eg. a `docker build` layer or
+# CI) it is a required flag, and the script exits with an error rather than
+# guessing.
 #
 # The profiles are cumulative, and `docs/tools.md` lists what each one
 # installs. `./run/bootstrap` still exists as a deprecated wrapper around this
@@ -40,10 +45,9 @@ set -euo pipefail
 # Feature toggles:
 
 # Consumed by the profile predicates in `run/inc/fn/profile.sh`, and through
-# them by the `*_step` wrappers in `run/inc/fn/steps.sh`. Defaults to `tui`:
-# a human at a terminal, with no display.
-# shellcheck disable=SC2034
-profile="tui"
+# them by the `*_step` wrappers in `run/inc/fn/steps.sh`. Left unset until
+# resolved below - there is no default profile.
+profile=""
 
 for arg in "$@"; do
   case "${arg}" in
@@ -65,7 +69,7 @@ for arg in "$@"; do
       exit 1
       ;;
     -h|--help)
-      sed -n '4,18p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '4,23p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *)
@@ -75,6 +79,28 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+# No `--profile` was passed. There is no default: ask for one when a human
+# can answer, otherwise fail fast rather than guessing.
+if [[ -z "${profile}" ]]; then
+  if [[ -t 0 ]]; then
+    while true; do
+      read -r -p "Select install profile (cli/tui/gui): " profile
+      case "${profile}" in
+        cli|tui|gui)
+          break
+          ;;
+        *)
+          echo "Invalid profile: '${profile}'. Type one of: cli, tui, gui." >&2
+          ;;
+      esac
+    done
+  else
+    echo "\`--profile\` is required in a non-interactive run (no terminal attached to stdin)." >&2
+    echo "Pass one of: --profile=cli, --profile=tui, --profile=gui." >&2
+    exit 1
+  fi
+fi
 
 #
 # Global variables.

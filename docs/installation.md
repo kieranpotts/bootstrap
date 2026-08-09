@@ -4,8 +4,9 @@
 
 2. From the root directory of this repository, run `./run/install`.
 
-   By default this installs the `tui` profile: everything that works without
-   a display. Pass `--profile=gui` for the full workstation install:
+   There is no default profile: at a terminal, you're prompted to type
+   `cli`, `tui`, or `gui`. Pass `--profile` up front to skip the prompt, eg.
+   `--profile=gui` for the full workstation install:
 
    ```
    ./run/install --profile=gui
@@ -26,23 +27,29 @@
 driving this machine?", and the three answers are cumulative — each profile
 contains the one before it:
 
-| Profile | Flag                 | For                                             |
-|---------|----------------------|-------------------------------------------------|
-| `cli`   | `--profile=cli`      | Nobody. A headless container running agents.    |
-| `tui`   | (`--profile=tui`)    | A human at a terminal, with no display.         |
-| `gui`   | `--profile=gui`      | A human at a desktop. The full workstation.     |
+| Profile | Flag             | For                                          |
+|---------|------------------|-----------------------------------------------|
+| `cli`   | `--profile=cli`  | Nobody. A headless container running agents. |
+| `tui`   | `--profile=tui`  | A human at a terminal, with no display.      |
+| `gui`   | `--profile=gui`  | A human at a desktop. The full workstation.  |
 
 ```
 ./run/install --profile=cli
-./run/install (--profile=tui)
+./run/install --profile=tui
 ./run/install --profile=gui
 ```
+
+There is no default: omit `--profile` at a terminal and you're prompted to
+type one of `cli`, `tui`, or `gui`; omit it in a non-interactive run (no
+terminal attached to stdin — a `docker build` layer, CI, a piped/logged run)
+and the script errors rather than guessing.
 
 See [Tools](./tools.md) for the per-program breakdown of what each profile
 installs. `cli` is the profile used to build the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
-image; it installs nothing that assumes a human or a display. Every run is
-unattended: no profile prompts before installing a step.
+image; it installs nothing that assumes a human or a display. Once a profile
+is chosen, every step in it runs unattended, with no further per-tool
+prompt.
 
 > **Note:** the `tui` name describes the *environment*, not the shape of the
 > tools. That profile holds plenty of non-interactive CLIs (`aws`, `ffmpeg`,
@@ -52,12 +59,12 @@ unattended: no profile prompts before installing a step.
 ## Updating an existing machine
 
 `./run/install` is idempotent, so keeping a machine up to date is just
-re-running it: it refreshes APT repositories, upgrades installed packages,
-and re-runs every per-tool install step. Tools that are already current are
-left untouched and outdated ones are upgraded.
+re-running it with the same profile: it refreshes APT repositories, upgrades
+installed packages, and re-runs every per-tool install step. Tools that are
+already current are left untouched and outdated ones are upgraded.
 
 ```
-./run/install
+./run/install --profile=tui
 ```
 
 Pass `--profile=gui` to also update GUI applications:

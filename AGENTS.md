@@ -67,12 +67,11 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Tools
 
-- **`./run/install`** to provision a target machine from scratch, in the
-  default `tui` profile.
-
-- **`./run/install --profile=cli`** for the minimal tooling a coding agent
-  needs in a headless container, or **`--profile=gui`** for the full
-  workstation install. See `docs/tools.md`.
+- **`./run/install --profile=<cli|tui|gui>`** to provision a target machine
+  from scratch. There is no default profile; omitting `--profile` prompts
+  for one at a terminal, and errors in a non-interactive run. `cli` is the
+  minimal tooling a coding agent needs in a headless container, `gui` the
+  full workstation install. See `docs/tools.md`.
 
 - **`./run/install --help`** to print the usage banner.
 
@@ -95,8 +94,12 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - **`cli`** — nobody. A headless container running coding agents, eg.
   `docker-devcontainer`. No human to prompt, no display.
-- **`tui`** — a human at a terminal, with no display. **The default.**
+- **`tui`** — a human at a terminal, with no display.
 - **`gui`** — a human at a desktop. The full workstation install.
+
+There is no default profile: `run/install` requires `--profile`, prompting
+for one interactively when it's omitted at a terminal, and erroring in a
+non-interactive run (no TTY on stdin).
 
 `tui` names the *environment*, not the shape of the tools: that profile holds
 plenty of non-interactive CLIs (`aws`, `ffmpeg`, `terraform`) alongside actual

@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- behavior: `--profile` is now required, with no default. Omitting it at a
+  terminal prompts for `cli`, `tui`, or `gui`, re-prompting on an invalid
+  answer; omitting it in a non-interactive run (no TTY on stdin - a
+  `docker build` layer, CI, a piped/logged run) is now an error rather than
+  a silent `tui`.
 - behavior: rename the `agent` install profile to `cli`. `--profile=cli`
   replaces `--profile=agent` (the old value now errors, like any other
   invalid `--profile`), and `agent_step`/`is_agent_profile` are renamed to
@@ -9,8 +14,7 @@
 - fix: `./run/install --profile=<value>` now errors on an empty or invalid
   value with a dedicated message, rather than falling through to the
   generic "Unknown argument" case. `--profile=tui` is also now accepted
-  explicitly, matching `agent` and `gui`, even though it remains the
-  default.
+  explicitly, matching `agent`/`cli` and `gui`.
 - behavior: remove the per-tool install/update prompts and the `--yes`/`-y`
   flag. Every step now runs unattended regardless of profile. Drops
   `is_yes_enabled` and the `assume_yes` flag, and the now-unused

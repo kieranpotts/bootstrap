@@ -9,7 +9,7 @@ in that profile:
   [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
   image). Nothing here needs a human or a display.
 
-- **TUI** — `./run/install`, the default. Everything in CLI, plus the tools
+- **TUI** — `./run/install --profile=tui`. Everything in CLI, plus the tools
   that need a human at a terminal but no display. Note that the name describes
   the *environment*, not the shape of the tools: this profile holds plenty of
   non-interactive CLIs (`aws`, `ffmpeg`, `terraform`) alongside the terminal
