@@ -36,7 +36,7 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   `run/install` directly.
 
 - **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, the
-  `agent_step`/`tui_step`/`gui_step` profile wrappers, `superdo`, status
+  `cli_step`/`tui_step`/`gui_step` profile wrappers, `superdo`, status
   printers, banners), `profile.sh` (the profile predicates and runtime
   toggles), and `install-steps.sh`, which defines `run_install_steps` — the
   shared install step sequence.
@@ -70,7 +70,7 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 - **`./run/install`** to provision a target machine from scratch, in the
   default `tui` profile.
 
-- **`./run/install --profile=agent`** for the minimal tooling a coding agent
+- **`./run/install --profile=cli`** for the minimal tooling a coding agent
   needs in a headless container, or **`--profile=gui`** for the full
   workstation install. See `docs/tools.md`.
 
@@ -91,9 +91,9 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 `--profile` is the only axis controlling *what* gets installed. It answers
 "who is driving this machine?", and the three answers are cumulative —
-`agent` ⊆ `tui` ⊆ `gui`:
+`cli` ⊆ `tui` ⊆ `gui`:
 
-- **`agent`** — nobody. A headless container running coding agents, eg.
+- **`cli`** — nobody. A headless container running coding agents, eg.
   `docker-devcontainer`. No human to prompt, no display.
 - **`tui`** — a human at a terminal, with no display. **The default.**
 - **`gui`** — a human at a desktop. The full workstation install.
@@ -103,7 +103,7 @@ plenty of non-interactive CLIs (`aws`, `ffmpeg`, `terraform`) alongside actual
 terminal UIs.
 
 Profile membership is declared **at the call site** in
-`run/inc/fn/install-steps.sh`, via `agent_step`, `tui_step`, or `gui_step` —
+`run/inc/fn/install-steps.sh`, via `cli_step`, `tui_step`, or `gui_step` —
 never by a guard inside a step file. That keeps "what does this profile
 install?" answerable by reading one file, and it is why `run/inc/fn/steps.sh`
 has three wrappers rather than one. `docs/tools.md` is the rendered summary.
@@ -111,7 +111,7 @@ Steps outside the selected profile are skipped silently; every step inside
 it runs unattended, with no per-tool prompt.
 
 The predicates behind all of this live in `run/inc/fn/profile.sh`:
-`profile_at_least` (used by the wrappers) and `is_agent_profile`. An
+`profile_at_least` (used by the wrappers) and `is_cli_profile`. An
 unrecognised `--profile=<value>` is rejected at parse time. There is no
 `--gui` flag; it was replaced by `--profile=gui`, and passing it now exits
 with an error pointing at the replacement.
@@ -140,14 +140,14 @@ with an error pointing at the replacement.
   runs at all: if it does not belong in a profile, it is simply not called
   with that profile's wrapper.
 
-  A step MAY still call `is_agent_profile` to adjust its own behavior once
+  A step MAY still call `is_cli_profile` to adjust its own behavior once
   it is already running — eg. skipping a check that can only pass on real
-  hardware, inside a step shared across every profile via `agent_step`.
+  hardware, inside a step shared across every profile via `cli_step`.
   This is the rare exception, not membership by another name: the step
   still runs in every profile either way, only what it does once running
   changes.
 
-- MUST use `agent_step` only for a step that belongs in a minimal,
+- MUST use `cli_step` only for a step that belongs in a minimal,
   unattended, headless coding agent container — not merely "something most
   workstations want". `tui_step` is the safe default. Use `gui_step` when
   the tool needs a display. Update `docs/tools.md` to match whichever you
@@ -188,8 +188,8 @@ with an error pointing at the replacement.
   doesn't fall out of sync.
 
 - SHOULD update `docs/tools.md` when adding, removing, or reclassifying an
-  install step (moving it between `agent_step`, `tui_step`, and `gui_step`),
-  so the Agent/TUI/GUI table stays a trustworthy summary of
+  install step (moving it between `cli_step`, `tui_step`, and `gui_step`),
+  so the CLI/TUI/GUI table stays a trustworthy summary of
   `run_install_steps`.
 
 ## Skills

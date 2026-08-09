@@ -3,9 +3,8 @@
 ## Installing Docker
 
 The bootstrap scripts install the native Docker Engine (Docker CE), via
-`run/inc/exec/docker.sh`. That step is prompted like any other tool, so it
-can be declined, and it is excluded from the agent profile — a container
-does not need a Docker Engine of its own.
+`run/inc/exec/docker.sh`. That step is excluded from the CLI profile — a
+container does not need a Docker Engine of its own.
 
 Docker Desktop is _not_ installed. On Linux it runs its own daemon in a VM
 and hijacks the active Docker CLI context, which conflicts with the native

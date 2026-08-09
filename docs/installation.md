@@ -28,18 +28,18 @@ contains the one before it:
 
 | Profile | Flag                 | For                                             |
 |---------|----------------------|-------------------------------------------------|
-| `agent` | `--profile=agent`    | Nobody. A headless container running agents.    |
+| `cli`   | `--profile=cli`      | Nobody. A headless container running agents.    |
 | `tui`   | (`--profile=tui`)    | A human at a terminal, with no display.         |
 | `gui`   | `--profile=gui`      | A human at a desktop. The full workstation.     |
 
 ```
-./run/install --profile=agent
+./run/install --profile=cli
 ./run/install (--profile=tui)
 ./run/install --profile=gui
 ```
 
 See [Tools](./tools.md) for the per-program breakdown of what each profile
-installs. `agent` is the profile used to build the
+installs. `cli` is the profile used to build the
 [`docker-devcontainer`](https://hub.docker.com/r/kieranpotts/docker-devcontainer)
 image; it installs nothing that assumes a human or a display. Every run is
 unattended: no profile prompts before installing a step.

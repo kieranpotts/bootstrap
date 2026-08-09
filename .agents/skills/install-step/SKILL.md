@@ -37,7 +37,7 @@ user with an error message.
 - **The operation — REQUIRED.** Whether the tool is being added, modified,
   or removed.
 
-- **The install profile — OPTIONAL.** Which of `agent`, `tui`, or `gui` the
+- **The install profile — OPTIONAL.** Which of `cli`, `tui`, or `gui` the
   step belongs to. Default to `tui`. For an existing tool, read the current
   profile from its call in `run/inc/fn/install-steps.sh`.
 
@@ -125,7 +125,7 @@ user with an error message.
     The wrapper you call it with declares the profile the step belongs to.
     That choice is the policy decision, and it MUST be made here, never
     inside the step file. The profiles are cumulative
-    (`agent` ⊆ `tui` ⊆ `gui`):
+    (`cli` ⊆ `tui` ⊆ `gui`):
 
     - `tui_step` — the default. Tools needing a human at a terminal but no
       display. Installed by a bare `./run/install`:
@@ -138,11 +138,11 @@ user with an error message.
       graphical editors. Installed only by `./run/install --profile=gui`.
       Same arguments as `tui_step`.
 
-    - `agent_step` — tools belonging in a minimal, unattended, headless
+    - `cli_step` — tools belonging in a minimal, unattended, headless
       container, which the bootstrap therefore treats as non-negotiable:
 
       ```bash
-      agent_step "${inc_path}/<group>/<name>.sh"
+      cli_step "${inc_path}/<group>/<name>.sh"
       ```
 
       Use it only where a coding agent genuinely needs the tool with no
@@ -178,8 +178,8 @@ user with an error message.
     them in the same change:
 
     - `docs/tools.md`: add, remove, or amend the program's row in the
-      Agent/TUI/GUI table. The columns are cumulative, so a ✅ in one
-      profile implies a ✅ in every profile to its right: `agent_step` is
+      CLI/TUI/GUI table. The columns are cumulative, so a ✅ in one
+      profile implies a ✅ in every profile to its right: `cli_step` is
       ✅ in all three, `tui_step` in TUI and GUI, `gui_step` in GUI only.
       Keep the table sorted by program name.
 
@@ -246,7 +246,7 @@ user with an error message.
 
   ```bash
   # ❌ No. This is what the call site is for.
-  is_agent_profile && return 0
+  is_cli_profile && return 0
 
   # ✅ Yes. Nothing about the profile appears in the step file at all.
   print_step "Installing <thing>."
@@ -382,11 +382,11 @@ user with an error message.
 
 - [`run/inc/fn/steps.sh`](../../run/inc/fn/steps.sh) \
   Read for the source of `print_step`, `step`, and the
-  `agent_step`/`tui_step`/`gui_step` wrappers.
+  `cli_step`/`tui_step`/`gui_step` wrappers.
 
 - [`run/inc/fn/profile.sh`](../../run/inc/fn/profile.sh) \
   Read when you need the exact semantics of `profile_at_least` or
-  `is_agent_profile`.
+  `is_cli_profile`.
 
 - [`run/inc/fn/install-steps.sh`](../../run/inc/fn/install-steps.sh) \
   Read before wiring a step in, to find the group and the alphabetical

@@ -86,14 +86,14 @@ step() {
 
 # profile_step - Run a step if the current profile includes it.
 #
-# The shared implementation behind `agent_step`, `tui_step`, and `gui_step`.
+# The shared implementation behind `cli_step`, `tui_step`, and `gui_step`.
 # The step runs only when the requested profile is at least the one this
 # call site requires (see `profile_at_least`). Filtering is silent: a step
 # left out of the profile prints nothing, because `docs/tools.md` already
 # documents what each profile contains.
 #
 # Arguments:
-#   $1 - Minimum profile this step belongs to (`agent`, `tui`, or `gui`).
+#   $1 - Minimum profile this step belongs to (`cli`, `tui`, or `gui`).
 #   $2 - Absolute path to the step file to source.
 #
 profile_step() {
@@ -105,7 +105,7 @@ profile_step() {
   step "${file}"
 }
 
-# agent_step - Run a step in every profile, including `agent`.
+# cli_step - Run a step in every profile, including `cli`.
 #
 # The minimal tooling a coding agent needs to work unattended in a headless
 # container, and which a human workstation wants too: these are the tools
@@ -114,8 +114,8 @@ profile_step() {
 # Arguments:
 #   $1 - Absolute path to the step file to source.
 #
-agent_step() {
-  profile_step "agent" "$1"
+cli_step() {
+  profile_step "cli" "$1"
 }
 
 # tui_step - Run a step in the `tui` and `gui` profiles.

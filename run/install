@@ -3,11 +3,11 @@
 #
 # Main entry point for the development environment bootstrapper.
 #
-# Usage: ./run/install [--profile=agent|tui|gui]
+# Usage: ./run/install [--profile=cli|tui|gui]
 #
-#   --profile=agent   The minimal tooling a coding agent needs to work
+#   --profile=cli     The minimal tooling a coding agent needs to work
 #                     unattended in a headless container.
-#   --profile=tui     Everything in `agent`, plus the tools that need a human
+#   --profile=tui     Everything in `cli`, plus the tools that need a human
 #                     at a terminal but no display. The default.
 #   --profile=gui     Everything in `tui`, plus applications, browsers, and
 #                     editors that need a display.
@@ -50,12 +50,12 @@ for arg in "$@"; do
     --profile=*)
       value="${arg#--profile=}"
       case "${value}" in
-        agent|tui|gui)
+        cli|tui|gui)
           # shellcheck disable=SC2034
           profile="${value}"
           ;;
         *)
-          echo "Invalid \`--profile\` value: '${value}'. Must be one of: agent, tui, gui." >&2
+          echo "Invalid \`--profile\` value: '${value}'. Must be one of: cli, tui, gui." >&2
           exit 1
           ;;
       esac

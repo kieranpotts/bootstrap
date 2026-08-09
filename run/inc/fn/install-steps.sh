@@ -20,7 +20,7 @@
 # inside the step file - so the answer to "what is actually in my image?"
 # fits on one screen, instead of being scattered across ninety files:
 #
-#   agent_step    Runs in every profile. The minimal tooling a coding agent
+#   cli_step      Runs in every profile. The minimal tooling a coding agent
 #                 needs to work unattended in a headless container.
 #   tui_step      Runs in `tui` (the default) and `gui`. Needs a human, but
 #                 no display.
@@ -72,9 +72,9 @@ run_install_steps() {
   # container) needs a JVM, PHP, Rust, or a full Docker Engine of its own.
   tui_step "${inc_path}/exec/docker.sh"
   tui_step "${inc_path}/exec/jdk.sh"
-  agent_step "${inc_path}/exec/node.sh"
+  cli_step "${inc_path}/exec/node.sh"
   tui_step "${inc_path}/exec/php.sh"
-  agent_step "${inc_path}/exec/python.sh"
+  cli_step "${inc_path}/exec/python.sh"
   tui_step "${inc_path}/exec/rust.sh"
 
   # Web browsers.
@@ -103,23 +103,23 @@ run_install_steps() {
   gui_step "${inc_path}/dev/bruno.sh"
   tui_step "${inc_path}/dev/claude.sh"
   tui_step "${inc_path}/dev/cline.sh"
-  agent_step "${inc_path}/dev/codespell.sh"
+  cli_step "${inc_path}/dev/codespell.sh"
   tui_step "${inc_path}/dev/continue.sh"
   tui_step "${inc_path}/dev/copilot.sh"
   tui_step "${inc_path}/dev/ctop.sh"
   tui_step "${inc_path}/dev/cursor-cli.sh"
   gui_step "${inc_path}/dev/cursor-gui.sh"
-  agent_step "${inc_path}/dev/delta.sh"
+  cli_step "${inc_path}/dev/delta.sh"
   tui_step "${inc_path}/dev/dive.sh"
   tui_step "${inc_path}/dev/docker-credential-pass.sh"
   tui_step "${inc_path}/dev/docker-mcp.sh"
-  agent_step "${inc_path}/dev/editorconfig-checker.sh"
+  cli_step "${inc_path}/dev/editorconfig-checker.sh"
   tui_step "${inc_path}/dev/ffmpeg.sh"
   gui_step "${inc_path}/dev/frame0.sh"
-  agent_step "${inc_path}/dev/gh.sh"
+  cli_step "${inc_path}/dev/gh.sh"
   tui_step "${inc_path}/dev/gh-dash.sh"
   gui_step "${inc_path}/dev/ghostty.sh"
-  agent_step "${inc_path}/dev/git-lfs.sh"
+  cli_step "${inc_path}/dev/git-lfs.sh"
   tui_step "${inc_path}/dev/hermes-agent.sh"
   tui_step "${inc_path}/dev/inshellisense.sh"
   gui_step "${inc_path}/dev/insomnia.sh"
@@ -137,12 +137,12 @@ run_install_steps() {
   tui_step "${inc_path}/dev/opencode.sh"
   tui_step "${inc_path}/dev/pi.sh"
   gui_step "${inc_path}/dev/postman.sh"
-  agent_step "${inc_path}/dev/pre-commit.sh"
+  cli_step "${inc_path}/dev/pre-commit.sh"
   tui_step "${inc_path}/dev/qwen-code.sh"
-  agent_step "${inc_path}/dev/shellcheck.sh"
-  agent_step "${inc_path}/dev/skills-ref.sh"
+  cli_step "${inc_path}/dev/shellcheck.sh"
+  cli_step "${inc_path}/dev/skills-ref.sh"
   gui_step "${inc_path}/dev/sourcegit.sh"
-  agent_step "${inc_path}/dev/tmux.sh"
+  cli_step "${inc_path}/dev/tmux.sh"
   gui_step "${inc_path}/dev/vscode.sh"
   gui_step "${inc_path}/dev/vscode-insiders.sh"
   gui_step "${inc_path}/dev/vscodium.sh"

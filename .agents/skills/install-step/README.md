@@ -6,7 +6,7 @@ how an existing tool is installed, or removing one.
 The skill walks an agent through the whole change, not just the shell
 script: picking the right group under `run/inc/`, writing the step file from
 the project's template, wiring the call into `run_install_steps` through the
-wrapper for the tool's install profile (`agent_step`, `tui_step`, or
+wrapper for the tool's install profile (`cli_step`, `tui_step`, or
 `gui_step`), then updating `CHANGELOG.md`, `docs/tools.md`, and
 `NOTES.md`, and finally linting and smoke-testing the result. It
 deliberately stops at the shared helpers in `run/inc/fn/` — those are

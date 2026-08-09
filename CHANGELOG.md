@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- behavior: rename the `agent` install profile to `cli`. `--profile=cli`
+  replaces `--profile=agent` (the old value now errors, like any other
+  invalid `--profile`), and `agent_step`/`is_agent_profile` are renamed to
+  `cli_step`/`is_cli_profile`. What the profile installs is unchanged.
 - fix: `./run/install --profile=<value>` now errors on an empty or invalid
   value with a dedicated message, rather than falling through to the
   generic "Unknown argument" case. `--profile=tui` is also now accepted
