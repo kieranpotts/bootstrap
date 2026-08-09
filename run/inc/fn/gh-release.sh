@@ -34,6 +34,6 @@ gh_asset_url() {
   local pattern="$2"
   curl -s "https://api.github.com/repos/${repo}/releases/latest" \
     | grep -oP '"browser_download_url": "\K[^"]+' \
-    | grep -E "${pattern}" \
+    | grep -E -- "${pattern}" \
     | head -1
 }

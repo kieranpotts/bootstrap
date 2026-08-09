@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- fix: pass `--` to `grep -E` in `gh_asset_url`, so an asset-matching
+  pattern that starts with `-` (eg. Pied's `-x86_64\.tar\.gz$`) is not
+  misparsed as `grep` options.
 - behavior: add guard to protect against injection of `.npmrc` settings that
   are incompatible with `nvm`.
 - feature: replace `--gui` with a single `--profile=agent|tui|gui` flag,
