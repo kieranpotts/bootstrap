@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- behavior: `htop` moves from unconditional (every profile) to a `tui_step`,
+  so it is no longer installed under `--profile=cli` - it's an interactive
+  tool for a human, not plumbing a headless container needs.
 - behavior: `--profile` is now required, with no default. Omitting it at a
   terminal prompts for `cli`, `tui`, or `gui`, re-prompting on an invalid
   answer; omitting it in a non-interactive run (no TTY on stdin - a

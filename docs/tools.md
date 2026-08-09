@@ -64,7 +64,7 @@ disagree, the code wins.
 | `git-lfs`                    | ✅  | ✅  | ✅  |
 | `gnupg`                      | ✅  | ✅  | ✅  |
 | `hermes-agent`               | —   | ✅  | ✅  |
-| `htop`                       | ✅  | ✅  | ✅  |
+| `htop`                       | —   | ✅  | ✅  |
 | `icoutils`                   | ✅  | ✅  | ✅  |
 | `inotify-tools`              | ✅  | ✅  | ✅  |
 | `inshellisense`              | —   | ✅  | ✅  |
@@ -124,12 +124,14 @@ disagree, the code wins.
 
 The rows showing ✅ in every column with no corresponding call in
 `run/inc/fn/install-steps.sh` (`apt-transport-https`, `ca-certificates`,
-`curl`, `git`, `gnupg`, `htop`, `icoutils`, `inotify-tools`, `jq`,
+`curl`, `git`, `gnupg`, `icoutils`, `inotify-tools`, `jq`,
 `lsb-release`, `make`, `ripgrep`, `software-properties-common`, `tar`,
 `unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
-every profile.
+every profile. `htop` lives in the same `util/` directory but, unlike
+those, is called from `run_install_steps` as a `tui_step` — a human tool,
+not first-run plumbing — so it is absent from the `cli` profile.
 
 `pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
 checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are

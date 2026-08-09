@@ -3,6 +3,11 @@
 #
 # Install the tmux multiplexer.
 #
+# Even though tmux is primarily used as a TUI program, it can be used
+# programmatically too, and it may be used by some agents to manage
+# persistent background sessions. For this reason, it it installed
+# in the CLI profile.
+#
 # https://github.com/tmux/tmux
 #
 

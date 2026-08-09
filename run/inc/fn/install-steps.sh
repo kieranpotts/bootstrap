@@ -66,6 +66,11 @@ run_install_steps() {
   step "${inc_path}/sys/update.sh"
   step "${inc_path}/sys/upgrade.sh"
 
+  # Utilities. Unlike the base util/* utilities sourced inline in
+  # `run/install` (curl, git, gnupg, etc.), htop is an interactive tool a
+  # human needs, not plumbing another step depends on, so it belongs here.
+  tui_step "${inc_path}/util/htop.sh"
+
   # Runtime (execution) environments. Node and Python are in every profile -
   # most agent CLIs are npm-installed, and a lot of tooling is Python. The
   # others need a human to have asked for them: not every machine (or agent
