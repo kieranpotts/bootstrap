@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+- fix: `oh-my-posh enable upgrade`, not `oh-my-posh enable autoupgrade` -
+  the upstream CLI renamed the auto-upgrade feature and now rejects the old
+  name.
 - fix: pass `--` to `grep -E` in `gh_asset_url`, so an asset-matching
   pattern that starts with `-` (eg. Pied's `-x86_64\.tar\.gz$`) is not
   misparsed as `grep` options.

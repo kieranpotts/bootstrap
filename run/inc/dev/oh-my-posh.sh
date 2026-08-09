@@ -23,6 +23,6 @@ curl -s https://ohmyposh.dev/install.sh | superdo bash -s -- -d /usr/local/bin
 # systemd timer entry for the invoking user), so it must NOT run under
 # `superdo` — otherwise the autoupgrade job would be installed for root
 # instead of the actual user on local installs.
-oh-my-posh enable autoupgrade
+oh-my-posh enable upgrade
 
 oh-my-posh --version
