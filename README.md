@@ -9,7 +9,6 @@ Provisioning scripts for my standard local development environment.
 - [**Tools**](./docs/tools.md)
 - [**Releasing**](./docs/releasing.md)
 - [**Considerations**](./docs/considerations.md)
-- [**Drift**](./docs/drift.md)
 
 -----
 

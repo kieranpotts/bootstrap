@@ -66,7 +66,7 @@ user with an error message.
   step file, and against `run/install` if it was touched.
 
 - `CHANGELOG.md` SHOULD carry a new bullet under `## [Unreleased]`, and
-  `docs/tools.md` and `docs/drift.md` SHOULD each carry a matching row.
+  `docs/tools.md` and `NOTES.md` SHOULD each carry a matching row.
   These are hand-maintained summaries, so a change that skips them drifts
   silently.
 
@@ -183,7 +183,7 @@ user with an error message.
       ✅ in all three, `tui_step` in TUI and GUI, `gui_step` in GUI only.
       Keep the table sorted by program name.
 
-    - `docs/drift.md`: add or remove the program's row, recording whether
+    - `NOTES.md`: add or remove the program's row, recording whether
       the private `hacksltd` bootstrapper installs it too.
 
 7.  Lint the script.
@@ -311,7 +311,7 @@ user with an error message.
 - The tool is being removed.
 
   Delete the step file, remove its call from `run_install_steps`, drop its
-  rows from `docs/tools.md` and `docs/drift.md`, and add an `[Unreleased]`
+  rows from `docs/tools.md` and `NOTES.md`, and add an `[Unreleased]`
   changelog entry. Consider whether the bootstrap SHOULD also remove an
   already-installed copy from existing machines (`apt-get remove -y …`) —
   usually yes, so that existing machines converge on the new desired state.

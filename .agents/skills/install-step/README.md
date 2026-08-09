@@ -8,7 +8,7 @@ script: picking the right group under `run/inc/`, writing the step file from
 the project's template, wiring the call into `run_install_steps` through the
 wrapper for the tool's install profile (`agent_step`, `tui_step`, or
 `gui_step`), then updating `CHANGELOG.md`, `docs/tools.md`, and
-`docs/drift.md`, and finally linting and smoke-testing the result. It
+`NOTES.md`, and finally linting and smoke-testing the result. It
 deliberately stops at the shared helpers in `run/inc/fn/` — those are
 infrastructure, and changing them is a different kind of change.
 
@@ -77,5 +77,5 @@ flowchart LR
 - [`docs/installation.md`](../../docs/installation.md) — entry scripts and
   install profiles.
 - [`docs/tools.md`](../../docs/tools.md) — the Agent/TUI/GUI table.
-- [`docs/drift.md`](../../docs/drift.md) — comparison against the private
+- [`NOTES.md`](../../NOTES.md) — comparison against the private
   `hacksltd` bootstrapper.

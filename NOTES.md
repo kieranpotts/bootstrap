@@ -1,8 +1,10 @@
-# Drift
+# Notes
+
+## Drift
 
 I maintain a near-identical bootstrap script in a private repository for my
-consultancy business. This table documents divergence in what each bootstrapper
-installs, for convenient quick-reference.
+consultancy business. This table documents divergence in what each bootstrap
+script installs.
 
 | Program                      | kieranpotts | hacksltd   |
 |------------------------------|-------------|------------|

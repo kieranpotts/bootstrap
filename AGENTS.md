@@ -62,8 +62,8 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 - **`run/inc/phy/`**: Hardware-related tooling (eg. ROCm).
 
 - **`docs/`**: Installation, requirements, tools (what installs under each
-  profile), releasing, considerations, drift (vs. the private `hacksltd`
-  bootstrapper), and architecture decision records (`docs/adr/`).
+  profile), releasing, considerations, and architecture decision records
+  (`docs/adr/`).
 
 ## Tools
 
@@ -183,7 +183,7 @@ with an error pointing at the replacement.
 - SHOULD add an "[Unreleased]" entry to `CHANGELOG.md` when adding,
   removing, or materially changing an install step.
 
-- SHOULD add a row to `docs/drift.md` when adding or removing an install
+- SHOULD add a row to `NOTES.md` when adding or removing an install
   step, so the comparison against the private `hacksltd` bootstrapper
   doesn't fall out of sync.
 
