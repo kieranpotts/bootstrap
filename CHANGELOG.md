@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+- fix: `step()` now explicitly turns `-u`/`pipefail` back off inside the
+  per-step subshell, matching the documented intent that steps run under
+  `set -e` only. Bash subshells inherit every option from the parent, so the
+  entry point's full strict mode (`set -euo pipefail`) was leaking into
+  every step - eg. `node.sh`/`rust.sh` re-sourcing the user's real
+  `~/.bashrc` and aborting on an unset variable referenced by a third-party
+  init script (`~/.inshellisense/init/bash/init.sh`).
 - fix: `oh-my-posh enable upgrade`, not `oh-my-posh enable autoupgrade` -
   the upstream CLI renamed the auto-upgrade feature and now rejects the old
   name.

@@ -50,11 +50,20 @@ EOF
 
 # step - Run a bootstrap step in an isolated subshell.
 #
-# Sources the given file inside `( set -e; source FILE )`, so that:
+# Sources the given file inside `( set +u +o pipefail; set -e; source FILE )`,
+# so that:
 #   - Internal command failures within the step still abort the step
 #     (via errexit inside the subshell).
 #   - `exit N` within the step terminates only the subshell, not the parent
 #     bootstrap — the failure is logged and the next step runs.
+#   - The step runs under `set -e` only, not the entry point's full strict
+#     mode. `-u` and `pipefail` are explicitly turned back off here, because
+#     bash subshells otherwise inherit *every* option from the parent - a
+#     bare `set -e` inside the subshell only reasserts errexit, it does not
+#     undo `-u`/`pipefail`. Without this, an unset-var reference anywhere a
+#     step touches (eg. sourcing the user's real `~/.bashrc`, which may
+#     reference variables third-party tools never bothered to default) kills
+#     the step, contrary to the documented intent in `run/install`.
 #
 # Functions and variables defined in the parent shell (print_*, superdo,
 # is_updating, ${bashrc}, ${inc_path}, etc.) are inherited automatically.
@@ -72,7 +81,7 @@ step() {
   set +e
 
   # shellcheck disable=SC1090
-  ( set -e; source "${file}" )
+  ( set +u +o pipefail; set -e; source "${file}" )
   local rc=$?
   set -e
 
