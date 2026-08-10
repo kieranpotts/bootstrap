@@ -22,15 +22,33 @@ npm install -g @microsoft/inshellisense
 
 is --version
 
-# Add to ~/.bashrc (or ~/local.bashrc, if that's what `${bashrc}` resolves
-# to - see `run/install`) so inshellisense automatically opens in every new
-# shell session. Avoid duplication by checking for the presence of the
-# sourcing line `is init bash` writes.
+# Add to ~/.bashrc (or ~/local.bashrc) so inshellisense automatically opens in
+# every new shell session.
 print_info "Configuring ~/.bashrc to load inshellisense shell startup."
 
+# The naive approach below - letting `is init bash` append its raw sourcing
+# line unconditionally - was found to break tmux pane rendering. That's
+# because both inshellisense and tmux wrap the shell in their own
+# pseudo-terminal, and nesting the two causes redraw/cursor-position escape
+# sequences to fight each other, corrupting pane output. Left here, commented
+# out, for reference:
+
+# shellcheck disable=SC2154
+##if [[ -f "${bashrc}" ]]; then
+##  if ! grep -qF ".inshellisense/init/bash/init.sh" "${bashrc}"; then
+##    is init bash >> "${bashrc}"
+##  fi
+##fi
+
+# Instead, guard the sourcing on `$TMUX` being unset, so inshellisense only
+# initializes in a top-level terminal, never inside a tmux pane.
 # shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
   if ! grep -qF ".inshellisense/init/bash/init.sh" "${bashrc}"; then
-    is init bash >> "${bashrc}"
+    {
+      echo "if [[ -z \"\${TMUX}\" ]]; then"
+      is init bash | sed 's/^/  /'
+      echo "fi"
+    } >> "${bashrc}"
   fi
 fi
