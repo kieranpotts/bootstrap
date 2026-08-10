@@ -85,3 +85,39 @@ gh_asset_url() {
 
   echo "${url}"
 }
+
+# gh_latest_release_tag - Print the `tag_name` of the most recent release for
+# a GitHub repo, including pre-releases.
+#
+# `gh_latest_tag` queries the `/releases/latest` endpoint, which GitHub
+# defines as the most recent *non-prerelease*, non-draft release, and 404s if
+# a repo has none (eg. every release of `docker/mcp-gateway` is flagged as a
+# pre-release). This walks the full `/releases` list instead - newest first -
+# and takes the first entry, so it works for those repos too.
+#
+# Arguments:
+#   $1 - GitHub repo in `owner/name` form.
+#
+# Output:
+#   The tag exactly as returned by the API, eg. `v0.42.0` or `0.42.0`.
+#   Callers should strip the leading `v` themselves if they don't want it.
+#
+gh_latest_release_tag() {
+  local repo="$1"
+  local tag=""
+
+  if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+    tag=$(gh api "repos/${repo}/releases" --jq '.[0].tag_name' 2>/dev/null)
+  else
+    tag=$(curl -s "https://api.github.com/repos/${repo}/releases" \
+      | grep -Po '"tag_name": "\K[^"]*' \
+      | head -1)
+  fi
+
+  if [[ -z "${tag}" ]]; then
+    print_error "Could not determine the latest release tag for ${repo}. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed."
+    return 1
+  fi
+
+  echo "${tag}"
+}

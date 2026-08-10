@@ -61,6 +61,11 @@ and various designs for the installation profiles.
   (5,000 requests/hour) partway through.
 - Both `gh_latest_tag`/`gh_asset_url` functions now also fail loudly with a
   rate-limit hint if no tag/asset is found, instead of returning empty.
+- Add `gh_latest_release_tag`, and use it in the Docker MCP Gateway install.
+  Every `docker/mcp-gateway` release is flagged as a pre-release, so it
+  can't use `gh_latest_tag`'s `/releases/latest` endpoint. It had its own
+  inline unauthenticated `curl` call to the full releases list, bypassing the
+  `gh` CLI hardening.
 - Retry `apt-get update` up to 3 times in the system update step. A
   third-party APT mirror mid-sync can transiently fail the fetch.
 

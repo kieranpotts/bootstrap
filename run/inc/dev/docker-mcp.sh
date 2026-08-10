@@ -20,9 +20,9 @@ if docker mcp --version >/dev/null 2>&1; then
 fi
 
 # Every release of `docker/mcp-gateway` is flagged as a pre-release, so the
-# `/releases/latest` endpoint used by `gh_latest_tag` 404s. Read the most
-# recent tag from the full releases list instead (strip the leading `v`).
-latest_version=$(curl -s "https://api.github.com/repos/docker/mcp-gateway/releases" | grep -Po '"tag_name": "\K[^"]*' | head -1 | sed 's/^v//')
+# `/releases/latest` endpoint used by `gh_latest_tag` 404s. Use
+# `gh_latest_release_tag` instead, which reads the full releases list.
+latest_version=$(gh_latest_release_tag docker/mcp-gateway | sed 's/^v//')
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Docker MCP Gateway is already installed and at the latest version, v${installed_version}. Skipping."
