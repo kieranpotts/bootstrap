@@ -33,7 +33,7 @@
 # individual step files from breaking on unset-var references in the 50+
 # install scripts that pre-date the strict-mode convention.
 
-set -euxo pipefail
+set -euo pipefail
 
 # Use this instead for debugging problems with the script.
 #set -euxo pipefail
