@@ -101,3 +101,4 @@ script installs.
 | `wget`                       |     ✅      |     ✅     |
 | `xpdf-reader`                |     ✅      |     ✅     |
 | `zed`                        |     ✅      |     ✅     |
+| `zellij`                     |     ✅      |     —      |

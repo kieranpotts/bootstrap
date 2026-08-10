@@ -121,6 +121,7 @@ disagree, the code wins.
 | `wget`                       | ✅  | ✅  | ✅  |
 | `xpdf-reader`                | —   | ✅  | ✅  |
 | `zed`                        | —   | —   | ✅  |
+| `zellij`                     | —   | ✅  | ✅  |
 
 The rows showing ✅ in every column with no corresponding call in
 `run/inc/fn/install-steps.sh` (`apt-transport-https`, `ca-certificates`,

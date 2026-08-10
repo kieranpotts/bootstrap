@@ -153,6 +153,7 @@ run_install_steps() {
   gui_step "${inc_path}/dev/vscodium.sh"
   gui_step "${inc_path}/dev/warp.sh"
   gui_step "${inc_path}/dev/zed.sh"
+  tui_step "${inc_path}/dev/zellij.sh"
 
   # Ops tools.
   tui_step "${inc_path}/ops/aws.sh"

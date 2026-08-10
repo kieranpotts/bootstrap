@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Install Zellij (`zellij`), a terminal multiplexer, in the `tui` profile.
 - behavior: `htop` moves from unconditional (every profile) to a `tui_step`,
   so it is no longer installed under `--profile=cli` - it's an interactive
   tool for a human, not plumbing a headless container needs.
