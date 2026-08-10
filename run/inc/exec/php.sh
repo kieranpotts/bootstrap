@@ -20,11 +20,21 @@ print_step "Installing PHP via phpenv."
 cwd=$(pwd)
 
 # Checkout phpenv into ~/.phpenv. Else update it.
+#
+# Upstream has renamed its default branch before (master -> main), which left
+# existing clones tracking a ref that no longer exists on the remote, so
+# `git pull` failed with "no such ref was fetched" and aborted this whole
+# step. Re-clone from scratch if a plain pull fails, rather than assuming the
+# tracked branch is still valid.
 if [[ ! -d "${HOME}/.phpenv" ]]; then
   git clone https://github.com/phpenv/phpenv.git "${HOME}/.phpenv"
 else
   cd "${HOME}/.phpenv" || true
-  git pull
+  git pull || {
+    cd "${HOME}" || true
+    rm -rf "${HOME}/.phpenv"
+    git clone https://github.com/phpenv/phpenv.git "${HOME}/.phpenv"
+  }
 fi
 
 # Move back to the original directory.
@@ -53,6 +63,10 @@ eval "$(phpenv init -)"
 # Install php-build as a plugin. Clone on first run, pull on subsequent runs
 # (a bare `git clone` aborts when the target directory already exists).
 # https://github.com/php-build/php-build
+#
+# Same hardening as the phpenv clone/pull above: if the tracked branch has
+# been renamed or removed upstream, `git pull` fails and would otherwise
+# abort this step, so fall back to a fresh clone.
 
 php_build_dir="$(phpenv root)/plugins/php-build"
 if [[ ! -d "${php_build_dir}/.git" ]]; then
@@ -60,7 +74,12 @@ if [[ ! -d "${php_build_dir}/.git" ]]; then
   git clone https://github.com/php-build/php-build "${php_build_dir}"
 else
   cd "${php_build_dir}" || true
-  git pull
+  git pull || {
+    cd "${HOME}" || true
+    rm -rf "${php_build_dir}"
+    mkdir -p "${php_build_dir}"
+    git clone https://github.com/php-build/php-build "${php_build_dir}"
+  }
 fi
 
 # Also install php-build as a standalone binary. This is required

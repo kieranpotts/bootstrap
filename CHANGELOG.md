@@ -51,6 +51,9 @@ and various designs for the installation profiles.
   pattern that starts with `-` (eg. Pied's `-x86_64\.tar\.gz$`) is not
   wrongly parsed as `grep` options.
 - Fix use of `sudo` (→ `superdo`) for ROCm and Microsoft Edge installs.
+- Fix clone of `~/.phpenv` and the `php-build` plugin if `git pull` fails due
+  to the default branch changing on an existing checkout — it had been changed
+  from `master` to `main`.
 
 ## [1.5.0] - 2026-07-24
 
