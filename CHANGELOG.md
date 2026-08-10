@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-08-10
+
 This release focused on extensive refactoring. In addition to the final
 featureset, experimental changes including introducing per-tool install
 prompts (ultimately rejected), a sibling `./run/update` script (also rejected),
