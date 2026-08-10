@@ -29,4 +29,19 @@ superdo apt-get -y autoremove
 superdo apt-get -y --purge remove && superdo apt-get autoclean
 
 # Update the package list.
-superdo apt-get update
+#
+# Retry a few times on failure. This has been observed to fail transiently
+# (exit 100) when a third-party APT mirror is mid-sync and briefly serves a
+# Packages file whose declared size doesn't match what's fetched (eg.
+# "File has unexpected size ... Mirror sync in progress?" from
+# packages.mozilla.org) - the same mirror is fine seconds later.
+attempt=1
+until superdo apt-get update; do
+  if (( attempt >= 3 )); then
+    print_error "apt-get update failed after ${attempt} attempts."
+    exit 1
+  fi
+  print_warning "apt-get update failed (attempt ${attempt}/3). Retrying in 5s..."
+  attempt=$((attempt + 1))
+  sleep 5
+done

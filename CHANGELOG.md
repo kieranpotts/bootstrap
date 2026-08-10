@@ -54,6 +54,15 @@ and various designs for the installation profiles.
 - Fix clone of `~/.phpenv` and the `php-build` plugin if `git pull` fails due
   to the default branch changing on an existing checkout — it had been changed
   from `master` to `main`.
+- `gh_latest_tag`/`gh_asset_url` now query the GitHub API via the authenticated
+  `gh` CLI instead of unauthenticated `curl` (60/hour), falling back to `curl`
+  only if `gh` isn't installed/authenticated. A full bootstrap run makes enough
+  GitHub Releases API calls on its own to exhaust the unauthenticated limit
+  (5,000 requests/hour) partway through.
+- Both `gh_latest_tag`/`gh_asset_url` functions now also fail loudly with a
+  rate-limit hint if no tag/asset is found, instead of returning empty.
+- Retry `apt-get update` up to 3 times in the system update step. A
+  third-party APT mirror mid-sync can transiently fail the fetch.
 
 ## [1.5.0] - 2026-07-24
 
