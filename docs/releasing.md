@@ -8,7 +8,7 @@ Update the changelog and release notes, and commit those:
 
 ```
 $ git add CHANGELOG.md
-$ git commit -m "release: v<major>.<minor>.<patch>"
+$ git commit -m "version: <major>.<minor>.<patch>"
 ```
 
 Tag the release:
