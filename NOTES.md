@@ -35,6 +35,7 @@ script installs.
 | `edge`                       |     ✅      |     ✅     |
 | `editorconfig-checker`       |     ✅      |     —      |
 | `ffmpeg`                     |     ✅      |     —      |
+| `file`                       |     ✅      |     —      |
 | `firefox`                    |     ✅      |     ✅     |
 | `frame0`                     |     ✅      |     ✅     |
 | `gh`                         |     ✅      |     ✅     |

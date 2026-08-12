@@ -23,8 +23,10 @@ or does something else shell out to it?
   happening."
   Actioned: added as `run/inc/util/lsof.sh`, wired in as a `cli_step`.
   Uncommitted, pending review.
-- `file` — verified missing; scripts and linters commonly shell out to it
-  for MIME/type sniffing.
+- [x] `file` — verified missing; scripts and linters commonly shell out to
+  it for MIME/type sniffing.
+  Actioned: added as `run/inc/util/file.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 
 **Medium value — networking diagnostics, still headless-appropriate:**
 

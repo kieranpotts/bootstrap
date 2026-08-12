@@ -8,6 +8,7 @@
 - Install procps in the `cli` profile.
 - Install psmisc in the `cli` profile.
 - Install lsof in the `cli` profile.
+- Install file in the `cli` profile.
 
 ## [1.6.0] - 2026-08-10
 

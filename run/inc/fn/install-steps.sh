@@ -69,12 +69,14 @@ run_install_steps() {
   # Utilities. Unlike the base util/* utilities sourced inline in
   # `run/install` (curl, git, gnupg, etc.), these are not plumbing another
   # step depends on, so they belong here. htop needs a human at a terminal;
-  # less, lsof, procps, and psmisc are needed unattended too - `git log`,
-  # `man`, and other tools a coding agent runs shell out to `less` by
+  # file, less, lsof, procps, and psmisc are needed unattended too - `git
+  # log`, `man`, and other tools a coding agent runs shell out to `less` by
   # default; an agent cannot list, find, or signal-by-name a background
-  # process it started without `procps` and `psmisc`; and it cannot tell
-  # what has a file or port open (eg. diagnosing `EADDRINUSE`) without
-  # `lsof`.
+  # process it started without `procps` and `psmisc`; it cannot tell what
+  # has a file or port open (eg. diagnosing `EADDRINUSE`) without `lsof`;
+  # and it cannot identify a file's type from its content, rather than its
+  # name, without `file`.
+  cli_step "${inc_path}/util/file.sh"
   tui_step "${inc_path}/util/htop.sh"
   cli_step "${inc_path}/util/less.sh"
   cli_step "${inc_path}/util/lsof.sh"

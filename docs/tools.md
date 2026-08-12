@@ -55,6 +55,7 @@ disagree, the code wins.
 | `edge`                       | —   | —   | ✅  |
 | `editorconfig-checker`       | ✅  | ✅  | ✅  |
 | `ffmpeg`                     | —   | ✅  | ✅  |
+| `file`                       | ✅  | ✅  | ✅  |
 | `firefox`                    | —   | —   | ✅  |
 | `frame0`                     | —   | —   | ✅  |
 | `gh`                         | ✅  | ✅  | ✅  |
@@ -135,12 +136,12 @@ The rows showing ✅ in every column with no corresponding call in
 `unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
-every profile. `htop`, `less`, `lsof`, `procps`, and `psmisc` live in the
-same `util/` directory but, unlike those, are called from
+every profile. `file`, `htop`, `less`, `lsof`, `procps`, and `psmisc` live
+in the same `util/` directory but, unlike those, are called from
 `run_install_steps` — `htop` as a `tui_step` (a human tool, not first-run
-plumbing, so it is absent from the `cli` profile) and `less`, `lsof`,
-`procps`, and `psmisc` as `cli_step`s (needed unattended too, so they are
-present in every profile).
+plumbing, so it is absent from the `cli` profile) and `file`, `less`,
+`lsof`, `procps`, and `psmisc` as `cli_step`s (needed unattended too, so
+they are present in every profile).
 
 `pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
 checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are
