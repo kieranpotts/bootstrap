@@ -69,19 +69,22 @@ run_install_steps() {
   # Utilities. Unlike the base util/* utilities sourced inline in
   # `run/install` (curl, git, gnupg, etc.), these are not plumbing another
   # step depends on, so they belong here. htop needs a human at a terminal;
-  # file, less, lsof, procps, and psmisc are needed unattended too - `git
-  # log`, `man`, and other tools a coding agent runs shell out to `less` by
-  # default; an agent cannot list, find, or signal-by-name a background
-  # process it started without `procps` and `psmisc`; it cannot tell what
-  # has a file or port open (eg. diagnosing `EADDRINUSE`) without `lsof`;
-  # and it cannot identify a file's type from its content, rather than its
-  # name, without `file`.
+  # file, less, lsof, procps, psmisc, and ssh are needed unattended too -
+  # `git log`, `man`, and other tools a coding agent runs shell out to
+  # `less` by default; an agent cannot list, find, or signal-by-name a
+  # background process it started without `procps` and `psmisc`; it cannot
+  # tell what has a file or port open (eg. diagnosing `EADDRINUSE`) without
+  # `lsof`; it cannot identify a file's type from its content, rather than
+  # its name, without `file`; and it cannot reach a `git@`-style SSH
+  # remote, or copy a file to/from another host, without the OpenSSH
+  # client.
   cli_step "${inc_path}/util/file.sh"
   tui_step "${inc_path}/util/htop.sh"
   cli_step "${inc_path}/util/less.sh"
   cli_step "${inc_path}/util/lsof.sh"
   cli_step "${inc_path}/util/procps.sh"
   cli_step "${inc_path}/util/psmisc.sh"
+  cli_step "${inc_path}/util/ssh.sh"
 
   # Runtime (execution) environments. Node and Python are in every profile -
   # most agent CLIs are npm-installed, and a lot of tooling is Python. The

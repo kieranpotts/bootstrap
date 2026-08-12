@@ -94,6 +94,7 @@ script installs.
 | `skills-ref`                 |     ✅      |     ✅     |
 | `software-properties-common` |     ✅      |     ✅     |
 | `sourcegit`                  |     ✅      |     ✅     |
+| `ssh`                        |     ✅      |     —      |
 | `tar`                        |     ✅      |     ✅     |
 | `terraform`                  |     ✅      |     ✅     |
 | `tmux`                       |     ✅      |     ✅     |

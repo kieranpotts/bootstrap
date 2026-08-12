@@ -30,9 +30,11 @@ or does something else shell out to it?
 
 **Medium value — networking diagnostics, still headless-appropriate:**
 
-- `openssh-client` (`ssh`, `scp`, `sftp`) — verified missing. `git`, `gh`,
-  and `git-lfs` are already `cli_step`, but there's no SSH client for
+- [x] `openssh-client` (`ssh`, `scp`, `sftp`) — verified missing. `git`,
+  `gh`, and `git-lfs` are already `cli_step`, but there's no SSH client for
   `git@github.com:`-style remotes.
+  Actioned: added as `run/inc/util/ssh.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 - `iproute2` (`ip`) and/or `bind9-dnsutils` (`dig`/`host`) + `iputils-ping`
   — verified missing; basic "can this container reach the registry/API"
   triage.
