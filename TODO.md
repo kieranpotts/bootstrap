@@ -19,8 +19,10 @@ or does something else shell out to it?
   same "find and kill a process" workflow.
   Actioned: added as `run/inc/util/psmisc.sh`, wired in as a `cli_step`.
   Uncommitted, pending review.
-- `lsof` — verified missing; the standard tool for "why is `EADDRINUSE`
+- [x] `lsof` — verified missing; the standard tool for "why is `EADDRINUSE`
   happening."
+  Actioned: added as `run/inc/util/lsof.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 - `file` — verified missing; scripts and linters commonly shell out to it
   for MIME/type sniffing.
 

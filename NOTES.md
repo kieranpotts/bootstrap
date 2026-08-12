@@ -60,6 +60,7 @@ script installs.
 | `litellm`                    |     ✅      |     ✅     |
 | `lmstudio`                   |     ✅      |     ✅     |
 | `lsb-release`                |     ✅      |     ✅     |
+| `lsof`                       |     ✅      |     —      |
 | `lynx`                       |     ✅      |     —      |
 | `make`                       |     ✅      |     ✅     |
 | `maven`                      |     ✅      |     ✅     |
