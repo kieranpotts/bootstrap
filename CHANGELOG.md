@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-08-12
+
 **Fixed**
 - Invalid version command in `vim-tiny` install script in devcontainer build.
 
