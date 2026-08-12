@@ -2,7 +2,7 @@
 
 #
 # GitHub repository configuration-as-code, applied to GitHub by the
-# "Apply Settings" workflow.
+# "Apply GitHub Settings as Code" workflow.
 #
 # Explicit ownership of this file MUST be defined in `CODEOWNERS`. Otherwise,
 # anyone who can push changes to this file to the default branch have admin
