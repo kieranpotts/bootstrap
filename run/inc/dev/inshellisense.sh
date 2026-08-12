@@ -44,7 +44,7 @@ print_info "Configuring ~/.bashrc to load inshellisense shell startup."
 # initializes in a top-level terminal, never inside a tmux pane.
 # shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
-  if ! grep -qF ".inshellisense/init/bash/init.sh" "${bashrc}"; then
+  if ! grep -qF "inshellisense/init/bash/init.sh" "${bashrc}"; then
     {
       echo "if [[ -z \"\${TMUX}\" ]]; then"
       is init bash | sed 's/^/  /'
