@@ -112,6 +112,7 @@ disagree, the code wins.
 | `qwen-code`                  | —   | ✅  | ✅  |
 | `ripgrep`                    | ✅  | ✅  | ✅  |
 | `rocm`                       | —   | ✅  | ✅  |
+| `rsync`                      | ✅  | ✅  | ✅  |
 | `rust`                       | —   | ✅  | ✅  |
 | `shellcheck`                 | ✅  | ✅  | ✅  |
 | `skills-ref`                 | ✅  | ✅  | ✅  |
@@ -141,8 +142,8 @@ The rows showing ✅ in every column with no corresponding call in
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
 every profile. `dig`, `file`, `htop`, `ip`, `less`, `lsof`, `ping`,
-`procps`, `psmisc`, and `ssh` live in the same `util/` directory but,
-unlike those, are called from `run_install_steps` — `htop` as a
+`procps`, `psmisc`, `rsync`, and `ssh` live in the same `util/` directory
+but, unlike those, are called from `run_install_steps` — `htop` as a
 `tui_step` (a human tool, not first-run plumbing, so it is absent from
 the `cli` profile) and the rest as `cli_step`s (needed unattended too, so
 they are present in every profile).

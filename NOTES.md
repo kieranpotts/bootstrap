@@ -92,6 +92,7 @@ script installs.
 | `qwen-code`                  |     ✅      |     ✅     |
 | `ripgrep`                    |     ✅      |     ✅     |
 | `rocm`                       |     ✅      |     —      |
+| `rsync`                      |     ✅      |     —      |
 | `rust`                       |     ✅      |     —      |
 | `shellcheck`                 |     ✅      |     ✅     |
 | `skills-ref`                 |     ✅      |     ✅     |

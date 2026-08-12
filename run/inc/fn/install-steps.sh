@@ -76,8 +76,10 @@ run_install_steps() {
   # diagnosing `EADDRINUSE`) without `lsof`; it cannot identify a file's
   # type from its content, rather than its name, without `file`; it cannot
   # reach a `git@`-style SSH remote, or copy a file to/from another host,
-  # without the OpenSSH client; and it cannot diagnose "can this container
-  # reach the registry/API" without `dig`, `ip`, and `ping`.
+  # without the OpenSSH client; it cannot diagnose "can this container
+  # reach the registry/API" without `dig`, `ip`, and `ping`; and it has no
+  # efficient way to sync a directory tree to/from another host without
+  # `rsync`.
   cli_step "${inc_path}/util/dig.sh"
   cli_step "${inc_path}/util/file.sh"
   tui_step "${inc_path}/util/htop.sh"
@@ -87,6 +89,7 @@ run_install_steps() {
   cli_step "${inc_path}/util/ping.sh"
   cli_step "${inc_path}/util/procps.sh"
   cli_step "${inc_path}/util/psmisc.sh"
+  cli_step "${inc_path}/util/rsync.sh"
   cli_step "${inc_path}/util/ssh.sh"
 
   # Runtime (execution) environments. Node and Python are in every profile -

@@ -41,7 +41,9 @@ or does something else shell out to it?
   Actioned: added all three as `run/inc/util/ip.sh`,
   `run/inc/util/dig.sh`, and `run/inc/util/ping.sh`, each wired in as a
   `cli_step`. Uncommitted, pending review.
-- `rsync` — verified missing, commonly assumed present by scripts.
+- [x] `rsync` — verified missing, commonly assumed present by scripts.
+  Actioned: added as `run/inc/util/rsync.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 
 **Lower value — archive-format completeness (matches existing `tar`/`unzip`/`zip`):**
 
