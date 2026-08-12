@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-08-12
+
 This release focuses on installing additional CLI utilities that may not be
 present in environments based on lightweight container images such as Debian
 Bookworm.
