@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+This release focuses on installing additional CLI utilities that may not be
+present in environments based on lightweight container images such as Debian
+Bookworm.
+
 **Added**
 - Install Vim (`vim-tiny`) in the `cli` profile, alongside Neovim's `tui` install.
 - Install less in the `cli` profile.
