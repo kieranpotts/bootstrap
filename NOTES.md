@@ -82,6 +82,7 @@ script installs.
 | `procps`                     |     ✅      |     —      |
 | `proton-mail`                |     ✅      |     ✅     |
 | `proton-vpn`                 |     ✅      |     ✅     |
+| `psmisc`                     |     ✅      |     —      |
 | `python`                     |     ✅      |     ✅     |
 | `qwen-code`                  |     ✅      |     ✅     |
 | `ripgrep`                    |     ✅      |     ✅     |

@@ -6,6 +6,7 @@
 - Install Vim (`vim-tiny`) in the `cli` profile, alongside Neovim's `tui` install.
 - Install less in the `cli` profile.
 - Install procps in the `cli` profile.
+- Install psmisc in the `cli` profile.
 
 ## [1.6.0] - 2026-08-10
 

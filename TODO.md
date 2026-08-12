@@ -15,8 +15,10 @@ or does something else shell out to it?
   already known. Likely the single biggest gap for the `cli` profile.
   Actioned: added as `run/inc/util/procps.sh`, wired in as a `cli_step`.
   Uncommitted, pending review.
-- `psmisc` — `killall`, `fuser`, `pstree`. Complements `procps` for the same
-  "find and kill a process" workflow.
+- [x] `psmisc` — `killall`, `fuser`, `pstree`. Complements `procps` for the
+  same "find and kill a process" workflow.
+  Actioned: added as `run/inc/util/psmisc.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 - `lsof` — verified missing; the standard tool for "why is `EADDRINUSE`
   happening."
 - `file` — verified missing; scripts and linters commonly shell out to it
