@@ -13,6 +13,7 @@ script installs.
 | `apt-transport-https`        |     ✅      |     ✅     |
 | `aws`                        |     ✅      |     ✅     |
 | `bruno`                      |     ✅      |     ✅     |
+| `bzip2`                      |     ✅      |     —      |
 | `ca-certificates`            |     ✅      |     ✅     |
 | `chrome`                     |     ✅      |     ✅     |
 | `claude`                     |     ✅      |     ✅     |
@@ -111,5 +112,6 @@ script installs.
 | `warp`                       |     ✅      |     ✅     |
 | `wget`                       |     ✅      |     ✅     |
 | `xpdf-reader`                |     ✅      |     ✅     |
+| `xz`                         |     ✅      |     —      |
 | `zed`                        |     ✅      |     ✅     |
 | `zellij`                     |     ✅      |     —      |

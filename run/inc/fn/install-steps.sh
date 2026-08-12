@@ -77,9 +77,13 @@ run_install_steps() {
   # type from its content, rather than its name, without `file`; it cannot
   # reach a `git@`-style SSH remote, or copy a file to/from another host,
   # without the OpenSSH client; it cannot diagnose "can this container
-  # reach the registry/API" without `dig`, `ip`, and `ping`; and it has no
+  # reach the registry/API" without `dig`, `ip`, and `ping`; it has no
   # efficient way to sync a directory tree to/from another host without
-  # `rsync`.
+  # `rsync`; and it cannot unpack a `.tar.bz2` or `.tar.xz` archive - as
+  # opposed to the `.tar.gz`/`.zip` formats already covered by `gzip`
+  # (present in the base image) and `unzip` - without `bzip2` and
+  # `xz-utils`.
+  cli_step "${inc_path}/util/bzip2.sh"
   cli_step "${inc_path}/util/dig.sh"
   cli_step "${inc_path}/util/file.sh"
   tui_step "${inc_path}/util/htop.sh"
@@ -91,6 +95,7 @@ run_install_steps() {
   cli_step "${inc_path}/util/psmisc.sh"
   cli_step "${inc_path}/util/rsync.sh"
   cli_step "${inc_path}/util/ssh.sh"
+  cli_step "${inc_path}/util/xz.sh"
 
   # Runtime (execution) environments. Node and Python are in every profile -
   # most agent CLIs are npm-installed, and a lot of tooling is Python. The

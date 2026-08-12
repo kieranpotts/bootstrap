@@ -33,6 +33,7 @@ disagree, the code wins.
 | `apt-transport-https`        | ✅  | ✅  | ✅  |
 | `aws`                        | —   | ✅  | ✅  |
 | `bruno`                      | —   | —   | ✅  |
+| `bzip2`                      | ✅  | ✅  | ✅  |
 | `ca-certificates`            | ✅  | ✅  | ✅  |
 | `chrome`                     | —   | —   | ✅  |
 | `claude`                     | —   | ✅  | ✅  |
@@ -131,6 +132,7 @@ disagree, the code wins.
 | `warp`                       | —   | —   | ✅  |
 | `wget`                       | ✅  | ✅  | ✅  |
 | `xpdf-reader`                | —   | ✅  | ✅  |
+| `xz`                         | ✅  | ✅  | ✅  |
 | `zed`                        | —   | —   | ✅  |
 | `zellij`                     | —   | ✅  | ✅  |
 
@@ -141,12 +143,12 @@ The rows showing ✅ in every column with no corresponding call in
 `unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
-every profile. `dig`, `file`, `htop`, `ip`, `less`, `lsof`, `ping`,
-`procps`, `psmisc`, `rsync`, and `ssh` live in the same `util/` directory
-but, unlike those, are called from `run_install_steps` — `htop` as a
-`tui_step` (a human tool, not first-run plumbing, so it is absent from
-the `cli` profile) and the rest as `cli_step`s (needed unattended too, so
-they are present in every profile).
+every profile. `bzip2`, `dig`, `file`, `htop`, `ip`, `less`, `lsof`,
+`ping`, `procps`, `psmisc`, `rsync`, `ssh`, and `xz` live in the same
+`util/` directory but, unlike those, are called from `run_install_steps`
+— `htop` as a `tui_step` (a human tool, not first-run plumbing, so it is
+absent from the `cli` profile) and the rest as `cli_step`s (needed
+unattended too, so they are present in every profile).
 
 `pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
 checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are

@@ -47,8 +47,10 @@ or does something else shell out to it?
 
 **Lower value — archive-format completeness (matches existing `tar`/`unzip`/`zip`):**
 
-- `xz-utils`, `bzip2` — verified missing; many upstream release tarballs
-  ship as `.tar.xz`.
+- [x] `xz-utils`, `bzip2` — verified missing; many upstream release
+  tarballs ship as `.tar.xz`.
+  Actioned: added as `run/inc/util/xz.sh` and `run/inc/util/bzip2.sh`,
+  each wired in as a `cli_step`. Uncommitted, pending review.
 
 **Considered and rejected:**
 
