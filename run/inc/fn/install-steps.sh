@@ -69,10 +69,13 @@ run_install_steps() {
   # Utilities. Unlike the base util/* utilities sourced inline in
   # `run/install` (curl, git, gnupg, etc.), these are not plumbing another
   # step depends on, so they belong here. htop needs a human at a terminal;
-  # less is needed unattended too - `git log`, `man`, and other tools a
-  # coding agent runs shell out to it by default.
+  # less and procps are needed unattended too - `git log`, `man`, and other
+  # tools a coding agent runs shell out to `less` by default, and an agent
+  # cannot list or signal-by-name a background process it started without
+  # `procps`.
   tui_step "${inc_path}/util/htop.sh"
   cli_step "${inc_path}/util/less.sh"
+  cli_step "${inc_path}/util/procps.sh"
 
   # Runtime (execution) environments. Node and Python are in every profile -
   # most agent CLIs are npm-installed, and a lot of tooling is Python. The

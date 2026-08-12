@@ -79,6 +79,7 @@ script installs.
 | `pied`/`piper`               |     ✅      |     —      |
 | `postman`                    |     ✅      |     ✅     |
 | `pre-commit`                 |     ✅      |     ✅     |
+| `procps`                     |     ✅      |     —      |
 | `proton-mail`                |     ✅      |     ✅     |
 | `proton-vpn`                 |     ✅      |     ✅     |
 | `python`                     |     ✅      |     ✅     |

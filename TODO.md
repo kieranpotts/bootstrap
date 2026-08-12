@@ -9,10 +9,12 @@ or does something else shell out to it?
 
 **High value — verified absent from the base image, same class of gap as `less`/`vim`:**
 
-- `procps` — gives `ps`, `top`, `free`, `uptime`, `watch`, `pkill`/`pgrep`.
+- [x] `procps` — gives `ps`, `top`, `free`, `uptime`, `watch`, `pkill`/`pgrep`.
   There is currently no way to list or signal-by-name a background process
   (eg. a dev server an agent started) — `kill` only works if the PID is
   already known. Likely the single biggest gap for the `cli` profile.
+  Actioned: added as `run/inc/util/procps.sh`, wired in as a `cli_step`.
+  Uncommitted, pending review.
 - `psmisc` — `killall`, `fuser`, `pstree`. Complements `procps` for the same
   "find and kill a process" workflow.
 - `lsof` — verified missing; the standard tool for "why is `EADDRINUSE`

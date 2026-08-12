@@ -99,6 +99,7 @@ disagree, the code wins.
 | `pied`                       | —   | —   | ✅  |
 | `postman`                    | —   | —   | ✅  |
 | `pre-commit`                 | ✅  | ✅  | ✅  |
+| `procps`                     | ✅  | ✅  | ✅  |
 | `proton-mail`                | —   | —   | ✅  |
 | `proton-vpn`                 | —   | —   | ✅  |
 | `python`                     | ✅  | ✅  | ✅  |
@@ -132,11 +133,11 @@ The rows showing ✅ in every column with no corresponding call in
 `unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
-every profile. `htop` and `less` live in the same `util/` directory but,
-unlike those, are called from `run_install_steps` — `htop` as a `tui_step`
-(a human tool, not first-run plumbing, so it is absent from the `cli`
-profile) and `less` as a `cli_step` (needed unattended too, so it is
-present in every profile).
+every profile. `htop`, `less`, and `procps` live in the same `util/`
+directory but, unlike those, are called from `run_install_steps` — `htop`
+as a `tui_step` (a human tool, not first-run plumbing, so it is absent from
+the `cli` profile) and `less` and `procps` as `cli_step`s (needed
+unattended too, so they are present in every profile).
 
 `pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
 checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are
