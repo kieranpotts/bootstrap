@@ -67,9 +67,12 @@ run_install_steps() {
   step "${inc_path}/sys/upgrade.sh"
 
   # Utilities. Unlike the base util/* utilities sourced inline in
-  # `run/install` (curl, git, gnupg, etc.), htop is an interactive tool a
-  # human needs, not plumbing another step depends on, so it belongs here.
+  # `run/install` (curl, git, gnupg, etc.), these are not plumbing another
+  # step depends on, so they belong here. htop needs a human at a terminal;
+  # less is needed unattended too - `git log`, `man`, and other tools a
+  # coding agent runs shell out to it by default.
   tui_step "${inc_path}/util/htop.sh"
+  cli_step "${inc_path}/util/less.sh"
 
   # Runtime (execution) environments. Node and Python are in every profile -
   # most agent CLIs are npm-installed, and a lot of tooling is Python. The
@@ -148,6 +151,7 @@ run_install_steps() {
   cli_step "${inc_path}/dev/skills-ref.sh"
   gui_step "${inc_path}/dev/sourcegit.sh"
   cli_step "${inc_path}/dev/tmux.sh"
+  cli_step "${inc_path}/dev/vim.sh"
   gui_step "${inc_path}/dev/vscode.sh"
   gui_step "${inc_path}/dev/vscode-insiders.sh"
   gui_step "${inc_path}/dev/vscodium.sh"

@@ -76,6 +76,7 @@ disagree, the code wins.
 | `lazydocker`                 | —   | ✅  | ✅  |
 | `lazygit`                    | —   | ✅  | ✅  |
 | `lazynpm`                    | —   | ✅  | ✅  |
+| `less`                       | ✅  | ✅  | ✅  |
 | `litellm`                    | —   | ✅  | ✅  |
 | `lmstudio`                   | —   | —   | ✅  |
 | `lsb-release`                | ✅  | ✅  | ✅  |
@@ -113,6 +114,7 @@ disagree, the code wins.
 | `terraform`                  | —   | ✅  | ✅  |
 | `tmux`                       | ✅  | ✅  | ✅  |
 | `unzip`                      | ✅  | ✅  | ✅  |
+| `vim`                        | ✅  | ✅  | ✅  |
 | `voxd`                       | —   | —   | ✅  |
 | `vscode`                     | —   | —   | ✅  |
 | `vscode-insiders`            | —   | —   | ✅  |
@@ -130,9 +132,11 @@ The rows showing ✅ in every column with no corresponding call in
 `unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
 and unprompted directly by `./run/install` (first-time-only - see
 `run/install` itself, not `run_install_steps`), so they are present in
-every profile. `htop` lives in the same `util/` directory but, unlike
-those, is called from `run_install_steps` as a `tui_step` — a human tool,
-not first-run plumbing — so it is absent from the `cli` profile.
+every profile. `htop` and `less` live in the same `util/` directory but,
+unlike those, are called from `run_install_steps` — `htop` as a `tui_step`
+(a human tool, not first-run plumbing, so it is absent from the `cli`
+profile) and `less` as a `cli_step` (needed unattended too, so it is
+present in every profile).
 
 `pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
 checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are

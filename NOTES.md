@@ -56,6 +56,7 @@ script installs.
 | `lazydocker`                 |     ✅      |     ✅     |
 | `lazygit`                    |     ✅      |     ✅     |
 | `lazynpm`                    |     ✅      |     —      |
+| `less`                       |     ✅      |     —      |
 | `litellm`                    |     ✅      |     ✅     |
 | `lmstudio`                   |     ✅      |     ✅     |
 | `lsb-release`                |     ✅      |     ✅     |
@@ -93,6 +94,7 @@ script installs.
 | `terraform`                  |     ✅      |     ✅     |
 | `tmux`                       |     ✅      |     ✅     |
 | `unzip`                      |     ✅      |     ✅     |
+| `vim` (tiny)                 |     ✅      |     —      |
 | `voxd`                       |     ✅      |     —      |
 | `vscode`                     |     ✅      |     ✅     |
 | `vscode-insiders`            |     ✅      |     ✅     |

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+**Added**
+- Install Vim (`vim-tiny`) in the `cli` profile, alongside Neovim's `tui` install.
+- Install less in the `cli` profile.
+
 ## [1.6.0] - 2026-08-10
 
 This release focused on extensive refactoring. In addition to the final
