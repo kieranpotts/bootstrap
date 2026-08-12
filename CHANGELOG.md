@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+**Fixed**
+- Invalid version command in `vim-tiny` install script in devcontainer build.
+
 ## [1.7.0] - 2026-08-12
 
 This release focuses on installing additional CLI utilities that may not be

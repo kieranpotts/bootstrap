@@ -19,4 +19,4 @@ print_step "Installing Vim."
 print_info "Installing/updating Vim via APT."
 superdo apt-get install -y vim-tiny
 
-vim --version
+vim.tiny --version
