@@ -66,23 +66,11 @@ run_install_steps() {
   step "${inc_path}/sys/update.sh"
   step "${inc_path}/sys/upgrade.sh"
 
-  # Utilities. Unlike the base util/* utilities sourced inline in
-  # `run/install` (curl, git, gnupg, etc.), these are not plumbing another
-  # step depends on, so they belong here. htop needs a human at a terminal;
-  # the rest are needed unattended too - `git log`, `man`, and other tools
-  # a coding agent runs shell out to `less` by default; an agent cannot
-  # list, find, or signal-by-name a background process it started without
-  # `procps` and `psmisc`; it cannot tell what has a file or port open (eg.
-  # diagnosing `EADDRINUSE`) without `lsof`; it cannot identify a file's
-  # type from its content, rather than its name, without `file`; it cannot
-  # reach a `git@`-style SSH remote, or copy a file to/from another host,
-  # without the OpenSSH client; it cannot diagnose "can this container
-  # reach the registry/API" without `dig`, `ip`, and `ping`; it has no
-  # efficient way to sync a directory tree to/from another host without
-  # `rsync`; and it cannot unpack a `.tar.bz2` or `.tar.xz` archive - as
-  # opposed to the `.tar.gz`/`.zip` formats already covered by `gzip`
-  # (present in the base image) and `unzip` - without `bzip2` and
-  # `xz-utils`.
+  # Unlike the base util/* utilities sourced inline in `run/install` (curl,
+  # git, gnupg, etc.), the following utilities are not dependencies of later
+  # install steps. Most of these utilities are explicitly installed so they
+  # will be present in environments based on lightweight container images such
+  # as Debian Bookworm.
   cli_step "${inc_path}/util/bzip2.sh"
   cli_step "${inc_path}/util/dig.sh"
   cli_step "${inc_path}/util/file.sh"

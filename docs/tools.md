@@ -135,23 +135,3 @@ disagree, the code wins.
 | `xz`                         | ✅  | ✅  | ✅  |
 | `zed`                        | —   | —   | ✅  |
 | `zellij`                     | —   | ✅  | ✅  |
-
-The rows showing ✅ in every column with no corresponding call in
-`run/inc/fn/install-steps.sh` (`apt-transport-https`, `ca-certificates`,
-`curl`, `git`, `gnupg`, `icoutils`, `inotify-tools`, `jq`,
-`lsb-release`, `make`, `ripgrep`, `software-properties-common`, `tar`,
-`unzip`, `wget`) are the base `util/*` utilities: installed unconditionally
-and unprompted directly by `./run/install` (first-time-only - see
-`run/install` itself, not `run_install_steps`), so they are present in
-every profile. `bzip2`, `dig`, `file`, `htop`, `ip`, `less`, `lsof`,
-`ping`, `procps`, `psmisc`, `rsync`, `ssh`, and `xz` live in the same
-`util/` directory but, unlike those, are called from `run_install_steps`
-— `htop` as a `tui_step` (a human tool, not first-run plumbing, so it is
-absent from the `cli` profile) and the rest as `cli_step`s (needed
-unattended too, so they are present in every profile).
-
-`pkg/*` (third-party APT repository registration) and `sys/*` (compatibility
-checks, APT setup, system update/upgrade, `.bashrc` config, teardown) are
-omitted from this table - they are bootstrap plumbing, not tools in their
-own right. The `pkg/*` registries serving GUI-only applications are
-themselves `gui_step`s, so they are not registered in the other profiles.
