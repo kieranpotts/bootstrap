@@ -35,9 +35,12 @@ or does something else shell out to it?
   `git@github.com:`-style remotes.
   Actioned: added as `run/inc/util/ssh.sh`, wired in as a `cli_step`.
   Uncommitted, pending review.
-- `iproute2` (`ip`) and/or `bind9-dnsutils` (`dig`/`host`) + `iputils-ping`
-  — verified missing; basic "can this container reach the registry/API"
-  triage.
+- [x] `iproute2` (`ip`) and/or `bind9-dnsutils` (`dig`/`host`) +
+  `iputils-ping` — verified missing; basic "can this container reach the
+  registry/API" triage.
+  Actioned: added all three as `run/inc/util/ip.sh`,
+  `run/inc/util/dig.sh`, and `run/inc/util/ping.sh`, each wired in as a
+  `cli_step`. Uncommitted, pending review.
 - `rsync` — verified missing, commonly assumed present by scripts.
 
 **Lower value — archive-format completeness (matches existing `tar`/`unzip`/`zip`):**

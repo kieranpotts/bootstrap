@@ -26,6 +26,7 @@ script installs.
 | `cursor-gui`                 |     ✅      |     ✅     |
 | `deja-dup`                   |     ✅      |     ✅     |
 | `delta`                      |     ✅      |     ✅     |
+| `dig`                        |     ✅      |     —      |
 | `dive`                       |     ✅      |     —      |
 | `docker`                     |     ✅      |     ✅     |
 | `docker-credential-pass`     |     ✅      |     ✅     |
@@ -50,6 +51,7 @@ script installs.
 | `inotify-tools`              |     ✅      |     ✅     |
 | `inshellisense`              |     ✅      |     —      |
 | `insomnia`                   |     ✅      |     ✅     |
+| `ip`                         |     ✅      |     —      |
 | `jdk`                        |     ✅      |     ✅     |
 | `jetbrains-toolbox`          |     ✅      |     ✅     |
 | `jq`                         |     ✅      |     ✅     |
@@ -79,6 +81,7 @@ script installs.
 | `php`                        |     ✅      |     —      |
 | `pi`                         |     ✅      |     ✅     |
 | `pied`/`piper`               |     ✅      |     —      |
+| `ping`                       |     ✅      |     —      |
 | `postman`                    |     ✅      |     ✅     |
 | `pre-commit`                 |     ✅      |     ✅     |
 | `procps`                     |     ✅      |     —      |
