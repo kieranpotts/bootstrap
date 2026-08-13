@@ -28,61 +28,62 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 ## Project structure
 
-- **`run/install`**: Entry script for provisioning a machine from scratch,
+- `run/install`. Entry script for provisioning a machine from scratch,
   or re-running to pick up updates. Sources every install step in order.
 
-- **`run/bootstrap`**: DEPRECATED. A thin wrapper that execs `run/install`,
+- `run/bootstrap`. DEPRECATED. A thin wrapper that execs `run/install`,
   kept for machines/images pinned to older tags. New references MUST use
   `run/install` directly.
 
-- **`run/inc/fn/`**: Shared helper functions (`print_step`, `step`, the
+- `run/inc/fn/`. Shared helper functions (`print_step`, `step`, the
   `cli_step`/`tui_step`/`gui_step` profile wrappers, `superdo`, status
   printers, banners), `profile.sh` (the profile predicates and runtime
   toggles), and `install-steps.sh`, which defines `run_install_steps` — the
   shared install step sequence.
 
-- **`run/inc/var/`**: Shared variables (ANSI codes).
+- `run/inc/var/`. Shared variables (ANSI codes).
 
-- **`run/inc/sys/`**: Compatibility checks, APT setup, system updates, upgrades, and teardown.
+- `run/inc/sys/`. Compatibility checks, APT setup, system updates,
+  upgrades, and teardown.
 
-- **`run/inc/util/`**: General utilities (curl, git, gnupg, wget, …).
+- `run/inc/util/`. General utilities (curl, git, gnupg, wget, …).
 
-- **`run/inc/exec/`**: Language runtimes (Node, JDK, PHP, Python).
+- `run/inc/exec/`. Language runtimes (Node, JDK, PHP, Python).
 
-- **`run/inc/pkg/`**: Third-party APT repository registration.
+- `run/inc/pkg/`. Third-party APT repository registration.
 
-- **`run/inc/web/`**: Web browsers.
+- `run/inc/web/`. Web browsers.
 
-- **`run/inc/app/`**: GUI/end-user applications.
+- `run/inc/app/`. GUI/end-user applications.
 
-- **`run/inc/dev/`**: Developer tooling (Claude, Copilot, delta, lazygit, …).
+- `run/inc/dev/`. Developer tooling (Claude, Copilot, delta, lazygit, …).
 
-- **`run/inc/ops/`**: Ops tooling (AWS CLI, Terraform).
+- `run/inc/ops/`. Ops tooling (AWS CLI, Terraform).
 
-- **`run/inc/phy/`**: Hardware-related tooling (eg. ROCm).
+- `run/inc/phy/`. Hardware-related tooling (eg. ROCm).
 
-- **`docs/`**: Installation, requirements, tools (what installs under each
+- `docs/`. Installation, requirements, tools (what installs under each
   profile), releasing, considerations, and architecture decision records
   (`docs/adr/`).
 
 ## Tools
 
-- **`./run/install --profile=<cli|tui|gui>`** to provision a target machine
-  from scratch. There is no default profile; omitting `--profile` prompts
+- `./run/install --profile=<cli|tui|gui>` to provision a target machine
+  from scratch. There is no default profile. Omitting `--profile` prompts
   for one at a terminal, and errors in a non-interactive run. `cli` is the
   minimal tooling a coding agent needs in a headless container, `gui` the
   full workstation install. See `docs/tools.md`.
 
-- **`./run/install --help`** to print the usage banner.
+- `./run/install --help` to print the usage banner.
 
-- **`shellcheck -x --severity=warning run/**/*.sh run/install`**
+- `shellcheck -x --severity=warning run/**/*.sh run/install`
   to lint shell scripts, at the same threshold CI enforces.
 
-- **`ec`** (editorconfig-checker) to validate files against `.editorconfig`.
+- `ec` (editorconfig-checker) to validate files against `.editorconfig`.
   Configured by `.editorconfig-checker.json`, which disables only the
   IndentSize check.
 
-- **`codespell --skip='./.git'`** to check for common misspellings.
+- `codespell --skip='./.git'` to check for common misspellings.
 
   All three run in CI on every push — see `.github/workflows/`.
 
@@ -92,31 +93,31 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 "who is driving this machine?", and the three answers are cumulative —
 `cli` ⊆ `tui` ⊆ `gui`:
 
-- **`cli`** — nobody. A headless container running coding agents, eg.
+- `cli`. Nobody. A headless container running coding agents, eg.
   `docker-devcontainer`. No human to prompt, no display.
-- **`tui`** — a human at a terminal, with no display.
-- **`gui`** — a human at a desktop. The full workstation install.
+- `tui`. A human at a terminal, with no display.
+- `gui`. A human at a desktop. The full workstation install.
 
-There is no default profile: `run/install` requires `--profile`, prompting
+There is no default profile. `run/install` requires `--profile`, prompting
 for one interactively when it's omitted at a terminal, and erroring in a
 non-interactive run (no TTY on stdin).
 
-`tui` names the *environment*, not the shape of the tools: that profile holds
-plenty of non-interactive CLIs (`aws`, `ffmpeg`, `terraform`) alongside actual
-terminal UIs.
+`tui` names the *environment*, not the shape of the tools. That profile
+holds plenty of non-interactive CLIs (`aws`, `ffmpeg`, `terraform`)
+alongside actual terminal UIs.
 
-Profile membership is declared **at the call site** in
+Profile membership is declared at the call site in
 `run/inc/fn/install-steps.sh`, via `cli_step`, `tui_step`, or `gui_step` —
 never by a guard inside a step file. That keeps "what does this profile
 install?" answerable by reading one file, and it is why `run/inc/fn/steps.sh`
 has three wrappers rather than one. `docs/tools.md` is the rendered summary.
-Steps outside the selected profile are skipped silently; every step inside
+Steps outside the selected profile are skipped silently. Every step inside
 it runs unattended, with no per-tool prompt.
 
 The predicates behind all of this live in `run/inc/fn/profile.sh`:
 `profile_at_least` (used by the wrappers) and `is_cli_profile`. An
 unrecognised `--profile=<value>` is rejected at parse time. There is no
-`--gui` flag; it was replaced by `--profile=gui`, and passing it now exits
+`--gui` flag. It was replaced by `--profile=gui`, and passing it now exits
 with an error pointing at the replacement.
 
 ## Rules
@@ -140,13 +141,13 @@ with an error pointing at the replacement.
 
 - MUST declare profile membership at the call site, never inside a step
   file. An install step MUST NOT branch on the profile to decide whether it
-  runs at all: if it does not belong in a profile, it is simply not called
+  runs at all. If it does not belong in a profile, it is simply not called
   with that profile's wrapper.
 
   A step MAY still call `is_cli_profile` to adjust its own behavior once
   it is already running — eg. skipping a check that can only pass on real
   hardware, inside a step shared across every profile via `cli_step`.
-  This is the rare exception, not membership by another name: the step
+  This is the rare exception, not membership by another name. The step
   still runs in every profile either way, only what it does once running
   changes.
 
@@ -200,8 +201,8 @@ with an error pointing at the replacement.
 The following skills, scoped to this project, are installed in the
 `.agents/skills/` directory:
 
-- [**`.agents/skills/apt/SKILL.md`**](./.agents/skills/apt/SKILL.md):
+- [`.agents/skills/apt/SKILL.md`](./.agents/skills/apt/SKILL.md).
   Use the APT package manager correctly in bootstrap scripts.
 
-- [**`.agents/skills/install-step/SKILL.md`**](./.agents/skills/install-step/SKILL.md):
+- [`.agents/skills/install-step/SKILL.md`](./.agents/skills/install-step/SKILL.md).
   Add or modify an install step in the bootstrap scripts.
