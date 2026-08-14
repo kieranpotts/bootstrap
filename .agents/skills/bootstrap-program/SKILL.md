@@ -313,12 +313,12 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   re-running the bootstrap does not duplicate exports. See `run/inc/exec/node.sh` 
   for the pattern.
 
-- The tool needs a third-party APT repository. Register the repository in its 
-  own `pkg/*` step, and keep the install itself a plain APT step. Call the 
-  registry with the same wrapper as the packages it serves — `gui_step` when 
-  every package is a `gui_step`, `tui_step` when every package is a `tui_step` 
-  — so the other profiles do not register a repository they can never install 
-  from.
+- The tool needs a third-party APT repository. Register the repository in its
+  own `pkg/*` step, and keep the install itself a plain APT step. Call the
+  registry with the same wrapper as the packages it serves — `step` when every
+  package is a `cli_step` (eg. `pkg/github.sh`), `tui_step` when every package
+  is a `tui_step`, `gui_step` when every package is a `gui_step` — so a profile
+  never registers a repository it can never install from.
 
 - The tool is being removed. Delete the step file, remove its call from 
   `run_install_steps`, drop its rows from `README.md` and `NOTES.md`, and add 
