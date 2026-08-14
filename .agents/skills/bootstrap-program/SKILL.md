@@ -1,15 +1,15 @@
 ---
 name: bootstrap-program
 description: >-
-  Add, change, or remove a program in the bootstrap provisioning run. Use this 
-  skill when the user says something like "add <program> to the bootstrap", 
-  "install <program> on new machines", "move <program> to the gui profile", 
-  "drop <program> from the bootstrap", "install <package> via apt", 
-  "check this apt command", or asks why a package step is prompting or 
-  failing on a fresh machine. Do not use it for one-off shell scripts 
+  Add, change, or remove a program in the bootstrap provisioning run. Use this
+  skill when the user says something like "add <program> to the bootstrap",
+  "install <program> on new machines", "move <program> to the gui profile",
+  "drop <program> from the bootstrap", "install <package> via apt",
+  "check this apt command", or asks why a package step is prompting or
+  failing on a fresh machine. Do not use it for one-off shell scripts
   outside the bootstrap run, to run one-off package operations against the
-  current machine outside a bootstrap script, or to make local changes to 
-  individual parts of the shell scripts such as the shared helpers in 
+  current machine outside a bootstrap script, or to make local changes to
+  individual parts of the shell scripts such as the shared helpers in
   `run/inc/fn/`.
 compatibility: >-
   requires Read, Write, Edit, Glob, Grep,
@@ -20,8 +20,8 @@ license: CC0-1.0
 # Bootstrap program
 
 Add, change, or remove one program in the bootstrap provisioning run, keeping
-`./run/install` idempotent, readable, and reproducible across a host machine. 
-Do not modify the shared helpers under `run/inc/fn/`, beyond the one line that 
+`./run/install` idempotent, readable, and reproducible across a host machine.
+Do not modify the shared helpers under `run/inc/fn/`, beyond the one line that
 wires a step into `run_install_steps`.
 
 ## Parameters
@@ -46,7 +46,7 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
 - **The install mechanism — OPTIONAL.** eg. APT, NPM, a GitHub release, a
   downloaded `.deb`, or an upstream install script. If not specified by the
-  user, infer the best installation mechanism from the upstream project's own 
+  user, infer the best installation mechanism from the upstream project's own
   install documentation. Prefer APT where the program is packaged for Debian.
 
 ## Success criteria
@@ -89,13 +89,13 @@ from `run_install_steps`, and update the docs.
 
 1.  Determine the target profile: `cli`, `tui`, or `gui`.
 
-  - For an existing program that's being updated or deleted, read the current 
+  - For an existing program that's being updated or deleted, read the current
     profile from its call in `run/inc/fn/install-steps.sh`.
 
-  - For a new program being installed for the first time, classify it from what 
-    the program is. Consult the upstream project's homepage and install 
-    documentation, and the program's man page where one exists (`man <program>`, 
-    or the online equivalent), to learn whether it is a headless CLI, a terminal 
+  - For a new program being installed for the first time, classify it from what
+    the program is. Consult the upstream project's homepage and install
+    documentation, and the program's man page where one exists (`man <program>`,
+    or the online equivalent), to learn whether it is a headless CLI, a terminal
     UI, or a graphical application.
 
 2.  Pick the group. Each install step lives in a single file under
@@ -120,9 +120,9 @@ from `run_install_steps`, and update the docs.
     `print_step "Installing <Program Name>."` call. See the **Examples**
     section below for complete files to copy as a starting point.
 
-4.  Wire the step into the sequence. Add one line to `run_install_steps` in 
-    `run/inc/fn/install-steps.sh`, in the correct group. `run_install_steps` is 
-    the shared sequence that `run/install` runs on both a fresh bootstrap and 
+4.  Wire the step into the sequence. Add one line to `run_install_steps` in
+    `run/inc/fn/install-steps.sh`, in the correct group. `run_install_steps` is
+    the shared sequence that `run/install` runs on both a fresh bootstrap and
     a re-run against an already-provisioned machine.
 
     The wrapper you call it with declares the profile the step belongs to.
@@ -169,14 +169,14 @@ from `run_install_steps`, and update the docs.
     Sort alphabetically by filename within the group regardless of which
     wrapper the line uses. Do not group by wrapper.
 
-5.  Resolve the upstream version at run time. You SHOULD NOT pin. APT steps take 
-    whatever the registry serves, NPM globals install the current tag, and steps 
-    installing from GitHub releases resolve the version with `gh_latest_tag` 
-    or `gh_asset_url`, compare it against the installed version, and skip the 
+5.  Resolve the upstream version at run time. You SHOULD NOT pin. APT steps take
+    whatever the registry serves, NPM globals install the current tag, and steps
+    installing from GitHub releases resolve the version with `gh_latest_tag`
+    or `gh_asset_url`, compare it against the installed version, and skip the
     download when they already match.
 
-6.  Update the changelog. Add a one-line bullet under the `## [Unreleased]` 
-    heading in `CHANGELOG.md` describing the change, eg. 
+6.  Update the changelog. Add a one-line bullet under the `## [Unreleased]`
+    heading in `CHANGELOG.md` describing the change, eg.
     `` - Install GitHub CLI (\`gh\`). ``
 
 7.  Update the documentation tables. Both are maintained by hand and fall out
@@ -201,7 +201,7 @@ from `run_install_steps`, and update the docs.
 
     Resolve every finding before finishing.
 
-9.  Smoke-test the install. On a clean target, or by re-running `./run/install` 
+9.  Smoke-test the install. On a clean target, or by re-running `./run/install`
     on an existing host, confirm the step prints its `STEP N` banner, completes
     unattended, and leaves the installed binary on `PATH` reporting a
     sensible version. Where no clean target is available, say so in your
@@ -209,15 +209,15 @@ from `run_install_steps`, and update the docs.
 
 ## Rules
 
-- Each step MUST be idempotent. `./run/install` is re-run to apply updates, not 
-  only on first provisioning. Each step MUST converge on the same end state 
+- Each step MUST be idempotent. `./run/install` is re-run to apply updates, not
+  only on first provisioning. Each step MUST converge on the same end state
   whether it runs against a fresh machine or one bootstrapped many times before.
   Prefer package-manager installs and guarded mutations
   (`grep -q … || echo … >> …`) over blind appends.
 
-- You MUST use `superdo` rather than `sudo` directly. The `superdo` helper in 
-  `run/inc/fn/superdo.sh` invokes the command directly when running as root 
-  (Docker image builds) and prefixes `sudo` otherwise (local installs). Calling 
+- You MUST use `superdo` rather than `sudo` directly. The `superdo` helper in
+  `run/inc/fn/superdo.sh` invokes the command directly when running as root
+  (Docker image builds) and prefixes `sudo` otherwise (local installs). Calling
   `sudo` directly breaks the Docker build path.
 
   ```bash
@@ -237,9 +237,9 @@ from `run_install_steps`, and update the docs.
   more than once, breaks the displayed sequence. So every step MUST call
   it exactly once, as its first non-comment line.
 
-- A step file MUST NOT branch on the install profile. Profile membership is 
-  declared at the call site. A step that does not belong in a profile is simply 
-  not called with that profile's wrapper; it does not check, and MUST NOT check, 
+- A step file MUST NOT branch on the install profile. Profile membership is
+  declared at the call site. A step that does not belong in a profile is simply
+  not called with that profile's wrapper; it does not check, and MUST NOT check,
   which profile is running.
 
   ```bash
@@ -252,8 +252,8 @@ from `run_install_steps`, and update the docs.
 
   `profile_at_least` is consumed by the wrappers, not by step files.
 
-- Each file MUST install exactly one tool. Where a tool genuinely depends on 
-  another, install the dependency in its own file and add both calls to 
+- Each file MUST install exactly one tool. Where a tool genuinely depends on
+  another, install the dependency in its own file and add both calls to
   `run_install_steps` in the right order.
 
 - A step that downloads an archive or a `.deb` SHOULD work in a temporary
@@ -264,9 +264,9 @@ from `run_install_steps`, and update the docs.
   on the way out. See `run/inc/dev/lazygit.sh` and `run/inc/dev/delta.sh`
   for the established pattern.
 
-- Steps MUST target Debian-based Linux only. Use `apt-get`, `dpkg`, and `.deb` 
-  artifacts. Do not branch on distribution or add fallbacks for other package 
-  managers. The supported environment is recorded in the `## ☑️ Requirements` 
+- Steps MUST target Debian-based Linux only. Use `apt-get`, `dpkg`, and `.deb`
+  artifacts. Do not branch on distribution or add fallbacks for other package
+  managers. The supported environment is recorded in the `## ☑️ Requirements`
   section of `README.md`.
 
 - You MUST use `apt-get` in scripts, never `apt`. In a non-interactive
@@ -281,7 +281,7 @@ from `run_install_steps`, and update the docs.
   in Docker builds and CI.
 
 - You MUST run `apt-get update` before installing from a newly-added
-  source. Where a step registers a new APT source — a `.list` file or a 
+  source. Where a step registers a new APT source — a `.list` file or a
   `Signed-By` keyring — follow it with an update so the new index is available:
 
   ```bash
@@ -309,13 +309,13 @@ from `run_install_steps`, and update the docs.
 
 ## Edge cases
 
-- The tool depends on a language runtime. Where the tool needs Node, Python, or 
-  another runtime installed earlier in the run — a global npm package, say — 
-  confirm that the runtime's call in `run_install_steps` precedes the new one. 
+- The tool depends on a language runtime. Where the tool needs Node, Python, or
+  another runtime installed earlier in the run — a global npm package, say —
+  confirm that the runtime's call in `run_install_steps` precedes the new one.
   Do not re-install the runtime inside the tool's own step file.
 
-- The tool modifies `.bashrc`. Guard the append with a `grep -q` check, so 
-  re-running the bootstrap does not duplicate exports. See `run/inc/exec/node.sh` 
+- The tool modifies `.bashrc`. Guard the append with a `grep -q` check, so
+  re-running the bootstrap does not duplicate exports. See `run/inc/exec/node.sh`
   for the pattern.
 
 - The tool needs a third-party APT repository. Register the repository in its
@@ -325,15 +325,15 @@ from `run_install_steps`, and update the docs.
   is a `tui_step`, `gui_step` when every package is a `gui_step` — so a profile
   never registers a repository it can never install from.
 
-- The tool is being removed. Delete the step file, remove its call from 
-  `run_install_steps`, drop its rows from `README.md` and `NOTES.md`, and add 
-  an `[Unreleased]` changelog entry. Consider whether the bootstrap SHOULD also 
-  remove an already-installed copy from existing machines (`apt-get remove -y …`) 
+- The tool is being removed. Delete the step file, remove its call from
+  `run_install_steps`, drop its rows from `README.md` and `NOTES.md`, and add
+  an `[Unreleased]` changelog entry. Consider whether the bootstrap SHOULD also
+  remove an already-installed copy from existing machines (`apt-get remove -y …`)
   — usually yes, so that existing machines converge on the new desired state.
 
-- The step must run only on first provisioning. System compatibility checks 
-  (`sys/checks.sh`) and the base `util/*` installs live inline in `run/install`, 
-  ahead of `run_install_steps`, rather than as steps in the shared sequence. 
+- The step must run only on first provisioning. System compatibility checks
+  (`sys/checks.sh`) and the base `util/*` installs live inline in `run/install`,
+  ahead of `run_install_steps`, rather than as steps in the shared sequence.
   Add to that inline sequence only for genuine first-run plumbing.
 
 ## Examples
