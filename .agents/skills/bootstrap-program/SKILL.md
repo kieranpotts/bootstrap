@@ -242,8 +242,10 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   call, worded as `print_step "Installing …."` or an equivalent verb,
   ending in a full stop.
 
-  The helper prints a numbered banner, so the run narrates itself, and step
-  numbering is a contract downstream scripts depend on.
+  `print_step` increments the run's step counter and prints a numbered
+  banner, so the run narrates itself. A step that omits it, or calls it
+  more than once, breaks the displayed sequence. So every step MUST call
+  it exactly once, as its first non-comment line.
 
 - A step file MUST NOT branch on the install profile. Profile membership is 
   declared at the call site. A step that does not belong in a profile is simply 
