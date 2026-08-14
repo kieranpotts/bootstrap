@@ -126,7 +126,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `orca`                       | —   | —   | ✅  |
 | `pass`                       | —   | ✅  | ✅  |
 | `php`                        | —   | ✅  | ✅  |
-| `pi`                         | —   | ✅  | ✅  |
+| `pi`                         | ✅  | ✅  | ✅  |
 | `pied`                       | —   | —   | ✅  |
 | `ping`                       | ✅  | ✅  | ✅  |
 | `postman`                    | —   | —   | ✅  |

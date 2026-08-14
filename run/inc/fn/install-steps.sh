@@ -157,7 +157,7 @@ run_install_steps() {
   tui_step "${inc_path}/dev/ollama.sh"
   tui_step "${inc_path}/dev/openclaw.sh"
   tui_step "${inc_path}/dev/opencode.sh"
-  tui_step "${inc_path}/dev/pi.sh"
+  cli_step "${inc_path}/dev/pi.sh"
   gui_step "${inc_path}/dev/postman.sh"
   cli_step "${inc_path}/dev/pre-commit.sh"
   tui_step "${inc_path}/dev/qwen-code.sh"

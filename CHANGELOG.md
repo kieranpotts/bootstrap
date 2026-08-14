@@ -4,6 +4,7 @@
 
 **Changed**
 - Merge the `apt` agent skill into `install-step` and rename it to `bootstrap-program`.
+- Reclassify Pi Coding Agent (`pi`) from `tui` to `cli`, so it is available to coding agents in headless containers (it can be used programmatically).
 - Replace stale `docs/tools.md`, `docs/installation.md`, and `docs/requirements.md` references with pointers to the corresponding sections of the root `README.md` (the profile table, installation, and requirements content moved out of `docs/`).
 
 **Fixed**
