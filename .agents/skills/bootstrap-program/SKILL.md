@@ -82,7 +82,7 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
 ## Instructions
 
-1.  Deterine the target profile: `cli`, `tui`, or `gui`.
+1.  Determine the target profile: `cli`, `tui`, or `gui`.
 
   - For an existing program that's being updated or deleted, read the current 
     profile from its call in `run/inc/fn/install-steps.sh`.
