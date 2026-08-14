@@ -82,6 +82,11 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
 ## Instructions
 
+These steps are written for adding a program. To **modify** an existing
+step, edit its file and re-run the relevant steps. To **remove** one, see the
+"The tool is being removed" edge case below — delete the file, drop its call
+from `run_install_steps`, and update the docs.
+
 1.  Determine the target profile: `cli`, `tui`, or `gui`.
 
   - For an existing program that's being updated or deleted, read the current 
