@@ -170,9 +170,11 @@ documentation. But do not prompt for a parameter you can resolve yourself.
       a human or a display and is not core to a headless container.
       `tui_step` for terminal-only tools. `gui_step` for desktop programs.
 
-    - `step`. This is reserved for the `sys/*` plumbing that MUST run in every
-      profile before anything else. It's not for the installation of programs
-      themselves.
+    - `step`. Runs unconditionally in every profile, with no filtering.
+      Reserved for plumbing that must always run: the `sys/*` setup,
+      update, upgrade, and teardown steps, and `pkg/*` registries that
+      serve `cli_step` packages (eg. `pkg/github.sh`, `pkg/git-lfs.sh`).
+      It is not for the installation of programs themselves.
 
     Sort alphabetically by filename within the group regardless of which
     wrapper the line uses. Do not group by wrapper.
