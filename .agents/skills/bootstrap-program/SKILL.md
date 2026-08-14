@@ -108,27 +108,12 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
     Use the program's canonical short name as the filename.
 
-3.  Create the step file from the following template.
-
-    ```bash
-    #!/usr/bin/env bash
-
-    #
-    # Install <Program Name>.
-    #
-    # <Upstream homepage>
-    # <https://... Upstream install docs>
-    #
-
-    print_step "Installing <Program Name>."
-
-    # Install commands here, using `superdo` instead of `sudo`.
-    superdo apt-get install -y <package>
-    ```
-
-    The leading comment block is REQUIRED. It records what the script
-    installs and points a reader at the upstream install instructions,
-    which is the only trail back to why a step is written as it is.
+3.  Create the step file. Start with an `#!/usr/bin/env bash` shebang,
+    then a REQUIRED leading comment block recording what the script installs
+    and pointing at the upstream install docs — the only trail back to why a
+    step is written as it is. The first non-comment line MUST be the
+    `print_step "Installing <Program Name>."` call. See the **Examples**
+    section below for complete files to copy as a starting point.
 
 4.  Wire the step into the sequence. Add one line to `run_install_steps` in 
     `run/inc/fn/install-steps.sh`, in the correct group. `run_install_steps` is 
