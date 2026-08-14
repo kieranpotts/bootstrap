@@ -289,13 +289,9 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   superdo apt install curl
   ```
 
-  Called from a non-interactive context, `apt` warns `WARNING: apt does not
-  have a stable CLI interface`. Worse, its output format may change between
-  Debian and Ubuntu releases, breaking any parsing or log diffing that
-  depends on it.
-
-  You MAY use `apt` when typing interactively at a terminal, where its
-  progress bar and colorized output help.
+  In a non-interactive context `apt` warns it has no stable CLI interface,
+  and its output format can change between Debian and Ubuntu releases,
+  breaking any parsing or log diffing that depends on it.
 
 - You MUST pass `-y` to every mutating `apt-get` invocation. `apt-get install`, 
   `apt-get remove`, `apt-get purge`, and `apt-get autoremove` all prompt for 
