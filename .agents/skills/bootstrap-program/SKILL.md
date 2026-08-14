@@ -299,7 +299,9 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
 - You MUST pass `-y` to every mutating `apt-get` invocation. `apt-get install`, 
   `apt-get remove`, `apt-get purge`, and `apt-get autoremove` all prompt for 
-  confirmation otherwise, which stalls an unattended bootstrap run.
+  confirmation otherwise, which stalls an unattended bootstrap run. Pass the
+  equivalent flag for any other installer too, so the run completes unattended
+  in Docker builds and CI.
 
   ```bash
   superdo apt-get install -y <package>
@@ -323,10 +325,6 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   MUST NOT prefix a read-only query with `superdo`. Queries need no
   privileges, and elevating them obscures which calls genuinely mutate the
   machine.
-
-- Steps MUST NOT prompt. Pass `-y` to `apt-get install` and whatever equivalent 
-  flag another installer needs, so the run completes unattended in Docker builds 
-  and CI.
 
 - A step SHOULD end by echoing the installed version, where the tool
   exposes `--version`. It makes provisioning logs useful when diagnosing
