@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+**Changed**
+- Merge the `apt` agent skill into `install-step` and rename it to `bootstrap-program`.
+- Replace stale `docs/tools.md`, `docs/installation.md`, and `docs/requirements.md` references with pointers to the corresponding sections of the root `README.md` (the profile table, installation, and requirements content moved out of `docs/`).
+
+**Fixed**
+- Correct the non-interactive install example (`make install --profile=gui` was rejected by `make`); use `./run/install --profile=gui` in `README.md` and `docs/development/debugging.md`.
+- Lint `run/version` in CI (it was missing from the ShellCheck workflow's file set) and align the documented `shellcheck` command in `AGENTS.md` with what CI lints (add `run/bootstrap` and `run/version`).
+- Document the `util/*` general-utilities block in the `run_install_steps` header comment (it was omitted from the sequence description).
+
+**Changed**
+- Tighten the `pkg/*` registry rule to cover TUI-only repos too, and reclassify `pkg/docker.sh` and `pkg/hashicorp.sh` from `step` to `tui_step` so the `cli` profile no longer registers repositories (Docker, HashiCorp) it never installs from.
+
 ## [1.7.1] - 2026-08-12
 
 **Fixed**
