@@ -387,8 +387,10 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   curl --version
   ```
 
-- A step backed by a third-party APT source. Registering the repository is a 
-  separate `pkg/*` step, so the install step itself stays a plain APT install.
+- A step backed by a third-party APT source. Registering the repository is a
+  separate `pkg/*` step (called earlier in the sequence), and `sys/update.sh`
+  refreshes every index before any `dev/*` step runs, so the install step
+  itself stays a plain APT install with no `apt-get update`.
 
   ```bash
   #!/usr/bin/env bash
@@ -404,8 +406,6 @@ documentation. But do not prompt for a parameter you can resolve yourself.
 
   print_step "Installing GitHub CLI."
 
-  # Install the GitHub CLI.
-  superdo apt-get update
   superdo apt-get install -y gh
   gh --version
   ```
