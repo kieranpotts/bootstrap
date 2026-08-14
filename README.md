@@ -22,7 +22,7 @@ WSL is no longer supported.
     use, pass the value to the `--profile` option.
 
     ```
-    make install --profile=gui
+    ./run/install --profile=gui
     ```
 
 See below for the list of tools installed in each profile.

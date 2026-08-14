@@ -89,8 +89,8 @@ step() {
 # The shared implementation behind `cli_step`, `tui_step`, and `gui_step`.
 # The step runs only when the requested profile is at least the one this
 # call site requires (see `profile_at_least`). Filtering is silent: a step
-# left out of the profile prints nothing, because `docs/tools.md` already
-# documents what each profile contains.
+# left out of the profile prints nothing, because the `## 💻 Programs` table
+# in `README.md` already documents what each profile contains.
 #
 # Arguments:
 #   $1 - Minimum profile this step belongs to (`cli`, `tui`, or `gui`).

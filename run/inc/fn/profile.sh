@@ -23,7 +23,8 @@
 # `run/inc/fn/install-steps.sh` (`cli_step`, `tui_step`, `gui_step`), never
 # inside an install step. Install steps therefore have no reason to test the
 # predicates below: "what does profile X install?" is answered by reading one
-# file. See `docs/tools.md` for the resulting table.
+# file. See the `## 💻 Programs` table in `README.md` for the resulting
+# table.
 #
 
 # profile_rank - Print the numeric rank of a profile name, low to high.

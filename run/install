@@ -18,9 +18,10 @@
 # CI) it is a required flag, and the script exits with an error rather than
 # guessing.
 #
-# The profiles are cumulative, and `docs/tools.md` lists what each one
-# installs. `./run/bootstrap` still exists as a deprecated wrapper around this
-# script, for machines/images pinned to older tags. Prefer `./run/install`.
+# The profiles are cumulative, and the `## 💻 Programs` table in `README.md`
+# lists what each one installs. `./run/bootstrap` still exists as a deprecated
+# wrapper around this script, for machines/images pinned to older tags.
+# Prefer `./run/install`.
 #
 
 # Strict mode for the entry-point script:

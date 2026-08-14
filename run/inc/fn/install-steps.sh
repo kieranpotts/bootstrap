@@ -7,6 +7,7 @@
 #
 #   - APT setup and third-party repository registration (`sys/apt.sh`, `pkg/*`)
 #   - System update and upgrade (`sys/update.sh`, `sys/upgrade.sh`)
+#   - General utilities (`util/*`)
 #   - Language runtimes (`exec/*`)
 #   - Web browsers (`web/*`)
 #   - Applications (`app/*`)
@@ -28,8 +29,8 @@
 #   step          Runs in every profile, unconditionally. Reserved for the
 #                 sys/* plumbing that has to run before anything else.
 #
-# See `profile_step` in `run/inc/fn/steps.sh`, and `docs/tools.md` for the
-# table this file produces.
+# See `profile_step` in `run/inc/fn/steps.sh`, and the `## 💻 Programs` table
+# in `README.md` for the table this file produces.
 #
 
 # run_install_steps - Run the shared install step sequence.
@@ -45,15 +46,17 @@ run_install_steps() {
   # APT setup.
   step "${inc_path}/sys/apt.sh"
 
-  # Add package repositories. Those serving nothing but GUI applications are
-  # `gui_step`s: registering a repository the run can never install from only
-  # slows down `apt update` and leaves a key on the machine for nothing.
+  # Add package repositories. Each is called with the same wrapper as the
+  # packages it serves — `gui_step` for GUI-only registries, `tui_step` for
+  # TUI-only ones — so a profile never registers a repository it can never
+  # install from, which only slows down `apt update` and leaves a key on the
+  # machine for nothing.
   gui_step "${inc_path}/pkg/bruno.sh"
-  step "${inc_path}/pkg/docker.sh"
+  tui_step "${inc_path}/pkg/docker.sh"
   gui_step "${inc_path}/pkg/ghostty.sh"
   step "${inc_path}/pkg/git-lfs.sh"
   step "${inc_path}/pkg/github.sh"
-  step "${inc_path}/pkg/hashicorp.sh"
+  tui_step "${inc_path}/pkg/hashicorp.sh"
   gui_step "${inc_path}/pkg/keepassxc.sh"
   gui_step "${inc_path}/pkg/microsoft.sh"
   gui_step "${inc_path}/pkg/mozilla.sh"

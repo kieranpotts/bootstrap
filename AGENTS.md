@@ -62,9 +62,10 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - `run/inc/phy/`. Hardware-related tooling (eg. ROCm).
 
-- `docs/`. Installation, requirements, tools (what installs under each
-  profile), releasing, considerations, and architecture decision records
-  (`docs/adr/`).
+- `docs/`. Developer documentation: architecture decision records
+  (`docs/decisions/`) and development notes (`docs/development/`).
+  Installation, requirements, and the per-profile tools table live in the
+  root `README.md`.
 
 ## Tools
 
@@ -72,11 +73,11 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
   from scratch. There is no default profile. Omitting `--profile` prompts
   for one at a terminal, and errors in a non-interactive run. `cli` is the
   minimal tooling a coding agent needs in a headless container, `gui` the
-  full workstation install. See `docs/tools.md`.
+  full workstation install. See the `## 💻 Programs` table in `README.md`.
 
 - `./run/install --help` to print the usage banner.
 
-- `shellcheck -x --severity=warning run/**/*.sh run/install`
+- `shellcheck -x --severity=warning run/**/*.sh run/install run/bootstrap run/version`
   to lint shell scripts, at the same threshold CI enforces.
 
 - `ec` (editorconfig-checker) to validate files against `.editorconfig`.
@@ -110,7 +111,8 @@ Profile membership is declared at the call site in
 `run/inc/fn/install-steps.sh`, via `cli_step`, `tui_step`, or `gui_step` —
 never by a guard inside a step file. That keeps "what does this profile
 install?" answerable by reading one file, and it is why `run/inc/fn/steps.sh`
-has three wrappers rather than one. `docs/tools.md` is the rendered summary.
+has three wrappers rather than one. The `## 💻 Programs` table in
+`README.md` is the rendered summary.
 Steps outside the selected profile are skipped silently. Every step inside
 it runs unattended, with no per-tool prompt.
 
@@ -154,12 +156,13 @@ with an error pointing at the replacement.
 - MUST use `cli_step` only for a step that belongs in a minimal,
   unattended, headless coding agent container — not merely "something most
   workstations want". `tui_step` is the safe default. Use `gui_step` when
-  the tool needs a display. Update `docs/tools.md` to match whichever you
-  choose.
+  the tool needs a display. Update the `## 💻 Programs` table in `README.md`
+  to match whichever you choose.
 
 - MUST call a `pkg/*` registry via `gui_step` when every package that
-  registry serves is itself a `gui_step`. Registering a repository the run
-  can never install from only slows down `apt update` and adds a key to the
+  registry serves is itself a `gui_step`, and via `tui_step` when every
+  package it serves is a `tui_step`. Registering a repository the run can
+  never install from only slows down `apt update` and adds a key to the
   machine (or image) for nothing.
 
 - MUST target Debian-based distros only. Do not add steps that assume other
@@ -191,18 +194,16 @@ with an error pointing at the replacement.
   step, so the comparison against the private `hacksltd` bootstrapper
   doesn't fall out of sync.
 
-- SHOULD update `docs/tools.md` when adding, removing, or reclassifying an
-  install step (moving it between `cli_step`, `tui_step`, and `gui_step`),
-  so the CLI/TUI/GUI table stays a trustworthy summary of
-  `run_install_steps`.
+- SHOULD update the `## 💻 Programs` table in `README.md` when adding,
+  removing, or reclassifying an install step (moving it between `cli_step`,
+  `tui_step`, and `gui_step`), so the CLI/TUI/GUI table stays a trustworthy
+  summary of `run_install_steps`.
 
 ## Skills
 
 The following skills, scoped to this project, are installed in the
 `.agents/skills/` directory:
 
-- [`.agents/skills/apt/SKILL.md`](./.agents/skills/apt/SKILL.md).
-  Use the APT package manager correctly in bootstrap scripts.
-
-- [`.agents/skills/install-step/SKILL.md`](./.agents/skills/install-step/SKILL.md).
-  Add or modify an install step in the bootstrap scripts.
+- [`.agents/skills/bootstrap-program/SKILL.md`](./.agents/skills/bootstrap-program/SKILL.md).
+  Add, change, or remove a tool in the bootstrap scripts, and apply this
+  project's conventions for invoking APT from them.
