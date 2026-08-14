@@ -279,30 +279,16 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   managers. The supported environment is recorded in the `## ☑️ Requirements` 
   section of `README.md`.
 
-- You MUST use `apt-get` in scripts, never `apt`.
+- You MUST use `apt-get` in scripts, never `apt`. In a non-interactive
+  context `apt` warns it has no stable CLI interface, and its output format can
+  change between Debian and Ubuntu releases, breaking any parsing or log
+  diffing that depends on it.
 
-  ```bash
-  # ✅ Yes:
-  superdo apt-get install -y curl
-
-  # ❌ No:
-  superdo apt install curl
-  ```
-
-  In a non-interactive context `apt` warns it has no stable CLI interface,
-  and its output format can change between Debian and Ubuntu releases,
-  breaking any parsing or log diffing that depends on it.
-
-- You MUST pass `-y` to every mutating `apt-get` invocation. `apt-get install`, 
-  `apt-get remove`, `apt-get purge`, and `apt-get autoremove` all prompt for 
+- You MUST pass `-y` to every mutating `apt-get` invocation. `apt-get install`,
+  `apt-get remove`, `apt-get purge`, and `apt-get autoremove` all prompt for
   confirmation otherwise, which stalls an unattended bootstrap run. Pass the
   equivalent flag for any other installer too, so the run completes unattended
   in Docker builds and CI.
-
-  ```bash
-  superdo apt-get install -y <package>
-  superdo apt-get remove -y <package>
-  ```
 
 - You MUST run `apt-get update` before installing from a newly-added
   source. Where a step registers a new APT source — a `.list` file or a 
