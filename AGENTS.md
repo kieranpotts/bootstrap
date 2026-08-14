@@ -207,3 +207,24 @@ The following skills, scoped to this project, are installed in the
 - [`.agents/skills/bootstrap-program/SKILL.md`](./.agents/skills/bootstrap-program/SKILL.md).
   Add, change, or remove a tool in the bootstrap scripts, and apply this
   project's conventions for invoking APT from them.
+
+## References
+
+The following technical standards (TS) govern this project. Fetch and ingest
+the relevant standards as-and-when required for the task at hand.
+
+- [**TS-9: Version Control**](https://kieranpotts.com/standards/009) \
+  Use when working with Git. Covers commits, branching, merging, integration
+  strategies, cutting releases, and configuring Git/PR/CI tooling.
+
+- [**TS-31: Unix Shells and POSIX Standards**](https://kieranpotts.com/standards/031) \
+  Use when authoring or modifying shell scripts that must be POSIX-compliant
+  and run across multiple shells (sh, bash, zsh, dash) and platforms.
+
+- [**TS-32: Bash**](https://kieranpotts.com/standards/032) \
+  Use when authoring or modifying scripts that target Bash specifically, and
+  which use Bash extensions ("Bashisms").
+
+- [**TS-58: Docker**](https://kieranpotts.com/standards/058) \
+  Use when designing Dockerfiles, building Docker images, or running Docker
+  containers.
