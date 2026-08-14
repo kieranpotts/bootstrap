@@ -154,21 +154,21 @@ documentation. But do not prompt for a parameter you can resolve yourself.
       gui_step "${inc_path}/<group>/<name>.sh"
       ```
 
-    - `cli_step`. Programs belonging in a minimal, unattended, headless
-      container, which the bootstrap therefore treats as non-negotiable.
+    - `cli_step`. The minimal tooling a coding agent needs to work
+      unattended in a headless container — what the bootstrap treats as
+      non-negotiable. This is the home of general CLI utilities (`curl`,
+      `less`, `lsof`, `ping`), core dev tooling (`gh`, `git-lfs`, `vim`,
+      `tmux`, `shellcheck`), and anything else a headless container must
+      have. But a terminal UI is not disqualifying — eg. `tmux` and `vim` are
+      `cli_step`s because an agent may drive them programmatically.
 
       ```bash
       cli_step "${inc_path}/<group>/<name>.sh"
       ```
 
-      Only use `cli_step` for programs that are designed to be used through
-      programmatic APIs and will mostly be used in automated scripts or by
-      AI agents working autonomously.
-    
-      Anything needing a human at a terminal (TUIs, prompt cosmetics), or that
-      requires a display, MUST be installed using either `tui_step` or 
-      `gui_step`. Programs that only have a terminal interface are installed
-      using `tui_step`. Desktop programs are installed using `gui_step`.
+      Reach for `tui_step` or `gui_step` only when the tool genuinely needs
+      a human or a display and is not core to a headless container.
+      `tui_step` for terminal-only tools. `gui_step` for desktop programs.
 
     - `step`. This is reserved for the `sys/*` plumbing that MUST run in every
       profile before anything else. It's not for the installation of programs
