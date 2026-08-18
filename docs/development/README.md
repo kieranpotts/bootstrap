@@ -2,3 +2,4 @@
 
 - [Debugging](./debugging.md)
 - [Releasing](./releasing.md)
+- [Repository settings](./repository-settings.md)
