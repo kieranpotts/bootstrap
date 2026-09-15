@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+**Added**
+- Install Teams for Linux (`teams-for-linux`) in the `gui` profile, via its official APT repository.
+
 **Changed**
 - Merge the `apt` agent skill into `install-step` and rename it to `bootstrap-program`.
 - Reclassify Pi Coding Agent (`pi`) from `tui` to `cli`, so it is available to coding agents in headless containers (it can be used programmatically).

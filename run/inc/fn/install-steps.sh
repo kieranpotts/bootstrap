@@ -61,6 +61,7 @@ run_install_steps() {
   gui_step "${inc_path}/pkg/microsoft.sh"
   gui_step "${inc_path}/pkg/mozilla.sh"
   gui_step "${inc_path}/pkg/sourcegit.sh"
+  gui_step "${inc_path}/pkg/teams-for-linux.sh"
   gui_step "${inc_path}/pkg/vscodium.sh"
   gui_step "${inc_path}/pkg/warp.sh"
 
@@ -117,6 +118,7 @@ run_install_steps() {
   gui_step "${inc_path}/app/pied.sh"
   gui_step "${inc_path}/app/proton-mail.sh"
   gui_step "${inc_path}/app/proton-vpn.sh"
+  gui_step "${inc_path}/app/teams-for-linux.sh"
   gui_step "${inc_path}/app/voxd.sh"
   tui_step "${inc_path}/app/xpdf-reader.sh"
 

@@ -101,6 +101,7 @@ script installs.
 | `sourcegit`                  |     ✅      |     ✅     |
 | `ssh`                        |     ✅      |     —      |
 | `tar`                        |     ✅      |     ✅     |
+| `teams-for-linux`            |     ✅      |     —      |
 | `terraform`                  |     ✅      |     ✅     |
 | `tmux`                       |     ✅      |     ✅     |
 | `unzip`                      |     ✅      |     ✅     |
