@@ -22,6 +22,11 @@ npm install -g @microsoft/inshellisense
 
 is --version
 
+# Re-running an install/update without this leaves stale cached resources,
+# which breaks the terminal with "inshellisense resources out of date...".
+print_info "Reinitializing inshellisense resources."
+is reinit
+
 # Add to ~/.bashrc (or ~/local.bashrc) so inshellisense automatically opens in
 # every new shell session.
 print_info "Configuring ~/.bashrc to load inshellisense shell startup."
