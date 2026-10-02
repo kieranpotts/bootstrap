@@ -261,7 +261,7 @@ from `run_install_steps`, and update the docs.
 
   Create the directory with `mktemp -d`, capture the working directory
   before `cd`-ing in, then `cd` back and `rm -rf` the temporary directory
-  on the way out. See `run/inc/dev/lazygit.sh` and `run/inc/dev/delta.sh`
+  on the way out. See `run/inc/dev/lazygit.sh` and `run/inc/dev/git-delta.sh`
   for the established pattern.
 
 - Steps MUST target Debian-based Linux only. Use `apt-get`, `dpkg`, and `.deb`

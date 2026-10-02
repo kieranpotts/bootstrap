@@ -56,7 +56,7 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - `run/inc/app/`. GUI/end-user applications.
 
-- `run/inc/dev/`. Developer tooling (Claude, Copilot, delta, lazygit, …).
+- `run/inc/dev/`. Developer tooling (Claude, Copilot, lazygit, …).
 
 - `run/inc/ops/`. Ops tooling (AWS CLI, Terraform).
 

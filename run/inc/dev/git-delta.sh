@@ -5,6 +5,9 @@
 # can be used as an alternative to `less` for paging through `git diff` output,
 # and other Git commands.
 #
+# NOTE: Installation currently disabled as the binary conflicts with Delta
+# agentic code editor - https://delta.dev/.
+#
 # https://dandavison.github.io/delta/
 #
 
