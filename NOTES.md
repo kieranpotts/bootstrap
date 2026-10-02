@@ -26,6 +26,7 @@ script installs.
 | `cursor-cli`                 |     ✅      |     ✅     |
 | `cursor-gui`                 |     ✅      |     ✅     |
 | `deja-dup`                   |     ✅      |     ✅     |
+| `delta`                      |     ✅      |     —      |
 | `dig`                        |     ✅      |     —      |
 | `dive`                       |     ✅      |     —      |
 | `docker`                     |     ✅      |     ✅     |

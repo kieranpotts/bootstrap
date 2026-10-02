@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 **Added**
+- Install Delta (`delta`, the Zed agentic development environment) in the `gui` profile.
 - Install Teams for Linux (`teams-for-linux`) in the `gui` profile, via its official APT repository.
 
 **Changed**

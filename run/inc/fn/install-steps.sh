@@ -133,6 +133,7 @@ run_install_steps() {
   tui_step "${inc_path}/dev/ctop.sh"
   tui_step "${inc_path}/dev/cursor-cli.sh"
   gui_step "${inc_path}/dev/cursor-gui.sh"
+  gui_step "${inc_path}/dev/delta.sh"
   tui_step "${inc_path}/dev/dive.sh"
   tui_step "${inc_path}/dev/docker-credential-pass.sh"
   tui_step "${inc_path}/dev/docker-mcp.sh"

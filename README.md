@@ -72,6 +72,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `cursor-cli`                 | —   | ✅  | ✅  |
 | `cursor-gui`                 | —   | —   | ✅  |
 | `deja-dup`                   | —   | —   | ✅  |
+| `delta`                      | —   | —   | ✅  |
 | `dig`                        | ✅  | ✅  | ✅  |
 | `dive`                       | —   | ✅  | ✅  |
 | `docker`                     | —   | ✅  | ✅  |
