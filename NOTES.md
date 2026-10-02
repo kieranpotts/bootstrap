@@ -26,7 +26,6 @@ script installs.
 | `cursor-cli`                 |     ✅      |     ✅     |
 | `cursor-gui`                 |     ✅      |     ✅     |
 | `deja-dup`                   |     ✅      |     ✅     |
-| `delta`                      |     ✅      |     ✅     |
 | `dig`                        |     ✅      |     —      |
 | `dive`                       |     ✅      |     —      |
 | `docker`                     |     ✅      |     ✅     |
@@ -44,6 +43,7 @@ script installs.
 | `gh-dash`                    |     ✅      |     —      |
 | `ghostty`                    |     ✅      |     ✅     |
 | `git`                        |     ✅      |     ✅     |
+| `git-delta`                  |     ✅      |     ✅     |
 | `git-lfs`                    |     ✅      |     ✅     |
 | `gnupg`                      |     ✅      |     ✅     |
 | `hermes-agent`               |     ✅      |     ✅     |

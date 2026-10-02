@@ -72,7 +72,6 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `cursor-cli`                 | —   | ✅  | ✅  |
 | `cursor-gui`                 | —   | —   | ✅  |
 | `deja-dup`                   | —   | —   | ✅  |
-| `delta`                      | ✅  | ✅  | ✅  |
 | `dig`                        | ✅  | ✅  | ✅  |
 | `dive`                       | —   | ✅  | ✅  |
 | `docker`                     | —   | ✅  | ✅  |
@@ -90,6 +89,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `gh-dash`                    | —   | ✅  | ✅  |
 | `ghostty`                    | —   | —   | ✅  |
 | `git`                        | ✅  | ✅  | ✅  |
+| `git-delta`                  | ✅  | ✅  | ✅  |
 | `git-lfs`                    | ✅  | ✅  | ✅  |
 | `gnupg`                      | ✅  | ✅  | ✅  |
 | `hermes-agent`               | —   | ✅  | ✅  |
