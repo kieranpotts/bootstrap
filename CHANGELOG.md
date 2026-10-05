@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-10-05
+
 - Fix key rotations.
 - Fix Obsidian install.
 - Install Node.js 26, set as default (required by OpenClaw).
