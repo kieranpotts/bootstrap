@@ -93,6 +93,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `git-delta`                  | ✅  | ✅  | ✅  |
 | `git-lfs`                    | ✅  | ✅  | ✅  |
 | `gnupg`                      | ✅  | ✅  | ✅  |
+| `herdr`                      | —   | ✅  | ✅  |
 | `hermes-agent`               | —   | ✅  | ✅  |
 | `htop`                       | —   | ✅  | ✅  |
 | `icoutils`                   | ✅  | ✅  | ✅  |

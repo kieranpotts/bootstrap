@@ -47,6 +47,7 @@ script installs.
 | `git-delta`                  |     ✅      |     ✅     |
 | `git-lfs`                    |     ✅      |     ✅     |
 | `gnupg`                      |     ✅      |     ✅     |
+| `herdr`                      |     ✅      |     —      |
 | `hermes-agent`               |     ✅      |     ✅     |
 | `htop`                       |     ✅      |     ✅     |
 | `icoutils`                   |     ✅      |     ✅     |
