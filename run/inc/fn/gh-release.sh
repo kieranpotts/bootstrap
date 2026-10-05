@@ -86,6 +86,44 @@ gh_asset_url() {
   echo "${url}"
 }
 
+# gh_asset_url_recent - Like `gh_asset_url`, but searches the most recent
+# releases (newest first) rather than only the latest one.
+#
+# Some repos publish releases that carry only a subset of assets (eg.
+# `obsidianmd/obsidian-releases` v1.13.8 shipped only an Android APK), so the
+# latest release has no asset for the platform we want.
+#
+# Arguments:
+#   $1 - GitHub repo in `owner/name` form.
+#   $2 - `grep -E` pattern to match against the URL.
+#
+# Output:
+#   The newest matching URL across the 10 most recent releases.
+#
+gh_asset_url_recent() {
+  local repo="$1"
+  local pattern="$2"
+  local url=""
+
+  if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
+    url=$(gh api "repos/${repo}/releases?per_page=10" --jq '.[].assets[].browser_download_url' 2>/dev/null \
+      | grep -E -- "${pattern}" \
+      | head -1)
+  else
+    url=$(curl -s "https://api.github.com/repos/${repo}/releases?per_page=10" \
+      | grep -oP '"browser_download_url": "\K[^"]+' \
+      | grep -E -- "${pattern}" \
+      | head -1)
+  fi
+
+  if [[ -z "${url}" ]]; then
+    print_error "Could not find a release asset for ${repo} matching '${pattern}' in its 10 most recent releases. This may be the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed." >&2
+    return 1
+  fi
+
+  echo "${url}"
+}
+
 # gh_latest_release_tag - Print the `tag_name` of the most recent release for
 # a GitHub repo, including pre-releases.
 #
