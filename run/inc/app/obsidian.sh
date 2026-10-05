@@ -17,9 +17,10 @@ if dpkg -s obsidian >/dev/null 2>&1; then
   installed_version=$(dpkg -s obsidian | grep -oP 'Version: \K[^ ]+')
 fi
 
-# Find the AMD64 .deb asset URL from the latest release, then extract the
-# version number from its filename.
-deb_url=$(gh_asset_url obsidianmd/obsidian-releases '_amd64\.deb$')
+# Find the AMD64 .deb asset URL from the newest release that has one (some
+# releases ship only a subset of platforms), then extract the version number
+# from its filename.
+deb_url=$(gh_asset_url_recent obsidianmd/obsidian-releases '_amd64\.deb$') || deb_url=""
 latest_version=$(echo "${deb_url}" | grep -Po 'obsidian_\K[0-9]+\.[0-9]+\.[0-9]+')
 
 print_info "Latest available version of Obsidian is v${latest_version}."
