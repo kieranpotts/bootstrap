@@ -108,6 +108,11 @@ if [[ -f "${bashrc}" ]]; then
   . "${bashrc}"
 fi
 
+# Installed versions are detected by checking NVM's versions directory, rather
+# than grepping `nvm list`. The latter also prints the system-wide Node (eg.
+# `system -> v26.10.0 (-> N/A)`), which falsely matches a pinned version that
+# is not actually installed under NVM.
+
 # Use NVM to install the current LTS version of Node, plus previous LTS versions
 # of Node that are not yet at end-of-life. For each major LTS release, we
 # install the first minor/patch version to receive the LTS label, rather than
@@ -118,7 +123,7 @@ fi
 # Node.js v26 is not yet LTS (it is promoted in late October 2026), so we pin
 # the latest release for now. Pin the first LTS version once it is published.
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V26.md
-if ! nvm list | grep -q "v26.10.0"; then
+if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v26.10.0" ]]; then
   print_info "Installing Node.js v26.10.0."
   nvm install 26.10.0
 else
@@ -126,7 +131,7 @@ else
 fi
 
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V24.md
-if ! nvm list | grep -q "v24.11.0"; then
+if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v24.11.0" ]]; then
   print_info "Installing Node.js LTS v24.11.0."
   nvm install 24.11.0
 else
@@ -134,7 +139,7 @@ else
 fi
 
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V22.md
-if ! nvm list | grep -q "v22.11.0"; then
+if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v22.11.0" ]]; then
   print_info "Installing Node.js LTS v22.11.0."
   nvm install 22.11.0
 else
@@ -142,7 +147,7 @@ else
 fi
 
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V20.md
-if ! nvm list | grep -q "v20.9.0"; then
+if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v20.9.0" ]]; then
   print_info "Installing Node.js LTS v20.9.0."
   nvm install 20.9.0
 else
