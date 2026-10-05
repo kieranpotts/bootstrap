@@ -29,9 +29,9 @@ else
 
   # Fetch the latest release. Upstream ships a prebuilt binary per OS/arch,
   # no apt package or .deb is published.
-  curl \
-    -Lo "${tmp_dir}/ec.tar.gz" \
-    "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v${latest_version}/ec-linux-amd64.tar.gz"
+  curl -fL \
+    -o "${tmp_dir}/ec.tar.gz" \
+    "https://github.com/editorconfig-checker/editorconfig-checker/releases/download/v${latest_version}/editorconfig-checker-linux-amd64.tar.gz"
 
   # Check if the download was successful.
   if [[ ! -f "${tmp_dir}/ec.tar.gz" ]]; then
@@ -39,11 +39,11 @@ else
     exit 1
   fi
 
-  # Unpack it to the tmp directory. The archive holds `bin/ec-linux-amd64`.
-  tar xf "${tmp_dir}/ec.tar.gz" -C "${tmp_dir}" bin/ec-linux-amd64
+  # Unpack it to the tmp directory. The archive holds a top-level `editorconfig-checker` binary.
+  tar xf "${tmp_dir}/ec.tar.gz" -C "${tmp_dir}" editorconfig-checker
 
   # Install it, renaming to the short `ec` command upstream itself documents.
-  superdo install "${tmp_dir}/bin/ec-linux-amd64" /usr/local/bin/ec
+  superdo install "${tmp_dir}/editorconfig-checker" /usr/local/bin/ec
 
   # Remove the temporary directory.
   rm -rf "${tmp_dir}"
