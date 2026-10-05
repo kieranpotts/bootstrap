@@ -4,6 +4,7 @@
 
 - Install Herdr (`herdr`) in the `tui` profile.
 - Install T3 Code (`t3code`) in the `gui` profile.
+- Install Hunk (`hunk`) in the `tui` profile.
 
 ## [1.8.0] - 2026-10-02
 

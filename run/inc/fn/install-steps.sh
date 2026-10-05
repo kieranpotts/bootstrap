@@ -148,6 +148,7 @@ run_install_steps() {
   cli_step "${inc_path}/dev/git-lfs.sh"
   tui_step "${inc_path}/dev/herdr.sh"
   tui_step "${inc_path}/dev/hermes-agent.sh"
+  tui_step "${inc_path}/dev/hunk.sh"
   tui_step "${inc_path}/dev/inshellisense.sh"
   gui_step "${inc_path}/dev/insomnia.sh"
   gui_step "${inc_path}/dev/jetbrains-toolbox.sh"

@@ -50,6 +50,7 @@ script installs.
 | `herdr`                      |     ✅      |     —      |
 | `hermes-agent`               |     ✅      |     ✅     |
 | `htop`                       |     ✅      |     ✅     |
+| `hunk`                       |     ✅      |     —      |
 | `icoutils`                   |     ✅      |     ✅     |
 | `inotify-tools`              |     ✅      |     ✅     |
 | `inshellisense`              |     ✅      |     —      |
