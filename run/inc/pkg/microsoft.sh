@@ -9,15 +9,10 @@
 
 print_step "Adding Microsoft's official package registry."
 
-if [[ -f /usr/share/keyrings/microsoft.gpg ]] \
-  && [[ -f /etc/apt/sources.list.d/vscode.sources ]] \
-  && [[ -f /etc/apt/sources.list.d/microsoft-edge.list ]]; then
-  print_info "Microsoft's GPG key and Edge/VS Code package registries are already configured. Skipping."
-  return 0
-fi
-
-# Install the signing key.
-print_info "Installing Microsoft GPG key."
+# Always re-fetch the signing key, even when the registries are already
+# configured, so a key rotation upstream is picked up on re-run. Otherwise
+# `apt update` fails with NO_PUBKEY once Microsoft rotates its key.
+print_info "Refreshing Microsoft GPG key."
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 superdo install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg
 rm -f microsoft.gpg
@@ -27,6 +22,10 @@ rm -f microsoft.gpg
 # (see `web/edge.sh`). Thereafter the package maintains this registry itself:
 # its postinst script rewrites this same file (dropping `signed-by`, and
 # trusting `/etc/apt/trusted.gpg.d/microsoft-edge.gpg` instead).
+#
+# The file is rewritten on every run, restoring `signed-by` with the refreshed
+# key. Otherwise Edge's own (possibly stale) trusted key is used, and a key
+# rotation breaks `apt update` until Edge refreshes it.
 #
 # We deliberately write to Microsoft's own filename. Using any other filename
 # leaves two sources for the same URI with differing `Signed-By` values, which

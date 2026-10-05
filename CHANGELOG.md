@@ -2,11 +2,13 @@
 
 ## [Unreleased]
 
+- Fix key rotations.
 - Fix Obsidian install.
 - Install Node.js 26, set as default (required by OpenClaw).
 - Install Herdr (`herdr`) in the `tui` profile.
 - Install T3 Code (`t3code`) in the `gui` profile.
 - Install Hunk (`hunk`) in the `tui` profile.
+- Refresh the HashiCorp and Microsoft APT signing keys on every run (and restore Edge's `signed-by`), so upstream key rotations no longer break `apt update`.
 
 ## [1.8.0] - 2026-10-02
 

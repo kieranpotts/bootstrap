@@ -6,13 +6,11 @@
 
 print_step "Adding Hashicorp's official package registry."
 
-if [[ -f /usr/share/keyrings/hashicorp-archive-keyring.gpg ]] && [[ -f /etc/apt/sources.list.d/hashicorp.list ]]; then
-  print_info "Hashicorp's package registry is already configured. Skipping."
-  return 0
-fi
-
-# Install the HashiCorp GPG key.
-wget -O- https://apt.releases.hashicorp.com/gpg | \
+# Always re-fetch the signing key, even when the registry is already configured,
+# so a key rotation upstream is picked up on re-run. Otherwise `apt update`
+# fails with NO_PUBKEY once HashiCorp rotates its key.
+print_info "Refreshing the HashiCorp GPG key."
+wget -qO- https://apt.releases.hashicorp.com/gpg | \
   gpg --dearmor | \
   superdo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
 
