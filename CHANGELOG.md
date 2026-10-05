@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-10-05
+
 - Remove debugging flag
 
 ## [1.9.0] - 2026-10-05
