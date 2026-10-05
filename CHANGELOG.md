@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Remove debugging flag
+
 ## [1.9.0] - 2026-10-05
 
 - Fix key rotations.
