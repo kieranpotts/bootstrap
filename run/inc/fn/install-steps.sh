@@ -118,6 +118,7 @@ run_install_steps() {
   gui_step "${inc_path}/app/pied.sh"
   gui_step "${inc_path}/app/proton-mail.sh"
   gui_step "${inc_path}/app/proton-vpn.sh"
+  gui_step "${inc_path}/app/t3code.sh"
   gui_step "${inc_path}/app/teams-for-linux.sh"
   gui_step "${inc_path}/app/voxd.sh"
   tui_step "${inc_path}/app/xpdf-reader.sh"

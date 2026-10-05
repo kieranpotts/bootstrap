@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Install T3 Code (`t3code`) in the `gui` profile.
+
 ## [1.8.0] - 2026-10-02
 
 **Added**

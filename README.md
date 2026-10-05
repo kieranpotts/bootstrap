@@ -148,6 +148,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `sourcegit`                  | —   | —   | ✅  |
 | `ssh`                        | ✅  | ✅  | ✅  |
 | `tar`                        | ✅  | ✅  | ✅  |
+| `t3code`                     | —   | —   | ✅  |
 | `teams-for-linux`            | —   | —   | ✅  |
 | `terraform`                  | —   | ✅  | ✅  |
 | `tmux`                       | ✅  | ✅  | ✅  |
