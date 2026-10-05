@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- Install Node.js 26, set as default (required by OpenClaw).
 - Install Herdr (`herdr`) in the `tui` profile.
 - Install T3 Code (`t3code`) in the `gui` profile.
 - Install Hunk (`hunk`) in the `tui` profile.

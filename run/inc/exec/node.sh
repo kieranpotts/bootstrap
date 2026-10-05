@@ -115,6 +115,16 @@ fi
 # changelog to find the first version number for each major LTS release.
 # https://nodejs.org/en/about/previous-releases
 
+# Node.js v26 is not yet LTS (it is promoted in late October 2026), so we pin
+# the latest release for now. Pin the first LTS version once it is published.
+# https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V26.md
+if ! nvm list | grep -q "v26.10.0"; then
+  print_info "Installing Node.js v26.10.0."
+  nvm install 26.10.0
+else
+  print_info "Node.js v26.10.0 is already installed."
+fi
+
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V24.md
 if ! nvm list | grep -q "v24.11.0"; then
   print_info "Installing Node.js LTS v24.11.0."
@@ -157,6 +167,7 @@ fi
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V10.md
 # nvm install 10.13.0
 
-# Use the current active LTS version as the default.
-print_info "Setting Node.js LTS v24.11.0 as the current version."
-nvm use 24.11.0
+# Use the newest version as the default.
+print_info "Setting Node.js v26.10.0 as the default and current version."
+nvm alias default 26.10.0
+nvm use 26.10.0
