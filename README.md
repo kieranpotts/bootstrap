@@ -117,6 +117,7 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 | `lynx`                       | —   | ✅  | ✅  |
 | `make`                       | ✅  | ✅  | ✅  |
 | `maven`                      | —   | ✅  | ✅  |
+| `mise`                       | ✅  | ✅  | ✅  |
 | `mozilla-vpn`                | —   | —   | ✅  |
 | `neovim`                     | —   | ✅  | ✅  |
 | `node`                       | ✅  | ✅  | ✅  |

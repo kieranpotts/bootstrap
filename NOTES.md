@@ -71,6 +71,7 @@ script installs.
 | `lynx`                       |     ✅      |     —      |
 | `make`                       |     ✅      |     ✅     |
 | `maven`                      |     ✅      |     ✅     |
+| `mise`                       |     ✅      |     —      |
 | `mozilla-vpn`                |     ✅      |     ✅     |
 | `neovim`                     |     ✅      |     ✅     |
 | `node`                       |     ✅      |     ✅     |

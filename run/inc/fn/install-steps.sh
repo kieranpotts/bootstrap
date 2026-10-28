@@ -59,6 +59,7 @@ run_install_steps() {
   tui_step "${inc_path}/pkg/hashicorp.sh"
   gui_step "${inc_path}/pkg/keepassxc.sh"
   gui_step "${inc_path}/pkg/microsoft.sh"
+  step "${inc_path}/pkg/mise.sh"
   gui_step "${inc_path}/pkg/mozilla.sh"
   gui_step "${inc_path}/pkg/sourcegit.sh"
   gui_step "${inc_path}/pkg/teams-for-linux.sh"
@@ -95,6 +96,7 @@ run_install_steps() {
   # container) needs a JVM, PHP, Rust, or a full Docker Engine of its own.
   tui_step "${inc_path}/exec/docker.sh"
   tui_step "${inc_path}/exec/jdk.sh"
+  cli_step "${inc_path}/exec/mise.sh"
   cli_step "${inc_path}/exec/node.sh"
   tui_step "${inc_path}/exec/php.sh"
   cli_step "${inc_path}/exec/python.sh"
