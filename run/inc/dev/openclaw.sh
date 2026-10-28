@@ -13,9 +13,11 @@ print_step "Installing OpenClaw."
 # passes its own looser check - which can be a stale v26.x that the package
 # itself then rejects. Activate the pinned Node version (see exec/node.sh) so
 # the installer keeps the active runtime and does not go scanning.
-if command -v nvm >/dev/null 2>&1; then
-  nvm use 26.12.1 >/dev/null
+# Each step runs in its own subshell, so NVM must be loaded here explicitly.
+if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
+  . "${HOME}/.nvm/nvm.sh"
 fi
+nvm use 26.12.1 >/dev/null
 
 # `bash -s -- <args>` forwards arguments to a piped install script.
 # `--no-onboard` skips the interactive onboarding workflow.
