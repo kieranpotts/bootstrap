@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-10-28
+
 - Print the GitHub Releases helpers' errors (eg. on hitting the API rate limit) to stderr, so they show in the log instead of being swallowed by the calling step's `$(...)`.
 - Stop piping `gh_latest_tag`/`gh_latest_release_tag` through `sed` in install steps, which masked their failure and let the step continue with a bad version.
 
