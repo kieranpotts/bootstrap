@@ -7,6 +7,7 @@
 - Preseed the VS Code package's debconf prompt, which otherwise stalls away-from-keyboard runs.
 - Bump pinned Node.js from v26.10.0 to v26.12.1, as required by OpenClaw.
 - Don't start open-webui automatically.
+- Activate the pinned Node.js before running the OpenClaw installer, which otherwise falls back to a stale NVM-managed v26.10.0 that the package rejects.
 
 ## [1.10.0] - 2026-10-28
 
