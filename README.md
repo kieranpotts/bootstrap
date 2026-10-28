@@ -1,6 +1,6 @@
 # Bootstrap
 
-**Provisioning scripts for my standard local development environment.**
+**Provisioning scripts for my local development environment.**
 
 ## ☑️ Requirements
 
