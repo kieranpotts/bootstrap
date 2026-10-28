@@ -38,7 +38,9 @@ gh_latest_tag() {
   local tag=""
 
   if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
-    tag=$(gh api "repos/${repo}/releases/latest" --jq '.tag_name' 2>/dev/null)
+    # On an HTTP error `gh api` prints the error body to stdout and exits
+    # non-zero, so the exit status must be checked, not just emptiness.
+    tag=$(gh api "repos/${repo}/releases/latest" --jq '.tag_name' 2>/dev/null) || tag=""
   else
     tag=$(curl -s "https://api.github.com/repos/${repo}/releases/latest" \
       | grep -Po '"tag_name": "\K[^"]*')
@@ -145,7 +147,7 @@ gh_latest_release_tag() {
   local tag=""
 
   if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
-    tag=$(gh api "repos/${repo}/releases" --jq '.[0].tag_name' 2>/dev/null)
+    tag=$(gh api "repos/${repo}/releases" --jq '.[0].tag_name' 2>/dev/null) || tag=""
   else
     tag=$(curl -s "https://api.github.com/repos/${repo}/releases" \
       | grep -Po '"tag_name": "\K[^"]*' \
