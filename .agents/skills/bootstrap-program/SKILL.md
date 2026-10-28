@@ -4,25 +4,31 @@ description: >-
   Add, change, or remove a program in the bootstrap provisioning run. Use this
   skill when the user says something like "add <program> to the bootstrap",
   "install <program> on new machines", "move <program> to the gui profile",
-  "drop <program> from the bootstrap", "install <package> via apt",
-  "check this apt command", or asks why a package step is prompting or
-  failing on a fresh machine. Do not use it for one-off shell scripts
+  "drop <program> from the bootstrap", "uninstall <program>",
+  "install <package> via apt", "check this apt command", or asks why a
+  package step is prompting or failing on a fresh machine. Do not use it
+  for one-off shell scripts
   outside the bootstrap run, to run one-off package operations against the
   current machine outside a bootstrap script, or to make local changes to
   individual parts of the shell scripts such as the shared helpers in
   `run/inc/fn/`.
 compatibility: >-
   requires Read, Write, Edit, Glob, Grep,
-  Bash (shellcheck, apt-get, apt-cache, dpkg, ./run/install)
+  Bash (shellcheck, apt-get, apt-cache, dpkg, ./run/install, ./run/uninstall)
 license: CC0-1.0
 ---
 
 # Bootstrap program
 
 Add, change, or remove one program in the bootstrap provisioning run, keeping
-`./run/install` idempotent, readable, and reproducible across a host machine.
-Do not modify the shared helpers under `run/inc/fn/`, beyond the one line that
-wires a step into `run_install_steps`.
+`./run/install` and `./run/uninstall` idempotent, readable, and reproducible
+across a host machine. Do not modify the shared helpers under `run/inc/fn/`,
+beyond the one line that wires a step into `run_install_steps`.
+
+Removing a program is not just deleting its install step. Machines provisioned
+by earlier versions of the bootstrap still have it, so its step file is
+rewritten to uninstall the program, and called from `./run/uninstall` instead
+of `run_install_steps`. See "Removing a program", below.
 
 ## Parameters
 
@@ -77,15 +83,18 @@ documentation. But do not prompt for a parameter you can resolve yourself.
   the `## 💻 Programs` table in `README.md` and the drift table in
   `NOTES.md` SHOULD each carry a matching row.
 
+- For a removed program, the step file MUST uninstall it instead, MUST be
+  a no-op when the program is not installed, and MUST be called from
+  `./run/uninstall` rather than from `run_install_steps`.
+
 - The shared helpers under `run/inc/fn/` MUST be unchanged apart from the
   one line in `install-steps.sh`. Behavior belongs to the helpers.
 
 ## Instructions
 
 These steps are written for adding a program. To **modify** an existing
-step, edit its file and re-run the relevant steps. To **remove** one, see the
-"The tool is being removed" edge case below — delete the file, drop its call
-from `run_install_steps`, and update the docs.
+step, edit its file and re-run the relevant steps. To **remove** one, follow
+"Removing a program", below, instead.
 
 1.  Determine the target profile: `cli`, `tui`, or `gui`.
 
@@ -207,6 +216,63 @@ from `run_install_steps`, and update the docs.
     sensible version. Where no clean target is available, say so in your
     summary rather than claiming the step was tested.
 
+## Removing a program
+
+1.  Read the existing step file, and work out everything its install left
+    behind: packages, pipx or uv tools, npm globals, binaries copied into
+    `/usr/local/bin` or `~/.local/bin`, APT sources and keyrings. Note which
+    of these other steps still rely on — eg. a shared runtime such as `uv` —
+    and leave those in place.
+
+2.  Rewrite the step file, in place at `run/inc/<group>/<name>.sh`, to
+    uninstall the program. Keep the leading comment block, reworded to record
+    what was installed and how, so the trail back to the upstream docs
+    survives. The first non-comment line becomes
+    `print_step "Uninstalling <Program Name>."`.
+
+    Guard each removal with a read-only check, so the step is a no-op on a
+    machine where the program is absent — a fresh machine, or one that has
+    already run `./run/uninstall`. Remove things in the reverse order they
+    were installed. See the uninstall example in the **Examples** section
+    below.
+
+3.  Remove the program's call from `run_install_steps` in
+    `run/inc/fn/install-steps.sh`.
+
+4.  Add a call to the step in `./run/uninstall`, in the correct group,
+    sorted alphabetically by filename within that group. Use plain `step`:
+    the uninstaller takes no `--profile`, because a program should be removed
+    whichever profile the machine was provisioned with.
+
+    ```bash
+    step "${inc_path}/<group>/<name>.sh"
+    ```
+
+5.  If the program had its own `pkg/*` registry, and nothing else draws on
+    it, uninstall that too. Rewrite the `pkg/*` step to remove the source
+    list and keyring, and move its call into `./run/uninstall` in the same
+    way, after the program's own step.
+
+6.  Update the docs.
+
+    - `CHANGELOG.md`. Add a bullet under `## [Unreleased]`, eg.
+      `` - Stop installing Aider, and uninstall it via \`./run/uninstall\`. ``
+    - `README.md`. Delete the program's row from the `## 💻 Programs` table,
+      and add it to the list under `## 🗑️ Uninstallation`, keeping that list
+      sorted by program name.
+    - `NOTES.md`. Change the program's `kieranpotts` cell to `—`. Delete the
+      row only if `hacksltd` doesn't install it either.
+
+7.  Lint the step file and `run/uninstall`.
+
+    ```sh
+    shellcheck -x --severity=warning run/inc/<group>/<name>.sh run/uninstall
+    ```
+
+8.  Smoke-test the uninstall only with the user's say-so. Running
+    `./run/uninstall` removes programs from the machine it runs on. Where it is
+    not run, say so in your summary rather than claiming the step was tested.
+
 ## Rules
 
 - Each step MUST be idempotent. `./run/install` is re-run to apply updates, not
@@ -325,11 +391,21 @@ from `run_install_steps`, and update the docs.
   is a `tui_step`, `gui_step` when every package is a `gui_step` — so a profile
   never registers a repository it can never install from.
 
-- The tool is being removed. Delete the step file, remove its call from
-  `run_install_steps`, drop its rows from `README.md` and `NOTES.md`, and add
-  an `[Unreleased]` changelog entry. Consider whether the bootstrap SHOULD also
-  remove an already-installed copy from existing machines (`apt-get remove -y …`)
-  — usually yes, so that existing machines converge on the new desired state.
+- The tool is being removed. Follow "Removing a program", above. The one
+  exception is a step that was never part of a released tag, and so never
+  reached a machine. Then simply delete the step file and its call, and
+  revert the doc changes that added it.
+
+- A removed tool is being added back. Rewrite its step file as an install
+  step again, move its call from `./run/uninstall` back into
+  `run_install_steps`, and move it from `## 🗑️ Uninstallation` back into
+  the `## 💻 Programs` table in `README.md`.
+
+- An uninstall step is no longer needed. Once every machine has run
+  `./run/uninstall` since the program was removed, its step can be retired:
+  delete the file, its call, and its entry under `## 🗑️ Uninstallation`.
+  Only the user knows when that point has been reached, so do this only when
+  asked.
 
 - The step must run only on first provisioning. System compatibility checks
   (`sys/checks.sh`) and the base `util/*` installs live inline in `run/install`,
@@ -378,6 +454,52 @@ from `run_install_steps`, and update the docs.
 
   superdo apt-get install -y gh
   gh --version
+  ```
+
+- An uninstall step, called from `./run/uninstall`. Each removal is guarded,
+  so the step converges on a machine where the program is already absent.
+
+  ```bash
+  #!/usr/bin/env bash
+
+  #
+  # Uninstall Aider.
+  #
+  # Aider was previously installed via `aider-install`, which is itself installed
+  # in pipx. `aider-install` then installs the `aider-chat` package as a uv tool.
+  # So both must be removed, in reverse order. `uv` itself is left in place, as
+  # other tools may be managed by it.
+  #
+  # https://aider.chat/docs/install.html
+  #
+
+  print_step "Uninstalling Aider."
+
+  # uv and pipx place executables in ~/.local/bin, which is not on PATH in a
+  # non-interactive shell.
+  export PATH="${HOME}/.local/bin:${PATH}"
+
+  if command -v uv >/dev/null 2>&1 && uv tool list 2>/dev/null | grep -q '^aider-chat '; then
+    print_info "Uninstalling aider-chat via uv."
+    uv tool uninstall aider-chat
+  else
+    print_info "aider-chat is not installed as a uv tool. Skipping."
+  fi
+
+  if python3 -m pipx list --short 2>/dev/null | grep -q '^aider-install '; then
+    print_info "Uninstalling aider installer from pipx."
+    python3 -m pipx uninstall aider-install
+  else
+    print_info "aider-install is not installed in pipx. Skipping."
+  fi
+  ```
+
+  For an APT package, guard with `dpkg -s` instead:
+
+  ```bash
+  if dpkg -s <package> >/dev/null 2>&1; then
+    superdo apt-get purge -y <package>
+  fi
   ```
 
 - APT call forms, for the install commands inside a step:

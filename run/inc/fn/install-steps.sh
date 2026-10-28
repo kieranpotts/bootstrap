@@ -126,7 +126,6 @@ run_install_steps() {
   tui_step "${inc_path}/app/xpdf-reader.sh"
 
   # Dev tools.
-  tui_step "${inc_path}/dev/aider.sh"
   gui_step "${inc_path}/dev/bruno.sh"
   tui_step "${inc_path}/dev/claude.sh"
   tui_step "${inc_path}/dev/cline.sh"

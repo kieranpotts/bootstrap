@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Add `./run/uninstall` (and `make uninstall`) for removing legacy programs.
+- Uninstall Aider.
 - Install ripgrep from the upstream GitHub release `.deb`.
 - Install Neovim from the upstream release tarball (`/opt/nvim`), instead of APT.
 - Preseed the VS Code package's debconf prompt, which otherwise stalls away-from-keyboard runs.

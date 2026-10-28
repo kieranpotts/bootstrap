@@ -22,7 +22,7 @@ jobs:
 
       # ShellCheck is pre-installed on ubuntu-latest runners. Lint every `.sh`
       # file under `run/`, plus the extensionless entry scripts (`run/install`,
-      # `run/bootstrap`, and `run/version`). The project's
+      # `run/uninstall`, `run/bootstrap`, and `run/version`). The project's
       # `.shellcheckrc` is picked up automatically.
       #
       # `--severity=warning` is the strictest threshold the codebase currently
@@ -34,5 +34,5 @@ jobs:
       - name: Run ShellCheck
         run: |
           find run -type f \
-            \( -name '*.sh' -o -name 'bootstrap' -o -name 'install' -o -name 'version' \) \
+            \( -name '*.sh' -o -name 'bootstrap' -o -name 'install' -o -name 'uninstall' -o -name 'version' \) \
             -print0 | xargs -0 shellcheck -x --severity=warning

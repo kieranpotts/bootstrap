@@ -8,7 +8,7 @@ script installs.
 
 | Program                      | kieranpotts | hacksltd   |
 |------------------------------|-------------|------------|
-| `aider`                      |     ✅      |     ✅     |
+| `aider`                      |     —       |     ✅     |
 | `amdgpu-top`                 |     ✅      |     —      |
 | `apt-transport-https`        |     ✅      |     ✅     |
 | `aws`                        |     ✅      |     ✅     |

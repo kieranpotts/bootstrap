@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+#
+# Uninstaller for programs previously installed by the bootstrapper.
+#
+# Usage: ./run/uninstall
+#
+#   -h, --help        Show this help and exit.
+#
+# Removes programs that `./run/install` used to install but no longer does,
+# so that machines provisioned by an older version of the bootstrapper
+# converge on the current desired state. Each step is a no-op if its
+# program is not installed, so this script is safe to re-run. It applies to
+# every profile, so takes no `--profile` option.
+#
+
+# Strict mode for the entry-point script. See `./run/install`.
+set -euo pipefail
+
+# Use this instead for debugging problems with the script.
+#set -euxo pipefail
+
+#
+# CLI flag parsing.
+#
+
+for arg in "$@"; do
+  case "${arg}" in
+    -h|--help)
+      sed -n '4,15p' "$0" | sed 's/^# \{0,1\}//'
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: ${arg}" >&2
+      echo "Run \`./run/uninstall --help\` to see available options." >&2
+      exit 1
+      ;;
+  esac
+done
+
+#
+# Global variables.
+#
+
+# Absolute path to this repository. This allows sourcing of files relative to
+# the repository root, and thus the uninstall script can be run from any
+# working directory.
+
+repo_root=$(dirname "$(dirname "$(readlink -f "$0")")")
+
+# Includes path.
+inc_path="${repo_root}/run/inc"
+
+# Source ANSI code variables.
+. "${inc_path}/var/ansi-codes.sh"
+
+#
+# Utility functions.
+#
+
+. "${inc_path}/fn/npmrc-protect.sh"
+. "${inc_path}/fn/statuses.sh"
+. "${inc_path}/fn/steps.sh"
+. "${inc_path}/fn/superdo.sh"
+
+#
+# Main script.
+#
+
+print_starting
+
+# Dev tools.
+step "${inc_path}/dev/aider.sh"
+
+# Print outcomes.
+print_finished
+print_failures
+
+# Exit non-zero if any step failed, so that CI/wrappers
+# can detect failures.
+exit "${#FAILED_STEPS[@]}"

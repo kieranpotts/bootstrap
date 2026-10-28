@@ -31,6 +31,12 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 - `run/install`. Entry script for provisioning a machine from scratch,
   or re-running to pick up updates. Sources every install step in order.
 
+- `run/uninstall`. Entry script for removing programs that earlier versions
+  of `run/install` installed but no longer do. Sources every uninstall step
+  in order, unconditionally — it takes no `--profile`. Uninstall steps live
+  in the same `run/inc/<group>/` directories as install steps, and each MUST
+  be a no-op when its program is not installed.
+
 - `run/bootstrap`. DEPRECATED. A thin wrapper that execs `run/install`,
   kept for machines/images pinned to older tags. New references MUST use
   `run/install` directly.
@@ -77,7 +83,9 @@ SHOULD NOT, OPTIONAL, and MAY are to be interpreted as described in
 
 - `./run/install --help` to print the usage banner.
 
-- `shellcheck -x --severity=warning run/**/*.sh run/install run/bootstrap run/version`
+- `./run/uninstall` to remove programs the bootstrapper no longer installs.
+
+- `shellcheck -x --severity=warning run/**/*.sh run/install run/uninstall run/bootstrap run/version`
   to lint shell scripts, at the same threshold CI enforces.
 
 - `ec` (editorconfig-checker) to validate files against `.editorconfig`.

@@ -31,6 +31,16 @@ See below for the list of tools installed in each profile.
 > `./run/install` is designed to be idempotent. It can be safely re-run at any
 > time to update to the latest changes in the bootstrap config.
 
+## 🗑️ Uninstallation
+
+Programs that were installed by earlier versions of the bootstrapper, but are no
+longer, can be removed by running `make uninstall` or `./run/uninstall`. Each
+step is skipped if its program is not installed, so it is safe to re-run.
+
+The following programs are uninstalled:
+
+- `aider`
+
 ## 💻 Programs
 
 The following programs are installed. The profile names describe the shape of
@@ -54,7 +64,6 @@ The profiles are cumulative — `cli` ⊆ `tui` ⊆ `gui`.
 
 | Program                      | CLI | TUI | GUI |
 |------------------------------|-----|-----|-----|
-| `aider`                      | —   | ✅  | ✅  |
 | `amdgpu-top`                 | —   | ✅  | ✅  |
 | `apt-transport-https`        | ✅  | ✅  | ✅  |
 | `aws`                        | —   | ✅  | ✅  |
