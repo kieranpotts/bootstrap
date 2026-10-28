@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-10-28
+
 - Add `./run/uninstall` (and `make uninstall`) for removing legacy programs.
 - Uninstall Aider.
 - Install ripgrep from the upstream GitHub release `.deb`.
