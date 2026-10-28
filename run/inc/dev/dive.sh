@@ -15,7 +15,8 @@ if dpkg -s dive >/dev/null 2>&1; then
 fi
 
 # Target Dive version we want to install (Dive's tags have a leading `v`).
-latest_version=$(gh_latest_tag wagoodman/dive | sed 's/^v//')
+latest_version=$(gh_latest_tag wagoodman/dive)
+latest_version="${latest_version#v}"
 
 print_info "Latest available version of Dive is v${latest_version}."
 

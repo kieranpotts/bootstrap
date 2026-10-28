@@ -17,7 +17,8 @@ if command -v herdr >/dev/null 2>&1; then
 fi
 
 # Get the latest version from the GitHub releases page (strip leading `v`).
-latest_version=$(gh_latest_tag herdrdev/herdr | sed 's/^v//')
+latest_version=$(gh_latest_tag herdrdev/herdr)
+latest_version="${latest_version#v}"
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "Herdr is already installed and at the latest version, v${installed_version}. Skipping."

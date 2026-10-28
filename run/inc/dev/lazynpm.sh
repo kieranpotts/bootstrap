@@ -15,7 +15,8 @@ if command -v lazynpm >/dev/null 2>&1; then
 fi
 
 # Get the latest version from the GitHub releases page (strip leading `v`).
-latest_version=$(gh_latest_tag jesseduffield/lazynpm | sed 's/^v//')
+latest_version=$(gh_latest_tag jesseduffield/lazynpm)
+latest_version="${latest_version#v}"
 if [[ -z "${latest_version}" ]]; then
   print_error "Could not determine the latest LazyNpm version."
   exit 1

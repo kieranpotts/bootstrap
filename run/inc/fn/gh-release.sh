@@ -31,7 +31,9 @@
 #
 # Output:
 #   The tag exactly as returned by the API, eg. `v0.42.0` or `0.42.0`.
-#   Callers should strip the leading `v` themselves if they don't want it.
+#   Callers should strip the leading `v` themselves if they don't want it,
+#   with `${tag#v}` after the assignment rather than by piping through `sed`.
+#   Steps run without `pipefail`, so a pipe would mask this function's failure.
 #
 gh_latest_tag() {
   local repo="$1"
@@ -47,7 +49,7 @@ gh_latest_tag() {
   fi
 
   if [[ -z "${tag}" ]]; then
-    print_error "Could not determine the latest release tag for ${repo}. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed."
+    print_error "Could not determine the latest release tag for ${repo}. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed." >&2
     return 1
   fi
 
@@ -81,7 +83,7 @@ gh_asset_url() {
   fi
 
   if [[ -z "${url}" ]]; then
-    print_error "Could not find a release asset for ${repo} matching '${pattern}'. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed."
+    print_error "Could not find a release asset for ${repo} matching '${pattern}'. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed." >&2
     return 1
   fi
 
@@ -140,7 +142,8 @@ gh_asset_url_recent() {
 #
 # Output:
 #   The tag exactly as returned by the API, eg. `v0.42.0` or `0.42.0`.
-#   Callers should strip the leading `v` themselves if they don't want it.
+#   Callers should strip the leading `v` themselves if they don't want it,
+#   with `${tag#v}` after the assignment, as for `gh_latest_tag`.
 #
 gh_latest_release_tag() {
   local repo="$1"
@@ -155,7 +158,7 @@ gh_latest_release_tag() {
   fi
 
   if [[ -z "${tag}" ]]; then
-    print_error "Could not determine the latest release tag for ${repo}. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed."
+    print_error "Could not determine the latest release tag for ${repo}. This is usually the GitHub API rate limit (60/hour unauthenticated, 5,000/hour if 'gh' is authenticated); it resets hourly, so re-running the bootstrap later should succeed." >&2
     return 1
   fi
 

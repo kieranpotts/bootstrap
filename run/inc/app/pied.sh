@@ -31,7 +31,8 @@ superdo apt-get install -y speech-dispatcher
 # tarball build into /opt instead, following the same pattern used for
 # Postman (see `run/inc/dev/postman.sh`).
 
-latest_version=$(gh_latest_tag Elleo/pied | sed 's/^v//')
+latest_version=$(gh_latest_tag Elleo/pied)
+latest_version="${latest_version#v}"
 
 if [[ -z "${latest_version}" ]]; then
   print_error "Failed to retrieve the latest version of Pied. Skipping."

@@ -10,7 +10,8 @@
 print_step "Installing amdgpu_top."
 
 # Get the latest version from the GitHub releases page (strip leading `v`).
-latest_version=$(gh_latest_tag Umio-Yasuno/amdgpu_top | sed 's/^v//')
+latest_version=$(gh_latest_tag Umio-Yasuno/amdgpu_top)
+latest_version="${latest_version#v}"
 
 if [[ -z "${latest_version}" ]]; then
   print_error "Failed to retrieve the latest version of amdgpu_top. Skipping."

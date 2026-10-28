@@ -18,7 +18,8 @@ if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
 fi
 
 # Target NVM version we want to install (strip leading `v` from the tag).
-latest_version=$(gh_latest_tag nvm-sh/nvm | sed 's/^v//')
+latest_version=$(gh_latest_tag nvm-sh/nvm)
+latest_version="${latest_version#v}"
 print_info "Latest available version of NVM is v${latest_version}."
 
 # Discover the installed version of NVM, if it exists.
