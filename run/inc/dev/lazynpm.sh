@@ -16,6 +16,10 @@ fi
 
 # Get the latest version from the GitHub releases page (strip leading `v`).
 latest_version=$(gh_latest_tag jesseduffield/lazynpm | sed 's/^v//')
+if [[ -z "${latest_version}" ]]; then
+  print_error "Could not determine the latest LazyNpm version."
+  exit 1
+fi
 
 if [[ "${installed_version}" == "${latest_version}" ]]; then
   print_info "LazyNpm is already installed and at the latest version, v${installed_version}. Skipping."
@@ -27,13 +31,12 @@ else
   tmp_dir=$(mktemp -d)
 
   # Fetch the latest release.
-  curl \
-    -Lo "${tmp_dir}/lazynpm.tar.gz" \
-    "https://github.com/jesseduffield/lazynpm/releases/latest/download/lazynpm_${latest_version}_Linux_x86_64.tar.gz"
-
-  # Check if the download was successful.
-  if [[ ! -f "${tmp_dir}/lazynpm.tar.gz" ]]; then
+  # `-f` makes HTTP errors fail the command instead of saving the error body.
+  if ! curl -fL \
+    -o "${tmp_dir}/lazynpm.tar.gz" \
+    "https://github.com/jesseduffield/lazynpm/releases/latest/download/lazynpm_${latest_version}_Linux_x86_64.tar.gz"; then
     print_error "Failed to download LazyNpm package."
+    rm -rf "${tmp_dir}"
     exit 1
   fi
 
