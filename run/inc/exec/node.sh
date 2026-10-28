@@ -110,7 +110,7 @@ fi
 
 # Installed versions are detected by checking NVM's versions directory, rather
 # than grepping `nvm list`. The latter also prints the system-wide Node (eg.
-# `system -> v26.10.0 (-> N/A)`), which falsely matches a pinned version that
+# `system -> v26.12.1 (-> N/A)`), which falsely matches a pinned version that
 # is not actually installed under NVM.
 
 # Use NVM to install the current LTS version of Node, plus previous LTS versions
@@ -123,11 +123,11 @@ fi
 # Node.js v26 is not yet LTS (it is promoted in late October 2026), so we pin
 # the latest release for now. Pin the first LTS version once it is published.
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V26.md
-if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v26.10.0" ]]; then
-  print_info "Installing Node.js v26.10.0."
-  nvm install 26.10.0
+if [[ ! -d "${NVM_DIR:-${HOME}/.nvm}/versions/node/v26.12.1" ]]; then
+  print_info "Installing Node.js v26.12.1."
+  nvm install 26.12.1
 else
-  print_info "Node.js v26.10.0 is already installed."
+  print_info "Node.js v26.12.1 is already installed."
 fi
 
 # https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V24.md
@@ -173,6 +173,6 @@ fi
 # nvm install 10.13.0
 
 # Use the newest version as the default.
-print_info "Setting Node.js v26.10.0 as the default and current version."
-nvm alias default 26.10.0
-nvm use 26.10.0
+print_info "Setting Node.js v26.12.1 as the default and current version."
+nvm alias default 26.12.1
+nvm use 26.12.1
