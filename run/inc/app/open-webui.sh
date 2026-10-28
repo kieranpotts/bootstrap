@@ -2,7 +2,8 @@
 
 #
 # Installs Open WebUI, a self-hosted web interface for interacting with local
-# LLMs. Run as a Docker container, wired to the host's Ollama service.
+# LLMs. Run as a Docker container, wired to the host's Ollama service. The
+# container is created but not started, so it only runs when started on demand.
 #
 # https://github.com/open-webui/open-webui
 #
@@ -39,16 +40,23 @@ if superdo docker ps -a --format '{{.Names}}' | grep -qx "${container}"; then
   superdo docker rm -f "${container}"
 fi
 
-# --add-host wires the container to the host's Ollama service on
-# host.docker.internal. --restart always brings it back up on boot and after
-# crashes. The UI is served on http://localhost:3000.
-print_info "Starting the '${container}' container on port 3000."
-superdo docker run -d \
+# The container is created but deliberately not started, and has no restart
+# policy, so Open WebUI does not run by default. It is resource-hungry and hogs
+# port 3000, which often conflicts with development servers.
+#
+# Start it on manually with `docker start open-webui` and stop it with
+# `docker stop open-webui`.
+#
+# `--add-host` wires the container to the host's Ollama service on
+# host.docker.internal. When started, the UI is served on
+# http://localhost:3000.
+print_info "Creating the '${container}' container (not started) on port 3000."
+superdo docker create \
   -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -v open-webui:/app/backend/data \
   --name "${container}" \
-  --restart always \
+  --restart no \
   "${image}"
 
-print_success "Open WebUI is running at http://localhost:3000"
+print_success "Open WebUI is installed but not running. Start it with: docker start ${container}"
