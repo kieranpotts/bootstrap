@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Allow passing of `--profile` target through `make install`.
+
 ## [1.9.1] - 2026-10-05
 
 - Remove debugging flag

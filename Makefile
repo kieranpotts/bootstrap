@@ -6,12 +6,12 @@
 
 help:
 	@echo "Available targets:"
-	@echo "  install   - Run the development environment bootstrapper (--profile=cli|tui|gui)"
+	@echo "  install   - Run the development environment bootstrapper (PROFILE=cli|tui|gui)"
 	@echo "  version   - Tag a release point"
 	@echo "  help      - Show this help message"
 
 install:
-	./run/install
+	./run/install $(if $(PROFILE),--profile=$(PROFILE))
 
 version:
 	./run/version
