@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-10-28
+
 - Install mise (`mise`) in the `cli` profile, and activate it in `~/.bashrc`.
 - Allow passing of `--profile` target through `make install`.
 
