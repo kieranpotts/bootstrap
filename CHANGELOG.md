@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.13.1] - 2026-10-29
+
 - Fix NVM not being loaded by `~/.bashrc` when the dotfiles' `local.bashrc` is in use. Its commented-out `#export NVM_DIR` line matched the duplicate check, so the real lines were never written.
 - Maintain the `~/.nvm/current` symlink to the default Node.js version, so `~/.nvm/current/bin` can be put on PATH for processes that do not read shell startup files.
 
