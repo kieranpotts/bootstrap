@@ -65,12 +65,23 @@ if ! grep -q "default-cache-ttl" "${HOME}/.gnupg/gpg-agent.conf"; then
   printf "%s\n" "${content}" >> "${HOME}/.gnupg/gpg-agent.conf"
 fi
 
+# Match only uncommented lines. The dotfiles' `local.bashrc` ships the same
+# lines commented out, which would otherwise suppress the real ones.
+#
+# `$(tty)` is written literally, to be evaluated by each new shell, not by
+# this script - whose own terminal is irrelevant, or absent in a Docker build.
+#
+# The agent is not launched at shell startup in the `cli` profile. That is a
+# headless container, which uses the host's agent, forwarded by the editor or
+# connected by the devcontainer's `postStartCommand`. A container-local agent,
+# with no keys, would shadow it.
 # shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
-  if ! grep -q "export GPG_TTY" "${bashrc}"; then
-    printf "%s\n" "export GPG_TTY=$(tty)" >> "${bashrc}"
+  if ! grep -q "^export GPG_TTY" "${bashrc}"; then
+    # shellcheck disable=SC2016
+    printf "%s\n" 'export GPG_TTY=$(tty)' >> "${bashrc}"
   fi
-  if ! grep -q "gpgconf" "${bashrc}"; then
+  if ! is_cli_profile && ! grep -q "^gpgconf --launch" "${bashrc}"; then
     printf "%s\n" "gpgconf --launch gpg-agent" >> "${bashrc}"
   fi
 fi

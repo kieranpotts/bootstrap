@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+- Fix `GPG_TTY` not being set by `~/.bashrc` when the dotfiles' `local.bashrc` is in use. Its commented-out `#export GPG_TTY` line matched the duplicate check, so the real line was never written.
+- Write `export GPG_TTY=$(tty)` literally, so each shell sets its own terminal, instead of the terminal (or "not a tty") of the bootstrap run.
+- Do not launch `gpg-agent` from `~/.bashrc` in the `cli` profile, where the host's agent is used instead.
+
 ## [1.13.1] - 2026-10-29
 
 - Fix NVM not being loaded by `~/.bashrc` when the dotfiles' `local.bashrc` is in use. Its commented-out `#export NVM_DIR` line matched the duplicate check, so the real lines were never written.
