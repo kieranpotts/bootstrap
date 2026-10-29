@@ -71,6 +71,7 @@ print_starting
 
 # Dev tools.
 step "${inc_path}/dev/aider.sh"
+step "${inc_path}/dev/claude-npm.sh"
 
 # Print outcomes.
 print_finished

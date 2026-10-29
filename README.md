@@ -40,6 +40,7 @@ step is skipped if its program is not installed, so it is safe to re-run.
 The following programs are uninstalled:
 
 - `aider`
+- `claude` (the npm package only; the native binary is installed in its place)
 
 ## 💻 Programs
 
