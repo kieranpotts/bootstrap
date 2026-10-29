@@ -97,9 +97,11 @@ export NVM_DIR="${HOME}/.nvm"
 [[ -s "${NVM_DIR}/bash_completion" ]] && \. "${NVM_DIR}/bash_completion" # Loads Bash completion for NVM
 '
 
+# Match only an uncommented `export`. The dotfiles' `local.bashrc` ships the
+# same lines commented out, which would otherwise suppress the real ones.
 # shellcheck disable=SC2154
 if [[ -f "${bashrc}" ]]; then
-  if ! grep -q "export NVM_DIR" "${bashrc}"; then
+  if ! grep -q "^export NVM_DIR" "${bashrc}"; then
     echo "${content}" >> "${bashrc}"
   fi
 
@@ -174,6 +176,11 @@ fi
 # nvm install 10.13.0
 
 # Use the newest version as the default.
+#
+# `NVM_SYMLINK_CURRENT` makes `nvm use` point the `~/.nvm/current` symlink at
+# the selected version. That gives a stable path, `~/.nvm/current/bin`, which
+# can be put on PATH where shell startup files are not read - eg. in the
+# `docker-devcontainer` image, for Git hooks, editor tasks, and coding agents.
 print_info "Setting Node.js v26.12.1 as the default and current version."
 nvm alias default 26.12.1
-nvm use 26.12.1
+NVM_SYMLINK_CURRENT=true nvm use 26.12.1
