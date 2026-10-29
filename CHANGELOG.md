@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-10-29
+
 - Install Claude Code via the native installer, instead of as a global NPM package.
 - Uninstall the NPM package of Claude Code, from every NVM-managed Node.js version.
 
